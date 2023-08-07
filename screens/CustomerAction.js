@@ -4,6 +4,8 @@ import { StyleSheet, View, ImageBackground } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
+// ===================================================================
+
 export default function CustomerAction({ navigation }) {
   const handleSignUp = () => {
     navigation.navigate("signUp");

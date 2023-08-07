@@ -17,41 +17,92 @@ import GenerateQRCode from "./screens/GenerateQRCode";
 import ScannerComponent from "./screens/ScannerComponent";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import UploadImage from "./screens/UploadImage";
+import AppCircularButton from "./components/form/AppCircularProgress";
+import ForgotPasswordView from "./screens/ForgotPasswordView";
+
+// ===================================================================
 
 const Stack = createNativeStackNavigator();
 
+// ===================================================================
+
 export default function App() {
   return (
-    // <NavigationContainer>
-    //   <ApplicationProvider {...eva} theme={eva.light}>
-    //     <Stack.Navigator initialRouteName="confirmUser">
-    //       <Stack.Screen name="confirmUser" component={ConfirmUser} />
-    //       <Stack.Screen name="customerAction" component={CustomerAction} />
-    //       <Stack.Screen name="login" component={LoginView} />
-    //       <Stack.Screen name="signUp" component={SignupView} />
-    //       <Stack.Screen name="welcomeScreen" component={WelcomeScreen} />
-    //       <Stack.Screen name="itemCards" component={ItemCards} />
-    //     </Stack.Navigator>
-    //   </ApplicationProvider>
-    // </NavigationContainer>
-    <SafeAreaView>
-      <GestureHandlerRootView>
-        <ApplicationProvider {...eva} theme={eva.light}>
-          {/* <SignupView /> */}
-          {/* <LoginView /> */}
-          {/* <AddItemForm /> */}
-          {/* <ConfirmUser /> */}
-          {/* <EmptyListMessage /> */}
-          {/* <ItemCard /> */}
-          {/* <ItemCards /> */}
-          {/* <CustomerAction /> */}
-          {/* <CreditCardView /> */}
-          {/* <GenerateQRCode /> */}
-          {/* <ScannerComponent /> */}
-          {/* <WelcomeScreen /> */}
-          {/* <UploadImage /> */}
-        </ApplicationProvider>
-      </GestureHandlerRootView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <ApplicationProvider {...eva} theme={eva.light}>
+        <Stack.Navigator initialRouteName="confirmUser">
+          <Stack.Screen
+            name="confirmUser"
+            component={ConfirmUser}
+            // options={{
+            //   headerShown: false,
+            // }}
+          />
+          <Stack.Screen
+            name="customerAction"
+            component={CustomerAction}
+            // options={{
+            //   headerShown: false,
+            // }}
+          />
+          <Stack.Screen
+            name="login"
+            component={LoginView}
+            // options={{
+            //   headerShown: false,
+            // }}
+          />
+          <Stack.Screen
+            name="signUp"
+            component={SignupView}
+            // options={{
+            //   headerShown: false,
+            // }}
+          />
+          <Stack.Screen
+            name="welcomeScreen"
+            component={WelcomeScreen}
+            // options={{
+            //   headerShown: false,
+            // }}
+          />
+          <Stack.Screen
+            name="itemCards"
+            component={ItemCards}
+            // options={{
+            //   headerShown: false,
+            // }}
+          />
+          <Stack.Screen
+            name="forgotPassword"
+            component={ForgotPasswordView}
+            // options={{
+            //   headerShown: false,
+            // }}
+          />
+        </Stack.Navigator>
+      </ApplicationProvider>
+    </NavigationContainer>
+    // <SafeAreaView>
+    //   <GestureHandlerRootView>
+    //     <ApplicationProvider {...eva} theme={eva.dark}>
+    //       {/* <SignupView /> */}
+    //       {/* <LoginView /> */}
+    //       <ForgotPasswordView />
+    //       {/* <AddItemForm /> */}
+    //       {/* <ConfirmUser /> */}
+    //       {/* <EmptyListMessage /> */}
+    //       {/* <ItemCard /> */}
+    //       {/* <ItemCards /> */}
+    //       {/* <CustomerAction /> */}
+    //       {/* <CreditCardView /> */}
+    //       {/* <GenerateQRCode /> */}
+    //       {/* <ScannerComponent /> */}
+    //       {/* <WelcomeScreen /> */}
+    //       {/* <UploadImage /> */}
+    //       {/* <AppCircularButton color="black" /> */}
+    //     </ApplicationProvider>
+    //   </GestureHandlerRootView>
+    // </SafeAreaView>
   );
 }

@@ -7,13 +7,18 @@ import {
 } from "react-native";
 import { useForm } from "react-hook-form";
 import { Button, Icon, Text } from "@ui-kitten/components";
-// import AppInputField from "../Form/AppInputField";
 import AppInputField from "../components/form/AppInputField";
 import { Ionicons } from "@expo/vector-icons";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { FIREBASE_AUTH } from "../FirebaseConfig";
+import AppCircularProgress from "../components/form/AppCircularProgress";
+
+// =====================================================
 
 export default function SignupView({ navigation }) {
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const auth = FIREBASE_AUTH;
   const [loading, setLoading] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const {
     control,
@@ -28,12 +33,21 @@ export default function SignupView({ navigation }) {
   });
 
   const onSubmit = async (data) => {
-    console.log("data", data);
-  };
-
-  const handleAlreadyAccount = () => {
-    // navigation.navigate("login");
-    // console.log("alreadt account");
+    setLoading(true);
+    try {
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        data?.email,
+        data?.password
+      );
+      alert("user signed in ");
+      navigation.navigate("login");
+    } catch (error) {
+      console.log("error", error.message);
+      alert(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -77,19 +91,27 @@ export default function SignupView({ navigation }) {
         <AppInputField
           name="password"
           placeholder="Password"
+          secureTextEntry={passwordVisible ? false : true}
+          icon="visibility"
+          onPressIcon={() => setPasswordVisible(!passwordVisible)}
           control={control}
           errors={errors}
         />
 
         <View style={styles.buttonContainer}>
-          <Button size="giant" onPress={handleSubmit(onSubmit)}>
-            SIGN UP
+          <Button
+            size="giant"
+            onPress={handleSubmit(onSubmit)}
+            disabled={loading}
+          >
+            {!loading ? "SIGN UP" : <AppCircularProgress color="white" />}
           </Button>
+
           <Button
             style={{ marginTop: 7 }}
             appearance="ghost"
             status="control"
-            onPress={handleAlreadyAccount}
+            onPress={() => navigation.navigate("login")}
           >
             Already have an account? Log In
           </Button>

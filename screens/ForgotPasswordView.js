@@ -3,6 +3,7 @@ import {
   StyleSheet,
   ImageBackground,
   View,
+  Alert,
   // Image,
   TouchableOpacity,
 } from "react-native";
@@ -11,37 +12,40 @@ import { Button, Text } from "@ui-kitten/components";
 import AppInputField from "../components/form/AppInputField";
 import { Ionicons } from "@expo/vector-icons";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 import AppCircularProgress from "../components/form/AppCircularProgress";
 
 // ==================================================================
 
-export default function LoginView({ navigation }) {
+export default function ForgotPasswordView({ navigation }) {
   const auth = FIREBASE_AUTH;
-  const [passwordVisible, setPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const {
     control,
     handleSubmit,
-    formState: { errors, onBlur },
+    formState: { errors },
   } = useForm({
     defaultValues: {
       email: "",
-      password: "",
     },
   });
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await signInWithEmailAndPassword(
-        auth,
-        data?.email,
-        data?.password
+      const response = await sendPasswordResetEmail(auth, data?.email);
+      Alert.alert(
+        "Reset Password",
+        "Kindly check your email to reset the password.",
+        [
+          {
+            text: "ok",
+            onPress: () => navigation.navigate("login"),
+            style: "cancel",
+          },
+        ]
       );
-      alert("user loged in ");
-      navigation.navigate("welcomeScreen");
     } catch (error) {
       console.log("error", error.message);
       alert(error);
@@ -50,13 +54,9 @@ export default function LoginView({ navigation }) {
     }
   };
 
-  const handleForgotPassowd = () => {
-    console.log("ForgotPassowd");
-  };
-
   return (
     <ImageBackground
-      source={require("../assets/cart2.jpg")}
+      source={require("../assets/ps1.jpg")}
       resizeMode="cover"
       style={styles.container}
       blurRadius={20}
@@ -73,42 +73,18 @@ export default function LoginView({ navigation }) {
       </View>
       <View style={styles.textContainer}>
         <Text category="h2" status="control">
-          Login to Digicart
+          Reset Password
         </Text>
       </View>
 
       <View style={styles.formContainer}>
         <AppInputField
           name="email"
-          placeholder="Email"
+          placeholder="Enter valid email"
           icon="mail"
           control={control}
           errors={errors}
         />
-        <AppInputField
-          name="password"
-          placeholder="Password"
-          secureTextEntry={passwordVisible ? false : true}
-          icon="visibility"
-          onPressIcon={() => setPasswordVisible(!passwordVisible)}
-          control={control}
-          errors={errors}
-        />
-        <View style={{ display: "flex", alignItems: "flex-end" }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("forgotPassword")}
-          >
-            <Text
-              style={{
-                color: "white",
-                fontSize: 20,
-                textDecorationLine: "underline",
-              }}
-            >
-              Forgot password?
-            </Text>
-          </TouchableOpacity>
-        </View>
 
         <View style={styles.buttonContainer}>
           <Button
@@ -116,19 +92,8 @@ export default function LoginView({ navigation }) {
             disabled={loading}
             onPress={handleSubmit(onSubmit)}
           >
-            {!loading ? "LOGIN" : <AppCircularProgress color="white" />}
+            {!loading ? "Proceed" : <AppCircularProgress color="white" />}
           </Button>
-
-          <View style={{ display: "flex", alignItems: "center", marginTop: 5 }}>
-            <Button
-              style={{ marginTop: 7 }}
-              appearance="ghost"
-              status="control"
-              onPress={() => navigation.navigate("signUp")}
-            >
-              Don't have Account? Sign up here
-            </Button>
-          </View>
         </View>
       </View>
     </ImageBackground>
