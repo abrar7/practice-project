@@ -3,6 +3,8 @@ import { View, Text, StyleSheet } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { Ionicons } from "@expo/vector-icons";
 
+// ===================================================================
+
 const data = [
   { id: 1, name: "Object 1" },
   { id: 2, name: "Object 2" },

@@ -1,7 +1,9 @@
 import { View } from "react-native";
 import { Input, Text } from "@ui-kitten/components";
-import { Ionicons } from "@expo/vector-icons";
 import { Controller } from "react-hook-form";
+import { MaterialIcons } from "@expo/vector-icons";
+
+// ======================================================
 
 export default function AppInputField({
   name,
@@ -9,7 +11,9 @@ export default function AppInputField({
   icon,
   control,
   keyboardType,
+  secureTextEntry,
   maxLength,
+  onPressIcon,
   style,
   errors,
 }) {
@@ -23,6 +27,7 @@ export default function AppInputField({
         }}
         render={({ field: { onChange, value } }) => (
           <Input
+            secureTextEntry={secureTextEntry}
             size="large"
             status="control"
             style={style}
@@ -31,8 +36,16 @@ export default function AppInputField({
             onChangeText={onChange}
             placeholder={placeholder}
             keyboardType={keyboardType}
+            autoCapitalize="none"
             textStyle={{ fontSize: 22, paddingVertical: 3 }}
-            accessoryRight={<Ionicons name={icon} size={24} color="black" />}
+            accessoryRight={
+              <MaterialIcons
+                name={icon}
+                size={24}
+                color="black"
+                onPress={onPressIcon}
+              />
+            }
           />
         )}
       />

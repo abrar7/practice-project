@@ -2,6 +2,8 @@ import React from "react";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+// ===================================================================
+
 export default function ListItemDeleteAction({ onPress }) {
   return (
     <TouchableOpacity onPress={onPress}>

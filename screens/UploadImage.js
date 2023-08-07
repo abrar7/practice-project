@@ -4,6 +4,8 @@ import { Button } from "@ui-kitten/components";
 import * as ImagePicker from "expo-image-picker";
 import { Image, View, StyleSheet } from "react-native";
 
+// ===================================================================
+
 export default function UploadImage({ setImgURL }) {
   const [image, setImage] = useState(null);
 

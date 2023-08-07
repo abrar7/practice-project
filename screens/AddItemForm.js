@@ -6,6 +6,8 @@ import AppInputField from "../components/form/AppInputField";
 import { Ionicons } from "@expo/vector-icons";
 import UploadImage from "../screens/UploadImage";
 
+// ===================================================================
+
 export default function AddItemForm() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [imgURL, setImgURL] = useState();
