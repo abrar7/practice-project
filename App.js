@@ -27,84 +27,53 @@ const Stack = createNativeStackNavigator();
 
 // ===================================================================
 
+function AppNavigator() {
+  return (
+    <Stack.Navigator initialRouteName="confirmUser">
+      <Stack.Screen
+        name="confirmUser"
+        component={ConfirmUser}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen name="customerAction" component={CustomerAction} />
+      <Stack.Screen name="login" component={LoginView} />
+      <Stack.Screen name="signUp" component={SignupView} />
+      <Stack.Screen name="welcomeScreen" component={WelcomeScreen} />
+      <Stack.Screen name="itemCards" component={ItemCards} />
+      <Stack.Screen name="forgotPassword" component={ForgotPasswordView} />
+    </Stack.Navigator>
+  );
+}
+
 export default function App() {
   return (
-    // <NavigationContainer>
-    //   <ApplicationProvider {...eva} theme={eva.light}>
-    //     <Stack.Navigator initialRouteName="confirmUser">
-    //       <Stack.Screen
-    //         name="confirmUser"
-    //         component={ConfirmUser}
-    //       // options={{
-    //       //   headerShown: false,
-    //       // }}
-    //       />
-    //       <Stack.Screen
-    //         name="customerAction"
-    //         component={CustomerAction}
-    //       // options={{
-    //       //   headerShown: false,
-    //       // }}
-    //       />
-    //       <Stack.Screen
-    //         name="login"
-    //         component={LoginView}
-    //       // options={{
-    //       //   headerShown: false,
-    //       // }}
-    //       />
-    //       <Stack.Screen
-    //         name="signUp"
-    //         component={SignupView}
-    //       // options={{
-    //       //   headerShown: false,
-    //       // }}
-    //       />
-    //       <Stack.Screen
-    //         name="welcomeScreen"
-    //         component={WelcomeScreen}
-    //       // options={{
-    //       //   headerShown: false,
-    //       // }}
-    //       />
-    //       <Stack.Screen
-    //         name="itemCards"
-    //         component={ItemCards}
-    //       // options={{
-    //       //   headerShown: false,
-    //       // }}
-    //       />
-    //       <Stack.Screen
-    //         name="forgotPassword"
-    //         component={ForgotPasswordView}
-    //       // options={{
-    //       //   headerShown: false,
-    //       // }}
-    //       />
-    //     </Stack.Navigator>
+    <ApplicationProvider {...eva} theme={eva.light}>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
+    </ApplicationProvider>
+
+    // <SafeAreaView>
+    //   <ApplicationProvider {...eva} theme={eva.dark}>
+    //     {/* <SignupView /> */}
+    //     {/* <LoginView /> */}
+    //     {/* <ForgotPasswordView /> */}
+    //     {/* <TestFile /> */}
+    //     {/* <AddItemForm /> */}
+    //     {/* <ConfirmUser /> */}
+    //     {/* <EmptyListMessage /> */}
+    //     {/* <ItemCard /> */}
+    //     {/* <ItemCards /> */}
+    //     {/* <CustomerAction /> */}
+    //     {/* <CreditCardView /> */}
+    //     {/* <GenerateQRCode /> */}
+    //     {/* <ScannerComponent /> */}
+    //     {/* <WelcomeScreen /> */}
+    //     {/* <UploadImage /> */}
+    //     {/* <AppCircularButton color="black" /> */}
     //   </ApplicationProvider>
-    // </NavigationContainer>
-    <SafeAreaView>
-      <GestureHandlerRootView>
-        <ApplicationProvider {...eva} theme={eva.dark}>
-          {/* <SignupView /> */}
-          {/* <LoginView /> */}
-          {/* <ForgotPasswordView /> */}
-          <TestFile />
-          {/* <AddItemForm /> */}
-          {/* <ConfirmUser /> */}
-          {/* <EmptyListMessage /> */}
-          {/* <ItemCard /> */}
-          {/* <ItemCards /> */}
-          {/* <CustomerAction /> */}
-          {/* <CreditCardView /> */}
-          {/* <GenerateQRCode /> */}
-          {/* <ScannerComponent /> */}
-          {/* <WelcomeScreen /> */}
-          {/* <UploadImage /> */}
-          {/* <AppCircularButton color="black" /> */}
-        </ApplicationProvider>
-      </GestureHandlerRootView>
-    </SafeAreaView>
+    // </SafeAreaView>
   );
 }

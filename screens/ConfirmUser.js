@@ -8,13 +8,14 @@ import { Ionicons } from "@expo/vector-icons";
 
 export default function ConfirmUser({ navigation }) {
   const handleCustomer = () => {
-    navigation.navigate("customerAction");
-    console.log("Customer pressed");
+    navigation.navigate("customerAction", {
+      role: "customer",
+    });
   };
   const handleAdmin = () => {
-    navigation.navigate("login");
-
-    console.log("Admin pressed");
+    navigation.navigate("login", {
+      role: "admin",
+    });
   };
   return (
     <ImageBackground

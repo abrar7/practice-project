@@ -11,12 +11,15 @@ import AppInputField from "../components/form/AppInputField";
 import { Ionicons } from "@expo/vector-icons";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
+import { FIRESTORE_DB } from "../FirebaseConfig";
 import AppCircularProgress from "../components/form/AppCircularProgress";
 
 // =====================================================
 
 export default function SignupView({ navigation }) {
   const auth = FIREBASE_AUTH;
+  const database = FIRESTORE_DB;
   const [loading, setLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -39,6 +42,17 @@ export default function SignupView({ navigation }) {
         auth,
         data?.email,
         data?.password
+      );
+      const uid = response?.user.uid;
+      setDoc(
+        doc(database, "user", uid),
+        {
+          username: data?.name,
+          email: response?.user.email,
+          role: "customer",
+          id: uid,
+        },
+        { merge: true }
       );
       alert("user signed in ");
       navigation.navigate("login");
