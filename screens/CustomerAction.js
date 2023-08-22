@@ -6,14 +6,16 @@ import { Ionicons } from "@expo/vector-icons";
 
 // ===================================================================
 
-export default function CustomerAction({ navigation }) {
+export default function CustomerAction({ route, navigation }) {
+  const role = route.params.role;
+
   const handleSignUp = () => {
     navigation.navigate("signUp");
-    // console.log("Admin pressed");
   };
   const handleLogin = () => {
-    navigation.navigate("login");
-    // console.log("Customer pressed");
+    navigation.navigate("login", {
+      role,
+    });
   };
   return (
     <ImageBackground

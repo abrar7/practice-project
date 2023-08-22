@@ -11,20 +11,26 @@ import { Button, Text } from "@ui-kitten/components";
 import AppInputField from "../components/form/AppInputField";
 import { Ionicons } from "@expo/vector-icons";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
+import { FIRESTORE_DB } from "../FirebaseConfig";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { User } from "firebase/auth";
+
 import { signInWithEmailAndPassword } from "firebase/auth";
 import AppCircularProgress from "../components/form/AppCircularProgress";
 
 // ==================================================================
 
-export default function LoginView({ navigation }) {
-  const auth = FIREBASE_AUTH;
+export default function LoginView({ route, navigation }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const role = route.params.role;
+  const auth = FIREBASE_AUTH;
+  const database = FIRESTORE_DB;
 
   const {
     control,
     handleSubmit,
-    formState: { errors, onBlur },
+    formState: { errors },
   } = useForm({
     defaultValues: {
       email: "",
@@ -35,23 +41,34 @@ export default function LoginView({ navigation }) {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await signInWithEmailAndPassword(
-        auth,
-        data?.email,
-        data?.password
+      const getDocsEmail = await getDocs(
+        query(collection(database, "user"), where("email", "==", data.email))
       );
-      alert("user loged in ");
-      navigation.navigate("welcomeScreen");
+      const documentData = getDocsEmail.docs.map((document) => ({
+        id: document.id,
+        ...document.data(),
+      }));
+      const getDocsRole = documentData[0].role;
+
+      if (getDocsRole === role) {
+        const response = await signInWithEmailAndPassword(
+          auth,
+          data?.email,
+          data?.password
+        );
+        alert("Admin logedIn ");
+      } else {
+        alert("Email not Authorized to login");
+      }
+
+      // navigation.navigate("welcomeScreen");
+      // navigation.navigate("itemCards");
     } catch (error) {
       console.log("error", error.message);
       alert(error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleForgotPassowd = () => {
-    console.log("ForgotPassowd");
   };
 
   return (
@@ -118,17 +135,22 @@ export default function LoginView({ navigation }) {
           >
             {!loading ? "LOGIN" : <AppCircularProgress color="white" />}
           </Button>
-
-          <View style={{ display: "flex", alignItems: "center", marginTop: 5 }}>
-            <Button
-              style={{ marginTop: 7 }}
-              appearance="ghost"
-              status="control"
-              onPress={() => navigation.navigate("signUp")}
+          {role === "admin" ? (
+            ""
+          ) : (
+            <View
+              style={{ display: "flex", alignItems: "center", marginTop: 5 }}
             >
-              Don't have Account? Sign up here
-            </Button>
-          </View>
+              <Button
+                style={{ marginTop: 7 }}
+                appearance="ghost"
+                status="control"
+                onPress={() => navigation.navigate("signUp")}
+              >
+                Don't have Account? Sign up here
+              </Button>
+            </View>
+          )}
         </View>
       </View>
     </ImageBackground>
@@ -165,5 +187,3 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
 });
-
-// Login done
