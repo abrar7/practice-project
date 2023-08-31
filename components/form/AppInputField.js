@@ -16,6 +16,7 @@ export default function AppInputField({
   onPressIcon,
   style,
   errors,
+  ...other
 }) {
   return (
     <View style={{ marginVertical: 5 }}>
@@ -46,6 +47,7 @@ export default function AppInputField({
                 onPress={onPressIcon}
               />
             }
+            {...other}
           />
         )}
       />

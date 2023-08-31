@@ -4,6 +4,7 @@ import {
   ImageBackground,
   View,
   KeyboardAvoidingView,
+  ToastAndroid,
   // Image,
 } from "react-native";
 import { useForm } from "react-hook-form";
@@ -15,6 +16,7 @@ import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../FirebaseConfig";
 import { ActivityIndicator } from "react-native-paper";
+import FirebaseErrorHandler from "../components/form/FirebaseErrorHandler";
 
 // =====================================================
 
@@ -55,11 +57,11 @@ export default function SignupView({ navigation }) {
         },
         { merge: true }
       );
-      alert("user signed in ");
+      ToastAndroid.show("Signed in successfully", ToastAndroid.LONG);
       navigation.navigate("login");
     } catch (error) {
+      FirebaseErrorHandler(error);
       console.log("error", error.message);
-      alert(error);
     } finally {
       setLoading(false);
     }

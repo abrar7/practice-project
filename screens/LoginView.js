@@ -16,6 +16,7 @@ import { FIRESTORE_DB } from "../FirebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { ActivityIndicator } from "react-native-paper";
+import FirebaseErrorHandler from "../components/form/FirebaseErrorHandler";
 
 // ==================================================================
 
@@ -69,10 +70,18 @@ export default function LoginView({ route, navigation }) {
       }
       setLoading(false);
     } catch (error) {
-      console.log("error", error.message);
-      ToastAndroid.show("Something went wrong. Try again!", ToastAndroid.LONG);
+      FirebaseErrorHandler(error);
+      console.log("error==>", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = () => {
+    if (role === "customer") {
+      navigation.navigate("forgotPassword");
+    } else {
+      ToastAndroid.show("Contact to your manager!", ToastAndroid.LONG);
     }
   };
 
@@ -117,9 +126,7 @@ export default function LoginView({ route, navigation }) {
           errors={errors}
         />
         <View style={{ display: "flex", alignItems: "flex-end" }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("forgotPassword")}
-          >
+          <TouchableOpacity onPress={handleForgotPassword}>
             <Text
               style={{
                 color: "white",
@@ -144,17 +151,6 @@ export default function LoginView({ route, navigation }) {
               <ActivityIndicator size="small" color="white" />
             )}
           </Button>
-
-          {/* <View style={{ display: "flex", alignItems: "center", marginTop: 5 }}>
-            <Button
-              style={{ marginTop: 7 }}
-              appearance="ghost"
-              status="control"
-              onPress={() => navigation.navigate("signUp")}
-            >
-              Don't have Account? Sign up here
-            </Button>
-          </View> */}
         </View>
       </View>
     </ImageBackground>
