@@ -1,22 +1,33 @@
+import React from "react";
+import {
+  View,
+  StyleSheet,
+  ToastAndroid,
+  Button,
+  StatusBar,
+} from "react-native";
 
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+const TestFile = () => {
+  const handleToast = () => {
+    ToastAndroid.show("A pikachu appeared nearby !", ToastAndroid.LONG);
+  };
 
-export default function TestFile() {
-    return (
-        <View>
-            <Text>
-                this is test file                this is test file
-                this is test file
-                this is test file
-                this is test file
-                this is test file
+  return (
+    <View style={styles.container}>
+      <Button title="Toggle Toast" onPress={() => handleToast()} />
+    </View>
+  );
+};
 
-            </Text>
-        </View>
-    )
-}
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "blue",
+    padding: 8,
+    height: "100%",
+    width: "100%",
+  },
+});
 
-
-
-const styles = StyleSheet.create({})
+export default TestFile;

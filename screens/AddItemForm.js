@@ -3,18 +3,24 @@ import { StyleSheet, ImageBackground, View } from "react-native";
 import { useForm } from "react-hook-form";
 import { Button, Icon, Text } from "@ui-kitten/components";
 import AppInputField from "../components/form/AppInputField";
+import { doc, setDoc } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
+import { FIRESTORE_DB } from "../FirebaseConfig";
 import { Ionicons } from "@expo/vector-icons";
 import UploadImage from "../screens/UploadImage";
+import AppCircularProgress from "../components/form/AppCircularProgress";
 
 // ===================================================================
 
-export default function AddItemForm() {
-  const [passwordVisible, setPasswordVisible] = useState(false);
+export default function AddItemForm({ navigation }) {
+  const [loading, setLoading] = useState(false);
   const [imgURL, setImgURL] = useState();
+  const database = FIRESTORE_DB;
 
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -27,10 +33,36 @@ export default function AddItemForm() {
   });
 
   const onSubmit = async (data) => {
-    // navigation.navigate("login");
-
-    console.log("formData", data);
-    console.log("image Url", imgURL);
+    setLoading(true);
+    try {
+      const stockCollection = collection(database, "stockItems");
+      const response = await addDoc(stockCollection, {
+        itemName: data.itemName,
+        companyName: data.companyName,
+        inStock: Number(data.itemsInStock),
+        price: Number(data.price),
+        weight: Number(data.weight),
+        imgLink: imgURL,
+      });
+      const uid = response?.id;
+      setDoc(
+        doc(database, "stockItems", uid),
+        {
+          id: uid,
+        },
+        { merge: true }
+      );
+      alert("item added in stock");
+      navigation.navigate("generateQRCode", {
+        id: uid,
+        product: data.itemName,
+        price: data.price,
+      });
+      reset();
+      setLoading(false);
+    } catch (err) {
+      alert("Error", err);
+    }
   };
 
   return (
@@ -96,8 +128,16 @@ export default function AddItemForm() {
         <UploadImage setImgURL={setImgURL} />
 
         <View style={styles.buttonContainer}>
-          <Button size="giant" onPress={handleSubmit(onSubmit)}>
-            Generate QR Code
+          <Button
+            size="giant"
+            onPress={handleSubmit(onSubmit)}
+            disabled={loading}
+          >
+            {!loading ? (
+              "Generate QR Code"
+            ) : (
+              <AppCircularProgress color="white" />
+            )}
           </Button>
         </View>
       </View>
@@ -112,7 +152,6 @@ const styles = StyleSheet.create({
   },
   imageConatiner: {
     display: "flex",
-    // backgroundColor: "black",
     flex: 0.13,
     justifyContent: "center",
     alignItems: "center",
@@ -136,13 +175,3 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
 });
-
-// Sign Up done
-
-// const renderPasswordIcon = (props) => (
-//   <TouchableWithoutFeedback
-//     onPress={() => setPasswordVisible(!passwordVisible)}
-//   >
-//     <Icon {...props} name={passwordVisible ? "eye-off" : "eye"} />
-//   </TouchableWithoutFeedback>
-// );

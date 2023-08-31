@@ -4,10 +4,10 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 
 // ===================================================================
 
-export default function ScannerComponent() {
+export default function ScannerComponent({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [text, setText] = useState("Not yet scanned");
+  const [text, setText] = useState("Noting scanned yet.");
 
   const askForCameraPermission = () => {
     (async () => {
@@ -25,7 +25,20 @@ export default function ScannerComponent() {
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     setText(data);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+
+    Alert.alert("Message", "Item has been scanned", [
+      {
+        text: "Add in cart",
+        onPress: () => {
+          navigation.navigate("itemCards", {
+            data: data,
+          });
+        },
+      },
+      { text: "Cancel", onPress: () => {} },
+    ]);
+
+    // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     console.log("Type: " + type + "\n Data: " + data);
   };
 
@@ -78,7 +91,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
-    backgroundColor: "yellow",
+    backgroundColor: "cyan",
     alignItems: "center",
     justifyContent: "center",
   },

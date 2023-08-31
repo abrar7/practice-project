@@ -1,19 +1,51 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, FlatList, View, Alert } from "react-native";
+import {
+  StyleSheet,
+  FlatList,
+  View,
+  Alert,
+  RefreshControl,
+  SafeAreaView,
+  StatusBar,
+} from "react-native";
 import { Text, Button } from "@ui-kitten/components";
 import ItemCard from "./ItemCard";
-// import { Chip } from "react-native-paper";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import ListItemDeleteAction from "./ListItemDeleteAction";
 import ListItemSeparator from "./ListItemSeparator";
 import EmptyListMessage from "./EmptyListMessage";
 import { Ionicons } from "@expo/vector-icons";
-import { items } from "../utils/ItemsData";
+import { FIRESTORE_DB } from "../../FirebaseConfig";
+// import { Chip } from "react-native-paper";
+// import { items } from "../utils/ItemsData";
 
 // ============================================================
 
-export default function ItemCards() {
-  const [refreshing, setRefreshing] = useState(false);
-  const [newItems, setNewItems] = useState(items);
+export default function ItemCards({ route, navigation }) {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [newItems, setNewItems] = useState();
+  const database = FIRESTORE_DB;
+  // const data = route.params.data;
+
+  const uid = "RXRYmi6jmLH3vbzI0W1O";
+
+  async function getData() {
+    const response = await getDocs(
+      query(collection(database, "stockItems"), where("id", "==", uid))
+    );
+    const documentData = response.docs.map((document) => ({
+      id: document.id,
+      ...document.data(),
+    }));
+    setIsRefreshing(true);
+    setNewItems(documentData);
+    setIsRefreshing(false);
+  }
+  useEffect(() => {
+    getData();
+  }, []);
+
+  // console.log("newItems", newItems);
 
   const handleAlertAction = (item) => {
     Alert.alert(
@@ -34,8 +66,13 @@ export default function ItemCards() {
     setNewItems(filteredData);
   };
 
+  const handleScanToAdd = () => {
+    navigation.navigate("scannerComponent");
+  };
+
   return (
-    <View style={styles.container}>
+    // <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text
         category="h2"
         style={{
@@ -59,7 +96,7 @@ export default function ItemCards() {
               price={item?.price}
               weight={item?.weight}
               image={item?.image}
-              imgURL={item?.imgURL}
+              imgURL={item?.imgLink}
               onPress={() => console.log("Tapped", item)}
               renderRightActions={() => (
                 <ListItemDeleteAction onPress={() => handleAlertAction(item)} />
@@ -67,10 +104,12 @@ export default function ItemCards() {
             />
           )}
           ItemSeparatorComponent={<ListItemSeparator />} // Divider
-          // refreshing={refreshing}
-          // onRefresh={() => {
-          //   setMessages(newItems);
-          // }}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={() => getData()}
+            />
+          }
         />
       ) : (
         <EmptyListMessage />
@@ -79,20 +118,26 @@ export default function ItemCards() {
         <Button status="info">Checkout Rs: 5600</Button>
         <Button
           status="primary"
+          onPress={handleScanToAdd}
           accessoryLeft={<Ionicons name="camera" size={20} color="white" />}
         >
           Scan To add
         </Button>
       </View>
-    </View>
+    </SafeAreaView>
+    // </View>
   );
 }
 
 const styles = StyleSheet.create({
+  // container: {
+  //   display: "flex",
+  //   height: "100%",
+  //   justifyContent: "space-between",
+  // },
   container: {
-    display: "flex",
-    height: "100%",
-    justifyContent: "space-between",
+    flex: 1,
+    paddingTop: StatusBar.currentHeight,
   },
   button: {
     flexDirection: "row",
