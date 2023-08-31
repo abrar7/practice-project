@@ -5,6 +5,7 @@ import {
   View,
   // Image,
   TouchableOpacity,
+  ToastAndroid,
 } from "react-native";
 import { useForm } from "react-hook-form";
 import { Button, Text } from "@ui-kitten/components";
@@ -13,10 +14,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { FIRESTORE_DB } from "../FirebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { User } from "firebase/auth";
-
 import { signInWithEmailAndPassword } from "firebase/auth";
-import AppCircularProgress from "../components/form/AppCircularProgress";
+import { ActivityIndicator } from "react-native-paper";
 
 // ==================================================================
 
@@ -27,6 +26,7 @@ export default function LoginView({ route, navigation }) {
   const auth = FIREBASE_AUTH;
   const database = FIRESTORE_DB;
 
+  // console.log("role is:", role);
   const {
     control,
     handleSubmit,
@@ -56,16 +56,21 @@ export default function LoginView({ route, navigation }) {
           data?.email,
           data?.password
         );
-        alert("Admin logedIn ");
+        if (role === "customer") {
+          navigation.navigate("customerHomeScreen");
+        } else if (role === "admin") {
+          navigation.navigate("adminHomeScreen");
+        }
+        ToastAndroid.show(`Login Successfully`, ToastAndroid.LONG);
+        setLoading(false);
       } else {
-        alert("Email not Authorized to login");
+        ToastAndroid.show("Email not authorized to login", ToastAndroid.LONG);
+        setLoading(false);
       }
-
-      // navigation.navigate("welcomeScreen");
-      // navigation.navigate("itemCards");
+      setLoading(false);
     } catch (error) {
       console.log("error", error.message);
-      alert(error);
+      ToastAndroid.show("Something went wrong. Try again!", ToastAndroid.LONG);
     } finally {
       setLoading(false);
     }
@@ -133,24 +138,23 @@ export default function LoginView({ route, navigation }) {
             disabled={loading}
             onPress={handleSubmit(onSubmit)}
           >
-            {!loading ? "LOGIN" : <AppCircularProgress color="white" />}
+            {!loading ? (
+              "LOGIN"
+            ) : (
+              <ActivityIndicator size="small" color="white" />
+            )}
           </Button>
-          {role === "admin" ? (
-            ""
-          ) : (
-            <View
-              style={{ display: "flex", alignItems: "center", marginTop: 5 }}
+
+          {/* <View style={{ display: "flex", alignItems: "center", marginTop: 5 }}>
+            <Button
+              style={{ marginTop: 7 }}
+              appearance="ghost"
+              status="control"
+              onPress={() => navigation.navigate("signUp")}
             >
-              <Button
-                style={{ marginTop: 7 }}
-                appearance="ghost"
-                status="control"
-                onPress={() => navigation.navigate("signUp")}
-              >
-                Don't have Account? Sign up here
-              </Button>
-            </View>
-          )}
+              Don't have Account? Sign up here
+            </Button>
+          </View> */}
         </View>
       </View>
     </ImageBackground>

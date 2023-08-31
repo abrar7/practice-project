@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import { Card, Text, Chip } from "react-native-paper";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { Button } from "@ui-kitten/components";
@@ -163,7 +163,8 @@ const styles = StyleSheet.create({
   image: {
     margin: 4,
     width: 92,
+    // height: 92,
     height: 92,
-    borderRadius: 30,
+    borderRadius: 10,
   },
 });

@@ -3,6 +3,7 @@ import {
   StyleSheet,
   ImageBackground,
   View,
+  KeyboardAvoidingView,
   // Image,
 } from "react-native";
 import { useForm } from "react-hook-form";
@@ -13,7 +14,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../FirebaseConfig";
-import AppCircularProgress from "../components/form/AppCircularProgress";
+import { ActivityIndicator } from "react-native-paper";
 
 // =====================================================
 
@@ -118,17 +119,21 @@ export default function SignupView({ navigation }) {
             onPress={handleSubmit(onSubmit)}
             disabled={loading}
           >
-            {!loading ? "SIGN UP" : <AppCircularProgress color="white" />}
+            {!loading ? (
+              "SIGN UP"
+            ) : (
+              <ActivityIndicator size="small" color="white" />
+            )}
           </Button>
 
-          <Button
+          {/* <Button
             style={{ marginTop: 7 }}
             appearance="ghost"
             status="control"
             onPress={() => navigation.navigate("login")}
           >
             Already have an account? Log In
-          </Button>
+          </Button> */}
         </View>
       </View>
     </ImageBackground>
@@ -165,13 +170,3 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
 });
-
-// Sign Up done
-
-// const renderPasswordIcon = (props) => (
-//   <TouchableWithoutFeedback
-//     onPress={() => setPasswordVisible(!passwordVisible)}
-//   >
-//     <Icon {...props} name={passwordVisible ? "eye-off" : "eye"} />
-//   </TouchableWithoutFeedback>
-// );

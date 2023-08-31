@@ -1,23 +1,28 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import QRCode from "react-native-qrcode-svg";
-import { Ionicons } from "@expo/vector-icons";
+import { Button } from "react-native-paper";
 
 // ===================================================================
 
-const data = [
-  { id: 1, name: "Object 1" },
-  { id: 2, name: "Object 2" },
-];
+export default function GenerateQRCode({ route, navigation }) {
+  const { id: itemUid, product: itemName, price: cost } = route.params;
+  const data = { id: itemUid, productName: itemName };
+  const jsonData = JSON.stringify(data);
 
-const jsonData = JSON.stringify(data);
-
-export default function GenerateQRCode() {
   return (
     <View style={styles.container}>
       <QRCode value={jsonData} size={200} />
+      <Text style={styles.text}>{`${itemName}, ${"$" + cost}`}</Text>
 
-      {/* <Text>Scan this QR code to retrieve the array of objects</Text> */}
+      <Button
+        icon="store-cog-outline"
+        mode="contained"
+        onPress={() => navigation.navigate("addItemForm")}
+        style={styles.buttons}
+      >
+        Add new item
+      </Button>
     </View>
   );
 }
@@ -28,5 +33,10 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  text: {
+    paddingTop: 30,
+    fontSize: 30,
+    color: "black",
   },
 });
