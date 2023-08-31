@@ -6,6 +6,7 @@ import {
   Alert,
   // Image,
   TouchableOpacity,
+  ToastAndroid,
 } from "react-native";
 import { useForm } from "react-hook-form";
 import { Button, Text } from "@ui-kitten/components";
@@ -14,6 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { sendPasswordResetEmail } from "firebase/auth";
 import AppCircularProgress from "../components/form/AppCircularProgress";
+import FirebaseErrorHandler from "../components/form/FirebaseErrorHandler";
 
 // ==================================================================
 
@@ -35,20 +37,14 @@ export default function ForgotPasswordView({ navigation }) {
     setLoading(true);
     try {
       const response = await sendPasswordResetEmail(auth, data?.email);
-      Alert.alert(
-        "Reset Password",
-        "Kindly check your email to reset the password.",
-        [
-          {
-            text: "ok",
-            onPress: () => navigation.navigate("login"),
-            style: "cancel",
-          },
-        ]
+      ToastAndroid.show(
+        `Check your email to reset the password`,
+        ToastAndroid.LONG
       );
+      navigation.navigate("confirmUser");
     } catch (error) {
-      console.log("error", error.message);
-      alert(error);
+      FirebaseErrorHandler(error);
+      console.log("error", error);
     } finally {
       setLoading(false);
     }
@@ -82,6 +78,7 @@ export default function ForgotPasswordView({ navigation }) {
           name="email"
           placeholder="Enter valid email"
           icon="mail"
+          textContentType="emailAddress"
           control={control}
           errors={errors}
         />
