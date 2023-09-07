@@ -26,7 +26,7 @@ const FirebaseErrorHandler = (error) => {
         errorMessage = "Account temporarily blocked. Reset password now!";
         break;
       case "auth/email-already-in-use":
-        errorMessage = "Email account already exist!";
+        errorMessage = "Account already exist!";
         break;
       case "auth/weak-password":
         errorMessage = "Password should be at least 6 characters!";

@@ -16,7 +16,7 @@ export default function EmptyListMessage() {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: "90%",
+    height: "85%",
     padding: 25,
     justifyContent: "center",
     alignItems: "center",
