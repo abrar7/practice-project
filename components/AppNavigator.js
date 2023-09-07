@@ -12,7 +12,11 @@ import SignupView from "../screens/SignupView";
 import ItemCards from "./cards/ItemCards";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { FIRESTORE_DB } from "../FirebaseConfig";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "../FirebaseConfig";
+import AppLoader from "../screens/AppLoader";
+import { onAuthStateChanged } from "firebase/auth";
+// import { onAuthStateChanged } from "firebase/auth";
+// import { FIREBASE_AUTH } from "./FirebaseConfig";
 
 // ===================================================================
 
@@ -20,11 +24,12 @@ const Stack = createNativeStackNavigator();
 
 // ===================================================================
 
-export default function AppNavigator({ user }) {
+export default function AppNavigator() {
   const [userRole, setUserRole] = useState();
+  const [initializing, setInitializing] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const database = FIRESTORE_DB;
-
-  console.log("user===", user);
 
   async function getData() {
     const response = await getDocs(
@@ -38,23 +43,31 @@ export default function AppNavigator({ user }) {
   }
 
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
+      setUser(authUser);
+      if (initializing) {
+        setInitializing(false);
+      }
+    });
     getData();
+
+    return unsubscribe;
   }, []);
 
-  return user ? (
+  if (initializing) {
+    return <AppLoader />;
+  }
+
+  //   console.log("user===", user);
+
+  return user || userRole === "customer" ? (
     <>
-      <Stack.Navigator
-        initialRouteName={
-          userRole === "customer" ? "customerHomeScreen" : "adminHomeScreen"
-        }
-      >
+      <Stack.Navigator initialRouteName={"customerHomeScreen"}>
         <Stack.Screen
           name="customerHomeScreen"
           component={CustomerHomeScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="adminHomeScreen" component={AdminHomeScreen} />
-        <Stack.Screen name="addItemForm" component={AddItemForm} />
         <Stack.Screen name="scannerComponent" component={ScannerComponent} />
         <Stack.Screen name="generateQRCode" component={GenerateQRCode} />
         <Stack.Screen
@@ -64,7 +77,14 @@ export default function AppNavigator({ user }) {
         />
       </Stack.Navigator>
     </>
-  ) : (
+  ) : user || userRole === "admin" ? (
+    <>
+      <Stack.Navigator initialRouteName={"adminHomeScreen"}>
+        <Stack.Screen name="adminHomeScreen" component={AdminHomeScreen} />
+        <Stack.Screen name="addItemForm" component={AddItemForm} />
+      </Stack.Navigator>
+    </>
+  ) : !user ? (
     <>
       <Stack.Navigator initialRouteName="confirmUser">
         <Stack.Screen name="confirmUser" component={ConfirmUser} />
@@ -74,5 +94,7 @@ export default function AppNavigator({ user }) {
         <Stack.Screen name="forgotPassword" component={ForgotPasswordView} />
       </Stack.Navigator>
     </>
+  ) : (
+    "issue"
   );
 }

@@ -26,12 +26,17 @@ export default function ScannerComponent({ navigation }) {
     setScanned(true);
     setText(data);
 
+    // const scannedData = data?.id;
+    const jsonToObj = JSON.parse(data);
+    // console.log("scannedData", scannedData);
+    // console.log("jsonToObj", typeof jsonToObj);
+
     Alert.alert("Message", "Item has been scanned", [
       {
         text: "Add in cart",
         onPress: () => {
           navigation.navigate("itemCards", {
-            data: data,
+            scannedData: jsonToObj,
           });
         },
       },
@@ -39,7 +44,7 @@ export default function ScannerComponent({ navigation }) {
     ]);
 
     // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-    console.log("Type: " + type + "\n Data: " + data);
+    // console.log("Type: " + type + "\n Data: " + data);
   };
 
   // Check permissions and return the screens

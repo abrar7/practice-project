@@ -32,28 +32,10 @@ import AppNavigator from "./components/AppNavigator";
 // ===================================================================
 
 export default function App() {
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
-      setUser(authUser);
-      if (initializing) {
-        setInitializing(false);
-      }
-    });
-
-    return unsubscribe;
-  }, []);
-
-  if (initializing) {
-    return <AppLoader />;
-  }
-
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
       <NavigationContainer>
-        <AppNavigator user={user} />
+        <AppNavigator />
       </NavigationContainer>
     </ApplicationProvider>
 
