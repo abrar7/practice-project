@@ -25,18 +25,14 @@ export default function ScannerComponent({ navigation }) {
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     setText(data);
-
-    // const scannedData = data?.id;
-    const jsonToObj = JSON.parse(data);
-    // console.log("scannedData", scannedData);
-    // console.log("jsonToObj", typeof jsonToObj);
+    const dataObject = JSON.parse(data);
 
     Alert.alert("Message", "Item has been scanned", [
       {
         text: "Add in cart",
         onPress: () => {
           navigation.navigate("itemCards", {
-            scannedData: jsonToObj,
+            scannedItem: dataObject.id,
           });
         },
       },

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   FlatList,
@@ -17,37 +17,39 @@ import EmptyListMessage from "./EmptyListMessage";
 import { Ionicons } from "@expo/vector-icons";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { ToastAndroid } from "react-native";
-// import { Chip } from "react-native-paper";
-// import { items } from "../utils/ItemsData";
 
 // ============================================================
 
 export default function ItemCards({ route, navigation }) {
+  const scannedItemUid = route?.params?.scannedItem || "";
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [newItems, setNewItems] = useState();
+  const [count, setCount] = useState(1);
+  const [newItems, setNewItems] = useState([]);
+  const isFirstRender = useRef(true);
   const database = FIRESTORE_DB;
 
-  // const uid = "RXRYmi6jmLH3vbzI0W1O";
-
-  async function getData() {
-    const scannedData = route?.params?.scannedData;
-    const uid = scannedData?.id;
-    console.log("scannedData------------", uid);
-
-    const response = await getDocs();
-    query(collection(database, "stockItems"), where("id", "==", uid));
-    const documentData = response.docs.map((document) => ({
-      id: document.id,
-      ...document.data(),
-    }));
-    console.log("documentData", documentData);
-    setIsRefreshing(true);
-    setNewItems(documentData);
-    setIsRefreshing(false);
-  }
   useEffect(() => {
-    getData();
-  }, []);
+    async function getData() {
+      const response = await getDocs(
+        query(
+          collection(database, "stockItems"),
+          where("id", "==", scannedItemUid)
+        )
+      );
+      const documentData = response.docs.map((document) => ({
+        id: document.id,
+        ...document.data(),
+      }));
+      const scannedDataObj = documentData[0];
+      setNewItems((prevData) => [...prevData, scannedDataObj]);
+    }
+
+    if (!isFirstRender.current) {
+      getData();
+    } else {
+      isFirstRender.current = false;
+    }
+  }, [scannedItemUid]);
 
   const handleAlertAction = (item) => {
     Alert.alert(
@@ -73,6 +75,8 @@ export default function ItemCards({ route, navigation }) {
     navigation.navigate("scannerComponent");
   };
 
+  console.log("newItems", newItems.length);
+
   return (
     // <View style={styles.container}>
     <SafeAreaView style={styles.container}>
@@ -87,11 +91,10 @@ export default function ItemCards({ route, navigation }) {
       >
         Scanned Items List
       </Text>
-      <Button onPress={getData}>test</Button>
       {newItems?.length ? (
         <FlatList
           data={newItems}
-          keyExtractor={(message) => message.id.toString()}
+          keyExtractor={(message) => message?.id.toString()}
           renderItem={({ item }) => (
             <ItemCard
               key={item?.id}
@@ -101,7 +104,8 @@ export default function ItemCards({ route, navigation }) {
               weight={item?.weight}
               image={item?.image}
               imgURL={item?.imgLink}
-              onPress={() => console.log("Tapped", item)}
+              count={count}
+              setCount={setCount}
               renderRightActions={() => (
                 <ListItemDeleteAction onPress={() => handleAlertAction(item)} />
               )}
