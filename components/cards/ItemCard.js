@@ -15,8 +15,10 @@ export default function ItemCard({
   weight,
   imgURL,
   renderRightActions,
+  setCount,
+  count,
 }) {
-  const [count, setCount] = useState(1);
+  // const [count, setCount] = useState(1);
   const [itemPrice, setItemPrice] = useState(price);
 
   const handleIncrement = () => {
