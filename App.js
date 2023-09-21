@@ -29,16 +29,27 @@ import { StyleSheet, View, Text } from "react-native";
 import AppLoader from "./screens/AppLoader";
 import AppNavigator from "./components/AppNavigator";
 import CheckoutPage from "./screens/CheckoutPage";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { StripeProvider } from "@stripe/stripe-react-native";
 
-// ===================================================================
+// ======================================
+
+const queryClient = new QueryClient();
+const STRIPE_PUBLISH_KEY = "pk_test_PVXNhndw4ri1vxgB1XLWhGc5";
+
+// =====================================
 
 export default function App() {
   return (
-    <ApplicationProvider {...eva} theme={eva.light}>
-      <NavigationContainer>
-        <AppNavigator />
-      </NavigationContainer>
-    </ApplicationProvider>
+    <QueryClientProvider client={queryClient}>
+      <StripeProvider publishableKey={STRIPE_PUBLISH_KEY}>
+        <ApplicationProvider {...eva} theme={eva.light}>
+          <NavigationContainer>
+            <AppNavigator />
+          </NavigationContainer>
+        </ApplicationProvider>
+      </StripeProvider>
+    </QueryClientProvider>
 
     // <SafeAreaView>
     //   <ApplicationProvider {...eva} theme={eva.light}>

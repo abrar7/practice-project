@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { View, StyleSheet, ImageBackground, FlatList } from "react-native";
-import { Button, Text, Divider } from "@ui-kitten/components";
+import { Text, Divider, Button } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
 import { ActivityIndicator } from "react-native-paper";
 import ListItemSeparator from "../components/cards/ListItemSeparator";
+import StripePayment from "../components/payment/StripePayment";
 
 // =======================================================
 
 export default function CheckoutPage({ route }) {
-  const [loading, setLoading] = useState(false);
   const { subTotal, weightAge } = route.params;
   const routeArray = {
     subTotal: subTotal,
@@ -91,13 +91,7 @@ export default function CheckoutPage({ route }) {
       </View>
 
       <View style={styles.buttonContainer}>
-        <Button size="giant" disabled={loading}>
-          {!loading ? (
-            "Proceed payment"
-          ) : (
-            <ActivityIndicator size="small" color="white" />
-          )}
-        </Button>
+        <StripePayment grandTotal={grandTotal} />
       </View>
     </ImageBackground>
   );

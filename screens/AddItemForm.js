@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { StyleSheet, ImageBackground, View } from "react-native";
+import {
+  StyleSheet,
+  ImageBackground,
+  View,
+  ScrollView,
+  Scrol,
+} from "react-native";
 import { useForm } from "react-hook-form";
 import { Button, Icon, Text } from "@ui-kitten/components";
 import AppInputField from "../components/form/AppInputField";
@@ -72,6 +78,7 @@ export default function AddItemForm({ navigation }) {
       style={styles.container}
       blurRadius={20}
     >
+      {/* <ScrollView style={styles.scrollView}> */}
       <View style={styles.imageConatiner}>
         {/* <Image
           style={styles.image}
@@ -141,6 +148,7 @@ export default function AddItemForm({ navigation }) {
           </Button>
         </View>
       </View>
+      {/* </ScrollView> */}
     </ImageBackground>
   );
 }
@@ -159,6 +167,10 @@ const styles = StyleSheet.create({
   image: {
     width: 150,
     height: 150,
+  },
+  scrollView: {
+    backgroundColor: "black",
+    // marginHorizontal: 10,
   },
   textContainer: {
     justifyContent: "center",

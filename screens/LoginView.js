@@ -57,6 +57,15 @@ export default function LoginView({ route, navigation }) {
           data?.email,
           data?.password
         );
+        // try {
+        //   await AsyncStorage.setItem("userRole", role);
+        // } catch (error) {
+        //   ToastAndroid.show(
+        //     `Async storage issue ${error.message}`,
+        //     ToastAndroid.LONG
+        //   );
+        //   console.log("error.message", error.message);
+        // }
         if (role === "customer") {
           navigation.navigate("customerHomeScreen");
         } else if (role === "admin") {
