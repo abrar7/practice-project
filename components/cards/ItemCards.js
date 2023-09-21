@@ -18,7 +18,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { ToastAndroid } from "react-native";
 import { Foundation } from "@expo/vector-icons";
-import HeaderComponent from "./HeaderComponent";
 
 // ============================================================
 
@@ -45,13 +44,7 @@ export default function ItemCards({ route, navigation }) {
         ...document.data(),
       }));
       const scannedDataObj = documentData[0];
-      // const scannedDataObjId = scannedDataObj.id;
-      // if (newItems.find((v) => v.id === scannedDataObjId)) {
-      //   console.log("id found ");
-      // } else {
-      //   console.log("id not found");
-      // }
-      // console.log("scannedDataObjId", scannedDataObjId);
+
       setNewItems((prevData) => [...prevData, scannedDataObj]);
     }
 
@@ -87,7 +80,6 @@ export default function ItemCards({ route, navigation }) {
   };
 
   useEffect(() => {
-    // console.log("newItems", newItems);
     const makingTotal = () => {
       let totalPrice = 0;
       let weightage = 0;
