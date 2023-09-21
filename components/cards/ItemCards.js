@@ -17,6 +17,8 @@ import EmptyListMessage from "./EmptyListMessage";
 import { Ionicons } from "@expo/vector-icons";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { ToastAndroid } from "react-native";
+import { Foundation } from "@expo/vector-icons";
+import HeaderComponent from "./HeaderComponent";
 
 // ============================================================
 
@@ -25,6 +27,8 @@ export default function ItemCards({ route, navigation }) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [count, setCount] = useState(1);
   const [newItems, setNewItems] = useState([]);
+  const [checkoutAmount, setCheckoutAmount] = useState();
+  const [checkoutWeight, setCheckoutWeight] = useState();
   const isFirstRender = useRef(true);
   const database = FIRESTORE_DB;
 
@@ -41,6 +45,13 @@ export default function ItemCards({ route, navigation }) {
         ...document.data(),
       }));
       const scannedDataObj = documentData[0];
+      // const scannedDataObjId = scannedDataObj.id;
+      // if (newItems.find((v) => v.id === scannedDataObjId)) {
+      //   console.log("id found ");
+      // } else {
+      //   console.log("id not found");
+      // }
+      // console.log("scannedDataObjId", scannedDataObjId);
       setNewItems((prevData) => [...prevData, scannedDataObj]);
     }
 
@@ -75,10 +86,30 @@ export default function ItemCards({ route, navigation }) {
     navigation.navigate("scannerComponent");
   };
 
-  console.log("newItems", newItems.length);
+  useEffect(() => {
+    // console.log("newItems", newItems);
+    const makingTotal = () => {
+      let totalPrice = 0;
+      let weightage = 0;
+      for (const item of newItems) {
+        totalPrice += item.price;
+        weightage += item.weight;
+      }
+
+      setCheckoutAmount(totalPrice);
+      setCheckoutWeight(weightage);
+    };
+    makingTotal();
+  }, [newItems]);
+
+  const handleCheckout = () => {
+    navigation.navigate("checkoutPage", {
+      subTotal: checkoutAmount,
+      weightAge: checkoutWeight,
+    });
+  };
 
   return (
-    // <View style={styles.container}>
     <SafeAreaView style={styles.container}>
       <Text
         category="h2"
@@ -98,12 +129,7 @@ export default function ItemCards({ route, navigation }) {
           renderItem={({ item }) => (
             <ItemCard
               key={item?.id}
-              itemName={item?.itemName}
-              companyName={item?.companyName}
-              price={item?.price}
-              weight={item?.weight}
-              image={item?.image}
-              imgURL={item?.imgLink}
+              item={item}
               count={count}
               setCount={setCount}
               renderRightActions={() => (
@@ -112,18 +138,24 @@ export default function ItemCards({ route, navigation }) {
             />
           )}
           ItemSeparatorComponent={<ListItemSeparator />} // Divider
-          refreshControl={
-            <RefreshControl
-              refreshing={isRefreshing}
-              onRefresh={() => getData()}
-            />
-          }
+          // refreshControl={
+          //   <RefreshControl
+          //     refreshing={isRefreshing}
+          //     // onRefresh={() => getData()}
+          //     onRefresh={() => newItems}
+          //   />
+          // }
         />
       ) : (
         <EmptyListMessage />
       )}
       <View style={styles.button}>
-        <Button status="info">Checkout Rs: 5600</Button>
+        <Button
+          status="info"
+          disabled={newItems.length === 0}
+          onPress={handleCheckout}
+        >{`Checkout Rs: ${checkoutAmount}`}</Button>
+
         <Button
           status="primary"
           onPress={handleScanToAdd}
@@ -133,7 +165,6 @@ export default function ItemCards({ route, navigation }) {
         </Button>
       </View>
     </SafeAreaView>
-    // </View>
   );
 }
 
@@ -152,5 +183,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: "#e4e7ed",
     padding: 15,
+  },
+  checkoutText: {
+    fontSize: 43,
+    color: "black",
   },
 });

@@ -161,9 +161,9 @@ const styles = StyleSheet.create({
     height: 150,
   },
   textContainer: {
-    flex: 0.1,
     justifyContent: "center",
     marginLeft: 16,
+    marginTop: 6,
   },
   formContainer: {
     flex: 0.5,
@@ -171,7 +171,6 @@ const styles = StyleSheet.create({
     display: "flex",
   },
   buttonContainer: {
-    flex: 0.6,
-    marginTop: 30,
+    marginTop: 14,
   },
 });

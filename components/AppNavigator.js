@@ -15,8 +15,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../FirebaseConfig";
 import AppLoader from "../screens/AppLoader";
 import { onAuthStateChanged } from "firebase/auth";
-// import { onAuthStateChanged } from "firebase/auth";
-// import { FIREBASE_AUTH } from "./FirebaseConfig";
+import CheckoutPage from "../screens/CheckoutPage";
 
 // ===================================================================
 
@@ -30,16 +29,19 @@ export default function AppNavigator() {
   const [user, setUser] = useState(null);
   const database = FIRESTORE_DB;
 
-  // async function getData() {
-  //   const response = await getDocs(
-  //     query(collection(database, "user"), where("id", "==", user.uid))
-  //   );
-  //   const documentData = response.docs.map((document) => ({
-  //     id: document.id,
-  //     ...document.data(),
-  //   }));
-  //   setUserRole(documentData[0].role);
-  // }
+  async function getData() {
+    const response = await getDocs(
+      query(
+        collection(database, "user"),
+        where("id", "==", FIREBASE_AUTH?.currentUser?.uid)
+      )
+    );
+    const documentData = response.docs.map((document) => ({
+      id: document.id,
+      ...document.data(),
+    }));
+    setUserRole(documentData[0].role);
+  }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
@@ -48,7 +50,8 @@ export default function AppNavigator() {
         setInitializing(false);
       }
     });
-    // getData();
+    getData();
+    console.log("userRole", userRole);
 
     return unsubscribe;
   }, []);
@@ -61,20 +64,8 @@ export default function AppNavigator() {
 
   return (
     <Stack.Navigator
-      initialRouteName={user ? "CustomerHomeScreen" : "confirmUser"}
+      initialRouteName={user ? "customerHomeScreen" : "confirmUser"}
     >
-      <Stack.Screen
-        name="customerHomeScreen"
-        component={CustomerHomeScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen name="scannerComponent" component={ScannerComponent} />
-      <Stack.Screen name="generateQRCode" component={GenerateQRCode} />
-      <Stack.Screen
-        name="itemCards"
-        component={ItemCards}
-        options={{ headerShown: false }}
-      />
       <Stack.Screen name="adminHomeScreen" component={AdminHomeScreen} />
       <Stack.Screen name="addItemForm" component={AddItemForm} />
       <Stack.Screen name="confirmUser" component={ConfirmUser} />
@@ -82,6 +73,38 @@ export default function AppNavigator() {
       <Stack.Screen name="signUp" component={SignupView} />
       <Stack.Screen name="login" component={LoginView} />
       <Stack.Screen name="forgotPassword" component={ForgotPasswordView} />
+      <Stack.Screen name="customerHomeScreen" component={CustomerHomeScreen} />
+      <Stack.Screen name="scannerComponent" component={ScannerComponent} />
+      <Stack.Screen name="generateQRCode" component={GenerateQRCode} />
+      <Stack.Screen name="checkoutPage" component={CheckoutPage} />
+      <Stack.Screen
+        name="itemCards"
+        component={ItemCards}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
+  // return user ? (
+  //   // <Stack.Navigator initialRouteName="customerHomeScreen">
+  //   <Stack.Navigator initialRouteName="customerHomeScreen">
+  //     <Stack.Screen name="customerHomeScreen" component={CustomerHomeScreen} />
+  //     <Stack.Screen name="scannerComponent" component={ScannerComponent} />
+  //     <Stack.Screen name="generateQRCode" component={GenerateQRCode} />
+  //     <Stack.Screen
+  //       name="itemCards"
+  //       component={ItemCards}
+  //       options={{ headerShown: false }}
+  //     />
+  //   </Stack.Navigator>
+  // ) : (
+  //   <Stack.Navigator initialRouteName="adminHomeScreen">
+  //     <Stack.Screen name="adminHomeScreen" component={AdminHomeScreen} />
+  //     <Stack.Screen name="addItemForm" component={AddItemForm} />
+  //     <Stack.Screen name="confirmUser" component={ConfirmUser} />
+  //     <Stack.Screen name="customerAction" component={CustomerAction} />
+  //     <Stack.Screen name="signUp" component={SignupView} />
+  //     <Stack.Screen name="login" component={LoginView} />
+  //     <Stack.Screen name="forgotPassword" component={ForgotPasswordView} />
+  //   </Stack.Navigator>
+  // );
 }

@@ -28,6 +28,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { StyleSheet, View, Text } from "react-native";
 import AppLoader from "./screens/AppLoader";
 import AppNavigator from "./components/AppNavigator";
+import CheckoutPage from "./screens/CheckoutPage";
 
 // ===================================================================
 
@@ -40,11 +41,12 @@ export default function App() {
     </ApplicationProvider>
 
     // <SafeAreaView>
-    //   <ApplicationProvider {...eva} theme={eva.dark}>
+    //   <ApplicationProvider {...eva} theme={eva.light}>
     //     {/* <SignupView /> */}
     //     {/* <LoginView /> */}
     //     {/* <ForgotPasswordView /> */}
-    //     <TestFile />
+    //     {/* <TestFile /> */}
+    //     <CheckoutPage />
     //     {/* <AddItemForm /> */}
     //     {/* <ConfirmUser /> */}
     //     {/* <EmptyListMessage /> */}
