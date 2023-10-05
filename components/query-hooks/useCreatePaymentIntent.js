@@ -1,9 +1,12 @@
 import axios from "axios";
 import { useMutation } from "react-query";
 
-// Change the IP address everytime change the connection
-// const API_URL = "http://172.16.41.70:3000/payments/intents"; // LRC
-const API_URL = "http://192.168.43.83:3000/payments/intents"; // Mobile Data
+// ====================================================
+
+const backendUrl =
+  "https://fyp-backend-abrar-ul-haqs-projects.vercel.app/payments/intents";
+
+const API_URL = backendUrl;
 
 const createPaymentIntent = async (data) => {
   try {
