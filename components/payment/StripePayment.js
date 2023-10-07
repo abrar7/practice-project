@@ -6,7 +6,7 @@ import { useStripe } from "@stripe/stripe-react-native";
 
 // ========================================================
 
-export default function StripePayment({ grandTotal }) {
+export default function StripePayment({ grandTotal, navigation }) {
   const [amount, setAmount] = useState(200);
   const [loading, setLoading] = useState(false);
 

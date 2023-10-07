@@ -58,7 +58,7 @@ export default function AddItemForm({ navigation }) {
         },
         { merge: true }
       );
-      alert("item added in stock");
+      alert("Item added in stock");
       navigation.navigate("generateQRCode", {
         id: uid,
         product: data.itemName,
@@ -78,7 +78,6 @@ export default function AddItemForm({ navigation }) {
       style={styles.container}
       blurRadius={20}
     >
-      {/* <ScrollView style={styles.scrollView}> */}
       <View style={styles.imageConatiner}>
         {/* <Image
           style={styles.image}
@@ -116,21 +115,28 @@ export default function AddItemForm({ navigation }) {
           control={control}
           errors={errors}
         />
-
-        <AppInputField
-          name="price"
-          placeholder="Item Price"
-          keyboardType="numeric"
-          control={control}
-          errors={errors}
-        />
-        <AppInputField
-          name="itemsInStock"
-          placeholder="Items in Stock"
-          keyboardType="numeric"
-          control={control}
-          errors={errors}
-        />
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <AppInputField
+            name="price"
+            placeholder="Item Price"
+            keyboardType="numeric"
+            control={control}
+            errors={errors}
+          />
+          <AppInputField
+            name="itemsInStock"
+            placeholder="Items in Stock"
+            keyboardType="numeric"
+            control={control}
+            errors={errors}
+          />
+        </View>
 
         <UploadImage setImgURL={setImgURL} />
 
@@ -148,7 +154,6 @@ export default function AddItemForm({ navigation }) {
           </Button>
         </View>
       </View>
-      {/* </ScrollView> */}
     </ImageBackground>
   );
 }
@@ -160,7 +165,7 @@ const styles = StyleSheet.create({
   },
   imageConatiner: {
     display: "flex",
-    flex: 0.13,
+    flex: 0.2,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -170,17 +175,16 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     backgroundColor: "black",
-    // marginHorizontal: 10,
   },
   textContainer: {
     justifyContent: "center",
     marginLeft: 16,
-    marginTop: 6,
+    marginTop: 10,
   },
   formContainer: {
-    flex: 0.5,
-    paddingHorizontal: 16,
     display: "flex",
+    flex: 0.65,
+    paddingHorizontal: 16,
   },
   buttonContainer: {
     marginTop: 14,

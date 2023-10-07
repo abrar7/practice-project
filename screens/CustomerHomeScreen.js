@@ -8,11 +8,11 @@ import {
   StatusBar,
 } from "react-native";
 import { collection, getDocs, query, where } from "firebase/firestore";
-// import { Button } from "react-native-paper";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../FirebaseConfig";
 import { Button } from "@ui-kitten/components";
 import { AntDesign } from "@expo/vector-icons";
 import { ActivityIndicator } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // ==================================================
 
@@ -20,9 +20,14 @@ export default function CustomerHomeScreen({ navigation }) {
   const [userName, setUserName] = useState();
   const database = FIRESTORE_DB;
 
-  const handleLogout = () => {
-    FIREBASE_AUTH.signOut();
+  const handleLogout = async () => {
     navigation.navigate("confirmUser");
+    FIREBASE_AUTH.signOut();
+    try {
+      const value = await AsyncStorage.removeItem("userRole");
+    } catch (e) {
+      console.log("errors", e.message);
+    }
   };
 
   useEffect(() => {
