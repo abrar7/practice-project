@@ -17,6 +17,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { ActivityIndicator } from "react-native-paper";
 import FirebaseErrorHandler from "../components/form/FirebaseErrorHandler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // ==================================================================
 
@@ -57,15 +58,12 @@ export default function LoginView({ route, navigation }) {
           data?.email,
           data?.password
         );
-        // try {
-        //   await AsyncStorage.setItem("userRole", role);
-        // } catch (error) {
-        //   ToastAndroid.show(
-        //     `Async storage issue ${error.message}`,
-        //     ToastAndroid.LONG
-        //   );
-        //   console.log("error.message", error.message);
-        // }
+        try {
+          await AsyncStorage.setItem("userRole", role);
+          console.log("data set as:", role);
+        } catch (e) {
+          console.log("errorsss", e.message);
+        }
         if (role === "customer") {
           navigation.navigate("customerHomeScreen");
         } else if (role === "admin") {

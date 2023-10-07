@@ -2,13 +2,19 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // =====================================================
 
 const AdminHomeScreen = ({ navigation }) => {
-  const handleLogout = () => {
-    FIREBASE_AUTH.signOut();
+  const handleLogout = async () => {
     navigation.navigate("confirmUser");
+    try {
+      const value = await AsyncStorage.removeItem("userRole");
+    } catch (e) {
+      console.log("errors", e.message);
+    }
+    FIREBASE_AUTH.signOut();
   };
 
   const handleAddItems = () => {
