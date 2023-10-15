@@ -146,7 +146,9 @@ export default function ItemCards({ route, navigation }) {
           status="info"
           disabled={newItems.length === 0}
           onPress={handleCheckout}
-        >{`Checkout Rs: ${checkoutAmount}`}</Button>
+        >
+          {`Checkout Rs: ${checkoutAmount}`}{" "}
+        </Button>
 
         <Button
           status="primary"

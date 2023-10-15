@@ -1,49 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, Alert } from "react-native";
-import { Button } from "@ui-kitten/components";
+import { View, StyleSheet, Alert, ImageBackground } from "react-native";
+import { Button, Text } from "@ui-kitten/components";
 import { useCreatePaymentIntent } from "../query-hooks/useCreatePaymentIntent";
 import { useStripe } from "@stripe/stripe-react-native";
+import { ActivityIndicator } from "react-native-paper";
+import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 // ========================================================
 
-export default function StripePayment({ grandTotal, navigation }) {
-  const [amount, setAmount] = useState(200);
+export default function StripePayment({ route, navigation }) {
+  const [amount, setAmount] = useState(route.params.grandTotal);
   const [loading, setLoading] = useState(false);
-
   const { mutate, data, error, isLoading } = useCreatePaymentIntent();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
-
-  // const handleCheckout = async () => {
-  //   mutate({ amount });
-
-  //   if (error) {
-  //     console.log("Api response error!", error);
-  //     return Alert.alert("Api response error!", error.message);
-  //   }
-
-  //   const initResponse = await initPaymentSheet({
-  //     merchantDisplayName: "Testing mode Name",
-  //     paymentIntentClientSecret: data?.clientSecret,
-  //   });
-
-  //   if (initResponse.error) {
-  //     console.log("Init response error happen!", initResponse.error);
-  //     return Alert.alert(
-  //       "Init response error happen",
-  //       initResponse.error.message
-  //     );
-  //   }
-
-  //   const paymentResponse = await presentPaymentSheet();
-
-  //   if (paymentResponse.error) {
-  //     console.log("Payment Response error happen!", paymentResponse.error);
-  //     return Alert.alert(
-  //       "Payment Response error happen",
-  //       paymentResponse.error.message
-  //     );
-  //   }
-  // };
+  const [paymentSuccessful, setPaymentSuccessful] = useState(false);
 
   useEffect(() => {
     if (data && !error) {
@@ -52,6 +23,7 @@ export default function StripePayment({ grandTotal, navigation }) {
   }, [data, error]);
 
   const handlePaymentFlow = async () => {
+    setLoading(true);
     try {
       const initResponse = await initPaymentSheet({
         merchantDisplayName: "Testing mode Name",
@@ -67,6 +39,8 @@ export default function StripePayment({ grandTotal, navigation }) {
       }
 
       const paymentResponse = await presentPaymentSheet();
+      setLoading(false);
+      setPaymentSuccessful(true);
 
       if (paymentResponse.error) {
         console.log("Payment Response error happen!", paymentResponse.error);
@@ -75,28 +49,71 @@ export default function StripePayment({ grandTotal, navigation }) {
           paymentResponse.error.message
         );
       }
+      setLoading(false);
     } catch (err) {
       console.error("An error occurred:", err);
       Alert.alert("An error occurred:", err.message);
     }
+    setLoading(false);
   };
 
   const handleCheckout = () => {
     mutate({ amount });
   };
 
-  return (
-    <View style={styles.container}>
-      <Text>{data?.clientSecret}</Text>
+  const handleFinished = () => {
+    navigation.navigate("success");
+  };
 
-      <Button size="giant" disabled={loading} onPress={handleCheckout}>
-        {!loading ? (
-          "Proceed payment"
-        ) : (
-          <ActivityIndicator size="small" color="white" />
+  return (
+    <ImageBackground
+      source={require("../../assets/card4.jpg")}
+      resizeMode="cover"
+      style={styles.container}
+      blurRadius={20}
+    >
+      <View style={styles.imageConatiner}>
+        {/* <Image
+          style={styles.image}
+          source={require("../../assets/cartlogo.png")}
+        /> */}
+        <Ionicons name="cart" size={74} color="white" />
+        <Text category="h4" style={{ color: "white" }}>
+          Digicart
+        </Text>
+        <View style={styles.textContainer}>
+          <Text category="h2" status="control">
+            Pay here
+          </Text>
+        </View>
+      </View>
+      <View style={styles.container}>
+        <Button
+          size="giant"
+          disabled={loading || paymentSuccessful}
+          onPress={handleCheckout}
+          accessoryLeft={
+            <FontAwesome
+              name="dollar"
+              size={24}
+              color={data?.clientSecret ? "white" : "red"}
+            />
+          }
+        >
+          {!loading ? (
+            "Proceed payment"
+          ) : (
+            <ActivityIndicator size="small" color="white" />
+          )}
+        </Button>
+
+        {paymentSuccessful && (
+          <Button onPress={handleFinished} style={styles.button} size="giant">
+            Finished
+          </Button>
         )}
-      </Button>
-    </View>
+      </View>
+    </ImageBackground>
   );
 }
 
@@ -105,27 +122,23 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    width: "100%",
+    height: "100%",
   },
-  input: {
-    width: "80%",
-    height: 50,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    paddingHorizontal: 15,
-    marginBottom: 20,
+  imageConatiner: {
+    display: "flex",
+    flex: 0.3,
+    justifyContent: "center",
+    alignItems: "center",
   },
   button: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#007bff",
-    padding: 10,
+    margin: 30,
     borderRadius: 5,
   },
-  buttonText: {
-    color: "white",
-    fontSize: 18,
-    marginRight: 10,
+  textContainer: {
+    justifyContent: "left",
+    marginLeft: 16,
   },
 });

@@ -52,7 +52,7 @@ export default function ForgotPasswordView({ navigation }) {
 
   return (
     <ImageBackground
-      source={require("../assets/ps1.jpg")}
+      source={require("../assets/cart9.jpg")}
       resizeMode="cover"
       style={styles.container}
       blurRadius={20}

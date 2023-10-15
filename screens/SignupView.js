@@ -69,7 +69,7 @@ export default function SignupView({ navigation }) {
 
   return (
     <ImageBackground
-      source={require("../assets/cart1.jpg")}
+      source={require("../assets/cart10.jpg")}
       resizeMode="stretch"
       style={styles.container}
       blurRadius={20}
@@ -127,15 +127,6 @@ export default function SignupView({ navigation }) {
               <ActivityIndicator size="small" color="white" />
             )}
           </Button>
-
-          {/* <Button
-            style={{ marginTop: 7 }}
-            appearance="ghost"
-            status="control"
-            onPress={() => navigation.navigate("login")}
-          >
-            Already have an account? Log In
-          </Button> */}
         </View>
       </View>
     </ImageBackground>

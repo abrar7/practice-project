@@ -1,33 +1,48 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  ToastAndroid,
-  Button,
-  StatusBar,
-} from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Button } from "@ui-kitten/components";
 
-const TestFile = () => {
-  const handleToast = () => {
-    ToastAndroid.show("A pikachu appeared nearby !", ToastAndroid.LONG);
-  };
+// ======================================
 
+export default function TestFile() {
   return (
-    <View style={styles.container}>
-      <Button title="Toggle Toast" onPress={() => handleToast()} />
-    </View>
+    <SafeAreaView style={{ backgroundColor: "cyan" }}>
+      <View
+        style={{
+          display: "flex",
+          alignItems: "center",
+          height: "100%",
+          marginTop: 50,
+        }}
+      >
+        <Image
+          source={require("../assets/payment.png")}
+          style={{
+            width: 300,
+            height: 300,
+            marginBottom: 50,
+
+            borderColor: "black",
+          }}
+        />
+        <Text style={styles.text}>Payment was Successfull!</Text>
+        <Text style={styles.text}>Thanks for shopping</Text>
+        <Text style={styles.text}>Come back soon</Text>
+        <Button style={styles.button} status="primary" size="large">
+          Back to Home Screen
+        </Button>
+      </View>
+    </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "blue",
-    padding: 8,
-    height: "100%",
-    width: "100%",
+  text: {
+    fontSize: 35,
+    fontWeight: "700",
+  },
+  button: {
+    margin: 42,
   },
 });
-
-export default TestFile;
