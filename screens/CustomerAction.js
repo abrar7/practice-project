@@ -19,7 +19,7 @@ export default function CustomerAction({ route, navigation }) {
   };
   return (
     <ImageBackground
-      source={require("../assets/cart3.jpg")}
+      source={require("../assets/cart7.jpg")}
       resizeMode="cover"
       style={styles.container}
       blurRadius={20}

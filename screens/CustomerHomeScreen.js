@@ -22,7 +22,7 @@ export default function CustomerHomeScreen({ navigation }) {
 
   const handleLogout = async () => {
     navigation.navigate("confirmUser");
-    FIREBASE_AUTH.signOut();
+    await FIREBASE_AUTH.signOut();
     try {
       const value = await AsyncStorage.removeItem("userRole");
     } catch (e) {
@@ -61,9 +61,8 @@ export default function CustomerHomeScreen({ navigation }) {
   };
 
   return userName ? (
-    // <View style={styles.container}>
     <SafeAreaView style={styles.container}>
-      <Text style={styles.welcome}>Welcome {userName}</Text>
+      <Text style={styles.welcome}>Welcome {userName.toUpperCase()}</Text>
 
       <Button
         appearance="filled"
@@ -86,7 +85,6 @@ export default function CustomerHomeScreen({ navigation }) {
       </Button>
     </SafeAreaView>
   ) : (
-    // {/* </View> */}
     <View style={styles.loader}>
       <ActivityIndicator size="large" color="black" />
     </View>
@@ -94,17 +92,15 @@ export default function CustomerHomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  // },
   container: {
     flex: 1,
     paddingTop: StatusBar.currentHeight,
-    backgroundColor: "cyan",
+    backgroundColor: "#202124",
     justifyContent: "center",
     alignItems: "center",
   },
   welcome: {
+    color: "white",
     fontSize: 32,
   },
   button: {

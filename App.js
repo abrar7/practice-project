@@ -6,6 +6,9 @@ import AppNavigator from "./components/AppNavigator";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { SafeAreaView } from "react-native-safe-area-context"; // For safe area view in Android
+import TestFile from "./screens/TestFile";
+import PaymentSuccessfull from "./screens/PaymentSuccessfull";
+import AppLoader from "./screens/AppLoader";
 
 // ======================================
 
@@ -32,7 +35,9 @@ export default function App() {
     //     {/* <LoginView /> */}
     //     {/* <ForgotPasswordView /> */}
     //     {/* <TestFile /> */}
-    //     <CheckoutPage />
+    //     {/* <AppLoader /> */}
+    //     {/* <PaymentSuccessfull /> */}
+    //     {/* <CheckoutPage /> */}
     //     {/* <AddItemForm /> */}
     //     {/* <ConfirmUser /> */}
     //     {/* <EmptyListMessage /> */}

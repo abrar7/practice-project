@@ -17,6 +17,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import CheckoutPage from "../screens/CheckoutPage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import StripePayment from "./payment/StripePayment";
+import PaymentSuccessfull from "../screens/PaymentSuccessfull";
 
 // ===================================================================
 
@@ -68,6 +69,7 @@ export default function AppNavigator() {
       <Stack.Screen name="checkoutPage" component={CheckoutPage} />
       <Stack.Screen name="itemCards" component={ItemCards} />
       <Stack.Screen name="stripePayment" component={StripePayment} />
+      <Stack.Screen name="success" component={PaymentSuccessfull} />
     </Stack.Navigator>
   ) : (
     <Stack.Navigator initialRouteName="confirmUser">

@@ -8,7 +8,7 @@ import StripePayment from "../components/payment/StripePayment";
 
 // =======================================================
 
-export default function CheckoutPage({ route }) {
+export default function CheckoutPage({ route, navigation }) {
   const { subTotal, weightAge } = route.params;
   const routeArray = {
     subTotal: subTotal,
@@ -24,7 +24,7 @@ export default function CheckoutPage({ route }) {
       id: 1,
       title: "Cart Weight",
       description: "Total weightage of goods",
-      price: `${routeArray.weightAge.toFixed(1)} Kg`,
+      price: `${routeArray.weightAge.toFixed(3)} Kg`,
     },
     {
       id: 2,
@@ -52,9 +52,15 @@ export default function CheckoutPage({ route }) {
     },
   ];
 
+  const handleOnClick = () => {
+    navigation.navigate("stripePayment", {
+      grandTotal: grandTotal,
+    });
+  };
+
   return (
     <ImageBackground
-      source={require("../assets/cart3.jpg")}
+      source={require("../assets/cart9.jpg")}
       resizeMode="cover"
       style={styles.container}
       blurRadius={20}
@@ -91,7 +97,9 @@ export default function CheckoutPage({ route }) {
       </View>
 
       <View style={styles.buttonContainer}>
-        <StripePayment grandTotal={grandTotal} />
+        <Button size="giant" onPress={handleOnClick}>
+          NEXT
+        </Button>
       </View>
     </ImageBackground>
   );
