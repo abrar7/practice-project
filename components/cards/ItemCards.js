@@ -17,35 +17,42 @@ import EmptyListMessage from "./EmptyListMessage";
 import { Ionicons } from "@expo/vector-icons";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { ToastAndroid } from "react-native";
-import { Foundation } from "@expo/vector-icons";
 
 // ============================================================
 
 export default function ItemCards({ route, navigation }) {
   const scannedItemUid = route?.params?.scannedItem || "";
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [count, setCount] = useState(1);
   const [newItems, setNewItems] = useState([]);
   const [checkoutAmount, setCheckoutAmount] = useState();
   const [checkoutWeight, setCheckoutWeight] = useState();
   const isFirstRender = useRef(true);
   const database = FIRESTORE_DB;
+  // const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
     async function getData() {
-      const response = await getDocs(
-        query(
-          collection(database, "stockItems"),
-          where("id", "==", scannedItemUid)
-        )
-      );
-      const documentData = response.docs.map((document) => ({
-        id: document.id,
-        ...document.data(),
-      }));
-      const scannedDataObj = documentData[0];
-
-      setNewItems((prevData) => [...prevData, scannedDataObj]);
+      if (newItems.some((v) => v.id === scannedItemUid)) {
+        setNewItems((prev) =>
+          prev.map((item) =>
+            item.id === scannedItemUid
+              ? { ...item, count: item.count + 1 }
+              : item
+          )
+        );
+      } else {
+        const response = await getDocs(
+          query(
+            collection(database, "stockItems"),
+            where("id", "==", scannedItemUid)
+          )
+        );
+        const documentData = response.docs.map((document) => ({
+          id: document.id,
+          ...document.data(),
+        }));
+        const scannedDataObj = documentData[0];
+        setNewItems((prevData) => [...prevData, scannedDataObj]);
+      }
     }
 
     if (!isFirstRender.current) {
@@ -84,8 +91,8 @@ export default function ItemCards({ route, navigation }) {
       let totalPrice = 0;
       let weightage = 0;
       for (const item of newItems) {
-        totalPrice += item.price;
-        weightage += item.weight;
+        totalPrice += item.price * item.count;
+        weightage += item.weight * item.count;
       }
 
       setCheckoutAmount(totalPrice);
@@ -94,10 +101,26 @@ export default function ItemCards({ route, navigation }) {
     makingTotal();
   }, [newItems]);
 
+  const handleIncrement = (itemId) => {
+    setNewItems((prev) =>
+      prev.map((item) =>
+        item.id === itemId ? { ...item, count: item.count + 1 } : item
+      )
+    );
+  };
+  const handleDecrement = (itemId) => {
+    setNewItems((prev) =>
+      prev.map((item) =>
+        item.id === itemId ? { ...item, count: item.count - 1 } : item
+      )
+    );
+  };
+
   const handleCheckout = () => {
     navigation.navigate("checkoutPage", {
       subTotal: checkoutAmount,
       weightAge: checkoutWeight,
+      newItems: newItems,
     });
   };
 
@@ -122,8 +145,8 @@ export default function ItemCards({ route, navigation }) {
             <ItemCard
               key={item?.id}
               item={item}
-              count={count}
-              setCount={setCount}
+              handleIncrement={() => handleIncrement(item?.id)}
+              handleDecrement={() => handleDecrement(item?.id)}
               renderRightActions={() => (
                 <ListItemDeleteAction onPress={() => handleAlertAction(item)} />
               )}

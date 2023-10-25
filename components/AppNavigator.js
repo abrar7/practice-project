@@ -58,7 +58,8 @@ export default function AppNavigator() {
   return user ? (
     <Stack.Navigator
       initialRouteName={
-        userRole === "customer" ? "customerHomeScreen" : "adminHomeScreen"
+        // userRole === "customer" ? "customerHomeScreen" : "adminHomeScreen"
+        userRole === "customer" ? "itemCards" : "adminHomeScreen"
       }
     >
       <Stack.Screen name="customerHomeScreen" component={CustomerHomeScreen} />
