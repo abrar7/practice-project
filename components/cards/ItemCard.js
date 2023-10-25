@@ -10,24 +10,11 @@ import { AntDesign } from "@expo/vector-icons";
 
 export default function ItemCard({
   item,
-  setCount,
-  count,
+  handleIncrement,
+  handleDecrement,
   renderRightActions,
 }) {
-  const { itemName, price, companyName, weight, imgLink } = item;
-  const [itemPrice, setItemPrice] = useState(price);
-
-  const handleIncrement = () => {
-    setCount(count + 1);
-    setItemPrice(itemPrice + price);
-  };
-
-  const handleDecrement = () => {
-    if (count > 1) {
-      setCount(count - 1);
-      setItemPrice(itemPrice - price);
-    }
-  };
+  const { itemName, price, companyName, weight, imgLink, count } = item;
 
   return (
     <>
@@ -90,7 +77,7 @@ export default function ItemCard({
                       marginVertical: 10,
                     }}
                   >
-                    <Chip icon="information">Rs: {itemPrice}</Chip>
+                    <Chip icon="information">Rs: {price * count}</Chip>
                   </Text>
                   <View
                     style={{
@@ -127,7 +114,7 @@ export default function ItemCard({
                       size="small"
                       status="info"
                       appearance="filled"
-                      // disabled={count >= 5}
+                      disabled={count >= 5}
                       onPress={handleIncrement}
                       style={{ borderRadius: 50, borderWidth: 1 }}
                       accessoryLeft={<AntDesign name="pluscircle" size={15} />}

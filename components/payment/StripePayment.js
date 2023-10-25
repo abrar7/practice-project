@@ -11,9 +11,9 @@ import { Ionicons } from "@expo/vector-icons";
 
 export default function StripePayment({ route, navigation }) {
   const [amount, setAmount] = useState(route.params.grandTotal);
-  const [loading, setLoading] = useState(false);
-  const { mutate, data, error, isLoading } = useCreatePaymentIntent();
+  const { mutate, data, error } = useCreatePaymentIntent();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const [loading, setLoading] = useState(false);
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
 
   useEffect(() => {
@@ -23,8 +23,8 @@ export default function StripePayment({ route, navigation }) {
   }, [data, error]);
 
   const handlePaymentFlow = async () => {
-    setLoading(true);
     try {
+      setLoading(true);
       const initResponse = await initPaymentSheet({
         merchantDisplayName: "Testing mode Name",
         paymentIntentClientSecret: data?.clientSecret,
@@ -37,10 +37,10 @@ export default function StripePayment({ route, navigation }) {
           initResponse.error.message
         );
       }
+      setLoading(false);
 
       const paymentResponse = await presentPaymentSheet();
       setLoading(false);
-      setPaymentSuccessful(true);
 
       if (paymentResponse.error) {
         console.log("Payment Response error happen!", paymentResponse.error);
@@ -48,13 +48,16 @@ export default function StripePayment({ route, navigation }) {
           "Payment Response error happen",
           paymentResponse.error.message
         );
+      } else {
+        setLoading(false);
+        setPaymentSuccessful(true);
       }
-      setLoading(false);
     } catch (err) {
       console.error("An error occurred:", err);
       Alert.alert("An error occurred:", err.message);
+      setPaymentSuccessful(false);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleCheckout = () => {
@@ -100,10 +103,10 @@ export default function StripePayment({ route, navigation }) {
             />
           }
         >
-          {!loading ? (
-            "Proceed payment"
-          ) : (
+          {loading ? (
             <ActivityIndicator size="small" color="white" />
+          ) : (
+            "Proceed Payment"
           )}
         </Button>
 
@@ -127,7 +130,7 @@ const styles = StyleSheet.create({
   },
   imageConatiner: {
     display: "flex",
-    flex: 0.3,
+    flex: 0.5,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -138,7 +141,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   textContainer: {
-    justifyContent: "left",
-    marginLeft: 16,
+    marginTop: 35,
   },
 });

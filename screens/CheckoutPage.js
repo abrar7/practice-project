@@ -9,7 +9,7 @@ import StripePayment from "../components/payment/StripePayment";
 // =======================================================
 
 export default function CheckoutPage({ route, navigation }) {
-  const { subTotal, weightAge } = route.params;
+  const { subTotal, weightAge, newItems } = route.params;
   const routeArray = {
     subTotal: subTotal,
     weightAge: weightAge,
@@ -30,7 +30,7 @@ export default function CheckoutPage({ route, navigation }) {
       id: 2,
       title: "Sub Total ",
       description: "Bill of your goods",
-      price: `${routeArray.subTotal.toFixed(1)} PKR`,
+      price: `${routeArray.subTotal.toFixed(0)} PKR`,
     },
     {
       id: 3,
@@ -42,19 +42,19 @@ export default function CheckoutPage({ route, navigation }) {
       id: 4,
       title: "Reward Coins ",
       description: "Discount from super market",
-      price: `${reward.toFixed(1)} PKR`,
+      price: `${reward.toFixed(0)} PKR`,
     },
     {
       id: 5,
       title: "Total",
       description: "Tolal Payment after reward points",
-      price: `${grandTotal.toFixed(1)} PKR`,
+      price: `${grandTotal.toFixed(0)} PKR`,
     },
   ];
 
   const handleOnClick = () => {
     navigation.navigate("stripePayment", {
-      grandTotal: grandTotal,
+      grandTotal: grandTotal.toFixed(0),
     });
   };
 
