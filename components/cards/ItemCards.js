@@ -120,7 +120,8 @@ export default function ItemCards({ route, navigation }) {
     navigation.navigate("checkoutPage", {
       subTotal: checkoutAmount,
       weightAge: checkoutWeight,
-      newItems: newItems,
+      purchasedItems: newItems,
+      checkoutScanned: false,
     });
   };
 
@@ -140,7 +141,8 @@ export default function ItemCards({ route, navigation }) {
       {newItems?.length ? (
         <FlatList
           data={newItems}
-          keyExtractor={(message) => message?.id.toString()}
+          keyExtractor={(item, index) => index.toString()}
+          // keyExtractor={(message) => message?.id.toString()}
           renderItem={({ item }) => (
             <ItemCard
               key={item?.id}

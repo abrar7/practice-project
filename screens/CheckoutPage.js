@@ -9,7 +9,7 @@ import StripePayment from "../components/payment/StripePayment";
 // =======================================================
 
 export default function CheckoutPage({ route, navigation }) {
-  const { subTotal, weightAge, newItems } = route.params;
+  const { subTotal, weightAge } = route.params;
   const routeArray = {
     subTotal: subTotal,
     weightAge: weightAge,
@@ -53,8 +53,9 @@ export default function CheckoutPage({ route, navigation }) {
   ];
 
   const handleOnClick = () => {
-    navigation.navigate("stripePayment", {
+    navigation.navigate("checkoutQRCode", {
       grandTotal: grandTotal.toFixed(0),
+      data: route.params,
     });
   };
 

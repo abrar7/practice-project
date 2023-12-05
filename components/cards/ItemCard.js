@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { View, StyleSheet, Image } from "react-native";
 import { Card, Text, Chip } from "react-native-paper";
 import Swipeable from "react-native-gesture-handler/Swipeable";

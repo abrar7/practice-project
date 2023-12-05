@@ -1,48 +1,47 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Button } from "@ui-kitten/components";
+import {
+  View,
+  SafeAreaView,
+  StyleSheet,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
+import { Text } from "@ui-kitten/components";
+import { Ionicons } from "@expo/vector-icons";
 
-// ======================================
+// ===================================================
 
 export default function TestFile() {
   return (
-    <SafeAreaView style={{ backgroundColor: "cyan" }}>
-      <View
-        style={{
-          display: "flex",
-          alignItems: "center",
-          height: "100%",
-          marginTop: 50,
-        }}
-      >
-        <Image
-          source={require("../assets/payment.png")}
-          style={{
-            width: 300,
-            height: 300,
-            marginBottom: 50,
-
-            borderColor: "black",
-          }}
-        />
-        <Text style={styles.text}>Payment was Successfull!</Text>
-        <Text style={styles.text}>Thanks for shopping</Text>
-        <Text style={styles.text}>Come back soon</Text>
-        <Button style={styles.button} status="primary" size="large">
-          Back to Home Screen
-        </Button>
-      </View>
-    </SafeAreaView>
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>Press me</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 35,
-    fontWeight: "700",
+  container: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 15,
   },
   button: {
-    margin: 42,
+    padding: 20,
+    width: "100%",
+    height: "20%",
+    borderRadius: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
+  },
+  buttonText: {
+    fontSize: 26,
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });

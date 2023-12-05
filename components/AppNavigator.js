@@ -18,6 +18,7 @@ import CheckoutPage from "../screens/CheckoutPage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import StripePayment from "./payment/StripePayment";
 import PaymentSuccessfull from "../screens/PaymentSuccessfull";
+import CheckoutQRCode from "../screens/CheckoutQRCode";
 
 // ===================================================================
 
@@ -58,8 +59,8 @@ export default function AppNavigator() {
   return user ? (
     <Stack.Navigator
       initialRouteName={
-        // userRole === "customer" ? "customerHomeScreen" : "adminHomeScreen"
-        userRole === "customer" ? "itemCards" : "adminHomeScreen"
+        userRole === "customer" ? "customerHomeScreen" : "adminHomeScreen"
+        // userRole === "customer" ? "itemCards" : "adminHomeScreen"
       }
     >
       <Stack.Screen name="customerHomeScreen" component={CustomerHomeScreen} />
@@ -68,6 +69,7 @@ export default function AppNavigator() {
       <Stack.Screen name="scannerComponent" component={ScannerComponent} />
       <Stack.Screen name="generateQRCode" component={GenerateQRCode} />
       <Stack.Screen name="checkoutPage" component={CheckoutPage} />
+      <Stack.Screen name="checkoutQRCode" component={CheckoutQRCode} />
       <Stack.Screen name="itemCards" component={ItemCards} />
       <Stack.Screen name="stripePayment" component={StripePayment} />
       <Stack.Screen name="success" component={PaymentSuccessfull} />

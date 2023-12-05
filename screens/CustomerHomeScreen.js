@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Alert,
-  SafeAreaView,
-  StatusBar,
-} from "react-native";
+import { StyleSheet, View, Alert, SafeAreaView, StatusBar } from "react-native";
+import { Text } from "@ui-kitten/components";
+import { ActivityIndicator } from "react-native-paper";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../FirebaseConfig";
-import { Button } from "@ui-kitten/components";
-import { AntDesign } from "@expo/vector-icons";
-import { ActivityIndicator } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons";
+import AppButton from "../components/form/AppButton";
 
 // ==================================================
 
@@ -24,7 +18,7 @@ export default function CustomerHomeScreen({ navigation }) {
     navigation.navigate("confirmUser");
     await FIREBASE_AUTH.signOut();
     try {
-      const value = await AsyncStorage.removeItem("userRole");
+      await AsyncStorage.removeItem("userRole");
     } catch (e) {
       console.log("errors", e.message);
     }
@@ -62,27 +56,17 @@ export default function CustomerHomeScreen({ navigation }) {
 
   return userName ? (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.welcome}>Welcome {userName.toUpperCase()}</Text>
-
-      <Button
-        appearance="filled"
-        status="primary"
-        size="large"
-        onPress={handleShop}
-        style={styles.button}
-      >
-        Ready to shop?
-      </Button>
-      <Button
-        appearance="filled"
-        status="primary"
-        size="large"
-        onPress={handleLogout}
-        style={styles.button}
-        accessoryLeft={<AntDesign name="logout" size={20} color="white" />}
-      >
-        Logout
-      </Button>
+      <View style={styles.imageConatiner}>
+        <Ionicons name="cart" size={74} color="white" />
+        <Text category="h4" style={{ color: "white" }}>
+          Digicart
+        </Text>
+      </View>
+      <View>
+        <Text style={styles.welcome}>Welcome {userName.toUpperCase()}</Text>
+      </View>
+      <AppButton title="Ready to shop?" onPress={handleShop} />
+      <AppButton title="Logout" onPress={handleLogout} icon="logout" />
     </SafeAreaView>
   ) : (
     <View style={styles.loader}>
@@ -96,12 +80,18 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: StatusBar.currentHeight,
     backgroundColor: "#202124",
+    alignItems: "center",
+  },
+  imageConatiner: {
+    display: "flex",
+    flex: 0.3,
     justifyContent: "center",
     alignItems: "center",
   },
   welcome: {
     color: "white",
     fontSize: 32,
+    marginBottom: 20,
   },
   button: {
     margin: 15,
