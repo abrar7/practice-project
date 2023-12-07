@@ -7,15 +7,17 @@ import QRCode from "react-native-qrcode-svg";
 // ===================================================================
 
 export default function CheckoutQRCode({ route, navigation }) {
-  const { subTotal, weightAge, purchasedItems, checkoutScanned } =
-    route.params.data;
+  const { grandTotal, data } = route.params;
+  const { weightAge, purchasedItems, checkoutScanned } = data;
 
-  const data = { items: purchasedItems, checkoutScanned: checkoutScanned };
-  const jsonData = JSON.stringify(data);
+  console.log("checkoutScanned", checkoutScanned);
+
+  const QRData = { checkoutScanned: checkoutScanned };
+  const jsonData = JSON.stringify(QRData);
 
   const handleNext = () => {
     navigation.navigate("stripePayment", {
-      grandTotal: route.params.grandTotal,
+      grandTotal: grandTotal,
     });
   };
 
@@ -40,21 +42,32 @@ export default function CheckoutQRCode({ route, navigation }) {
         <View style={styles.qrcode}>
           <QRCode value={jsonData} size={300} />
         </View>
+        <View style={styles.detailsContainer}>
+          <Text category="h5" style={styles.detailsText}>
+            Weightage: {weightAge} kg
+          </Text>
+          <Text category="h5" style={styles.detailsText}>
+            Total bill: Rs.{grandTotal}
+          </Text>
+        </View>
       </View>
       <View style={styles.buttonContainer}>
         <Button
           size="giant"
+          appearance="filled"
           status="primary"
-          style={styles.button}
           onPress={() => navigation.goBack()}
+          style={{ borderRadius: 50, width: 110 }}
         >
           Back
         </Button>
         <Button
           size="giant"
+          appearance="outline"
           status="success"
-          style={styles.button}
+          // disabled
           onPress={handleNext}
+          style={{ borderRadius: 50, width: 110 }}
         >
           Next
         </Button>
@@ -79,8 +92,10 @@ const styles = StyleSheet.create({
     flex: 0.6,
     alignItems: "center",
   },
-  qrcode: { backgroundColor: "white", margin: 5 },
+  qrcode: { margin: 5 },
   text: { color: "white", marginBottom: 25 },
+  detailsContainer: { marginTop: 15 },
+  detailsText: { color: "white" },
   buttonContainer: {
     flexDirection: "row",
     marginTop: 25,

@@ -34,6 +34,14 @@ const AdminHomeScreen = ({ navigation }) => {
         Add Items
       </Button>
       <Button
+        icon="store-cog-outline"
+        mode="contained"
+        onPress={() => navigation.navigate("checkoutScanner")}
+        style={styles.buttons}
+      >
+        Checkout Scanner
+      </Button>
+      <Button
         icon="logout"
         mode="contained"
         onPress={handleLogout}
