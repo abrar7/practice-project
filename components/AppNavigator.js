@@ -19,6 +19,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import StripePayment from "./payment/StripePayment";
 import PaymentSuccessfull from "../screens/PaymentSuccessfull";
 import CheckoutQRCode from "../screens/CheckoutQRCode";
+import CheckoutScanner from "../screens/CheckoutScanner";
 
 // ===================================================================
 
@@ -70,6 +71,7 @@ export default function AppNavigator() {
       <Stack.Screen name="generateQRCode" component={GenerateQRCode} />
       <Stack.Screen name="checkoutPage" component={CheckoutPage} />
       <Stack.Screen name="checkoutQRCode" component={CheckoutQRCode} />
+      <Stack.Screen name="checkoutScanner" component={CheckoutScanner} />
       <Stack.Screen name="itemCards" component={ItemCards} />
       <Stack.Screen name="stripePayment" component={StripePayment} />
       <Stack.Screen name="success" component={PaymentSuccessfull} />

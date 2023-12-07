@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Icon, Text } from "@ui-kitten/components";
+import { Button, Text } from "@ui-kitten/components";
 import { StyleSheet, View, ImageBackground } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";

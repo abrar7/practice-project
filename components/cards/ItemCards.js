@@ -121,7 +121,7 @@ export default function ItemCards({ route, navigation }) {
       subTotal: checkoutAmount,
       weightAge: checkoutWeight,
       purchasedItems: newItems,
-      checkoutScanned: false,
+      checkoutScanned: true,
     });
   };
 
