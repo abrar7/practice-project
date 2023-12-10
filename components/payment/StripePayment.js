@@ -2,26 +2,44 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Alert, ImageBackground } from "react-native";
 import { Button, Text } from "@ui-kitten/components";
 import { useCreatePaymentIntent } from "../query-hooks/useCreatePaymentIntent";
+import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useStripe } from "@stripe/stripe-react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { FIRESTORE_DB } from "../../FirebaseConfig";
 
 // ========================================================
 
 export default function StripePayment({ route, navigation }) {
-  const { grandTotal } = route.params;
+  const { grandTotal, purchasedItems } = route.params;
   const [amount, setAmount] = useState(grandTotal);
   const { mutate, data, error } = useCreatePaymentIntent();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
+  const DB = FIRESTORE_DB;
 
   useEffect(() => {
     if (data && !error) {
       handlePaymentFlow();
     }
-  }, [data, error]);
+
+    const manageInventory = async () => {
+      for (let i = 0; i <= purchasedItems.length; i++) {
+        const docRef = doc(collection(DB, "stockItems"), purchasedItems[i].id);
+        const itemDoc = await getDoc(docRef);
+        const docCountValue = itemDoc.data().inStock;
+        updateDoc(docRef, {
+          inStock: docCountValue - purchasedItems[i].count,
+        });
+      }
+    };
+
+    if (paymentSuccessful) {
+      manageInventory();
+    }
+  }, [data, error, paymentSuccessful]);
 
   const handlePaymentFlow = async () => {
     try {
@@ -74,7 +92,7 @@ export default function StripePayment({ route, navigation }) {
       source={require("../../assets/card4.jpg")}
       resizeMode="cover"
       style={styles.container}
-      blurRadius={20}
+      blurRadius={10}
     >
       <View style={styles.imageConatiner}>
         {/* <Image
