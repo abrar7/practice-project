@@ -8,14 +8,14 @@ import ListItemSeparator from "../components/cards/ListItemSeparator";
 // =======================================================
 
 export default function CheckoutPage({ route, navigation }) {
-  const { subTotal, weightAge } = route.params;
+  const { subTotal, weightAge, purchasedItems } = route.params;
   const routeArray = {
     subTotal: subTotal,
     weightAge: weightAge,
   };
   const gstAmount = (12 * routeArray.subTotal) / 100;
   const total = routeArray.subTotal + gstAmount;
-  const reward = (1 * total) / 100;
+  const reward = (2 * total) / 100;
   const grandTotal = total - reward;
 
   const data = [
@@ -39,7 +39,7 @@ export default function CheckoutPage({ route, navigation }) {
     },
     {
       id: 4,
-      title: "Reward Coins ",
+      title: "Reward ",
       description: "Discount from super market",
       price: `${reward.toFixed(0)} PKR`,
     },

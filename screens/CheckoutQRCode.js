@@ -69,6 +69,7 @@ export default function CheckoutQRCode({ route, navigation }) {
     const bill = Number(grandTotal);
     navigation.navigate("stripePayment", {
       grandTotal: bill,
+      purchasedItems: purchasedItems,
     });
   };
 
@@ -92,7 +93,7 @@ export default function CheckoutQRCode({ route, navigation }) {
       settingNextTrue();
     }
 
-    const intervalId = setInterval(settingNextTrue, 15000);
+    const intervalId = setInterval(settingNextTrue, 7000);
 
     // Clear the interval when the component unmounts
     return () => clearInterval(intervalId);

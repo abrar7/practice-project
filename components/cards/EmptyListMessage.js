@@ -7,7 +7,7 @@ export default function EmptyListMessage() {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>
-        Your cart is empty, Press camera button and scan the item.
+        Your cart is empty, Press scan to add button and scan the item QR code.
       </Text>
     </View>
   );
