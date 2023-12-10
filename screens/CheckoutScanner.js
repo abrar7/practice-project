@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import { addDoc, doc, collection, setDoc, updateDoc } from "firebase/firestore";
+import { FIRESTORE_DB } from "../FirebaseConfig";
 
 // ===================================================================
 
 export default function CheckoutScanner({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [text, setText] = useState("Noting scanned yet.");
+  const [scannedData, setScannedData] = useState();
+  const database = FIRESTORE_DB;
 
   const askForCameraPermission = () => {
     (async () => {
@@ -19,13 +22,29 @@ export default function CheckoutScanner({ navigation }) {
   // Request Camera Permission
   useEffect(() => {
     askForCameraPermission();
-  }, []);
+
+    const handleRequest = async () => {
+      const dataObject = JSON.parse(scannedData);
+      const updateRef = doc(
+        collection(database, "checkout"),
+        dataObject.userUid,
+        "enableQR",
+        dataObject.docId
+      );
+      updateDoc(updateRef, {
+        checkoutScanned: true,
+      });
+    };
+
+    if (scannedData) {
+      handleRequest();
+    }
+  }, [scannedData]);
 
   // What happens when we scan the bar code
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    setText(data);
-    const dataObject = JSON.parse(data);
+    setScannedData(data);
     Alert.alert("Message", "QR code has been scanned");
   };
 
@@ -60,8 +79,9 @@ export default function CheckoutScanner({ navigation }) {
           style={{ height: 400, width: 400 }}
         />
       </View>
+      {!scannedData && <Text style={styles.maintext}>Nothing scanned yet</Text>}
 
-      <Text style={styles.maintext}>{text}</Text>
+      <Text style={styles.maintext}>{scannedData}</Text>
 
       {scanned && (
         <Button

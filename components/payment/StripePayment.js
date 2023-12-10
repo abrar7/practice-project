@@ -10,8 +10,8 @@ import { Ionicons } from "@expo/vector-icons";
 // ========================================================
 
 export default function StripePayment({ route, navigation }) {
-  const bill = Number(route.params.grandTotal);
-  const [amount, setAmount] = useState(bill);
+  const { grandTotal } = route.params;
+  const [amount, setAmount] = useState(grandTotal);
   const { mutate, data, error } = useCreatePaymentIntent();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
