@@ -4,7 +4,6 @@ import { Text, Divider, Button } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
 import { ActivityIndicator } from "react-native-paper";
 import ListItemSeparator from "../components/cards/ListItemSeparator";
-import StripePayment from "../components/payment/StripePayment";
 
 // =======================================================
 

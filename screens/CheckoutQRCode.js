@@ -1,25 +1,102 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, ImageBackground } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Button, Text } from "@ui-kitten/components";
+import {
+  addDoc,
+  doc,
+  collection,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "../FirebaseConfig";
 import QRCode from "react-native-qrcode-svg";
+import { ToastAndroid } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 
 // ===================================================================
 
 export default function CheckoutQRCode({ route, navigation }) {
   const { grandTotal, data } = route.params;
   const { weightAge, purchasedItems, checkoutScanned } = data;
+  const [jsonData, setJsonData] = useState();
+  const [responseId, setResponseId] = useState(undefined || "");
+  const [isLoading, setIsLoading] = useState(false);
+  const [next, setNext] = useState();
+  const database = FIRESTORE_DB;
+  const userUid = FIREBASE_AUTH.currentUser.uid;
 
-  console.log("checkoutScanned", checkoutScanned);
-
-  const QRData = { checkoutScanned: checkoutScanned };
-  const jsonData = JSON.stringify(QRData);
+  const handleGenerateQR = async () => {
+    setIsLoading(true);
+    try {
+      const userRef = doc(collection(database, "checkout"), userUid);
+      const collectionRef = collection(userRef, "enableQR");
+      const response = await addDoc(collectionRef, {
+        userUid: userUid,
+        timeStamp: new Date(),
+        checkoutScanned: checkoutScanned,
+        docId: "",
+      });
+      setResponseId(response.id);
+      const updateRef = doc(
+        collection(database, "checkout"),
+        userUid,
+        "enableQR",
+        response.id
+      );
+      updateDoc(updateRef, {
+        docId: response.id,
+      });
+      const QRData = {
+        userUid: userUid,
+        docId: response.id,
+        timeStamp: new Date(),
+        checkoutScanned: checkoutScanned,
+      };
+      setJsonData(JSON.stringify(QRData));
+      ToastAndroid.show("QR Generated Successfully.", ToastAndroid.LONG);
+      setIsLoading(false);
+    } catch (err) {
+      console.error("Error while generating QR code");
+      ToastAndroid.show("Error while generating QR code.", ToastAndroid.LONG);
+      setIsLoading(false);
+    }
+  };
 
   const handleNext = () => {
+    const bill = Number(grandTotal);
     navigation.navigate("stripePayment", {
-      grandTotal: grandTotal,
+      grandTotal: bill,
     });
   };
+
+  useEffect(() => {
+    async function settingNextTrue() {
+      const dataQuery = query(
+        collection(database, "checkout", userUid, "enableQR"),
+        where("docId", "==", responseId)
+      );
+      const querySnapshot = await getDocs(dataQuery);
+      const documentData = querySnapshot.docs.map((document) => ({
+        id: document.id,
+        ...document.data(),
+      }));
+
+      if (documentData[0].checkoutScanned === true) {
+        setNext(documentData[0].checkoutScanned);
+      }
+    }
+    if (responseId) {
+      settingNextTrue();
+    }
+
+    const intervalId = setInterval(settingNextTrue, 15000);
+
+    // Clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, [responseId]);
 
   return (
     <ImageBackground
@@ -40,7 +117,7 @@ export default function CheckoutQRCode({ route, navigation }) {
           QR code
         </Text>
         <View style={styles.qrcode}>
-          <QRCode value={jsonData} size={300} />
+          {jsonData && <QRCode value={jsonData} size={300} />}
         </View>
         <View style={styles.detailsContainer}>
           <Text category="h5" style={styles.detailsText}>
@@ -54,7 +131,7 @@ export default function CheckoutQRCode({ route, navigation }) {
       <View style={styles.buttonContainer}>
         <Button
           size="giant"
-          appearance="filled"
+          appearance="outline"
           status="primary"
           onPress={() => navigation.goBack()}
           style={{ borderRadius: 50, width: 110 }}
@@ -63,9 +140,23 @@ export default function CheckoutQRCode({ route, navigation }) {
         </Button>
         <Button
           size="giant"
+          appearance="filled"
+          status="info"
+          disabled={jsonData?.length > 0}
+          onPress={handleGenerateQR}
+          style={{ borderRadius: 50, width: 160 }}
+        >
+          {isLoading ? (
+            <ActivityIndicator size="small" color="white" />
+          ) : (
+            "Generate QR"
+          )}
+        </Button>
+        <Button
+          size="giant"
           appearance="outline"
           status="success"
-          // disabled
+          disabled={!next}
           onPress={handleNext}
           style={{ borderRadius: 50, width: 110 }}
         >
