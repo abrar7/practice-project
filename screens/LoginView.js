@@ -58,7 +58,6 @@ export default function LoginView({ route, navigation }) {
         );
         try {
           await AsyncStorage.setItem("userRole", role);
-          console.log("data set as:", role);
         } catch (e) {
           console.log("errorsss", e.message);
         }

@@ -37,7 +37,7 @@ export default function AppNavigator() {
       const value = await AsyncStorage.getItem("userRole");
       setUserRole(value);
     } catch (e) {
-      console.log("errorsss", e.message);
+      console.log("errors", e.message);
     }
   }
 
@@ -60,8 +60,13 @@ export default function AppNavigator() {
   return user ? (
     <Stack.Navigator
       initialRouteName={
-        userRole === "customer" ? "customerHomeScreen" : "adminHomeScreen"
-        // userRole === "customer" ? "itemCards" : "adminHomeScreen"
+        userRole === "customer" ? (
+          "customerHomeScreen"
+        ) : userRole === "admin" ? (
+          "adminHomeScreen"
+        ) : (
+          <AppLoader />
+        )
       }
     >
       <Stack.Screen name="customerHomeScreen" component={CustomerHomeScreen} />

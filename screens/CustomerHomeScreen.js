@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Alert, SafeAreaView, StatusBar } from "react-native";
 import { Text } from "@ui-kitten/components";
 import { ActivityIndicator } from "react-native-paper";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDoc, doc } from "firebase/firestore";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../FirebaseConfig";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppButton from "../components/form/AppButton";
 
 // ==================================================
@@ -15,7 +15,6 @@ export default function CustomerHomeScreen({ navigation }) {
   const database = FIRESTORE_DB;
 
   const handleLogout = async () => {
-    navigation.navigate("confirmUser");
     await FIREBASE_AUTH.signOut();
     try {
       await AsyncStorage.removeItem("userRole");
@@ -26,17 +25,13 @@ export default function CustomerHomeScreen({ navigation }) {
 
   useEffect(() => {
     const currentUserUid = FIREBASE_AUTH.currentUser.uid;
-    const getName = async () => {
-      const response = await getDocs(
-        query(collection(database, "user"), where("id", "==", currentUserUid))
-      );
-      const documentData = response.docs.map((document) => ({
-        id: document.id,
-        ...document.data(),
-      }));
-      setUserName(documentData[0].username);
+    const getUserName = async () => {
+      const userRef = doc(collection(database, "user"), currentUserUid);
+      const userDoc = await getDoc(userRef);
+      const userData = userDoc.data();
+      setUserName(userData?.username);
     };
-    getName();
+    getUserName();
   }, []);
 
   const handleShop = () => {
