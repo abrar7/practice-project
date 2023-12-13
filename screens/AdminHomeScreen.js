@@ -1,69 +1,101 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Button } from "react-native-paper";
-import { FIREBASE_AUTH } from "../FirebaseConfig";
+import React, { useState, useEffect } from "react";
+import { Text } from "@ui-kitten/components";
+import { StyleSheet, View, SafeAreaView, StatusBar } from "react-native";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "../FirebaseConfig";
+import { Ionicons } from "@expo/vector-icons";
+import { collection, getDoc, doc } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AppButton from "../components/form/AppButton";
+import { ActivityIndicator } from "react-native-paper";
 
 // =====================================================
 
-const AdminHomeScreen = ({ navigation }) => {
+export default function AdminHomeScreen({ navigation }) {
+  const [userName, setUserName] = useState();
+  const database = FIRESTORE_DB;
+
   const handleLogout = async () => {
-    navigation.navigate("confirmUser");
+    FIREBASE_AUTH.signOut();
     try {
-      const value = await AsyncStorage.removeItem("userRole");
+      await AsyncStorage.removeItem("userRole");
     } catch (e) {
       console.log("errors", e.message);
     }
-    FIREBASE_AUTH.signOut();
   };
 
   const handleAddItems = () => {
     navigation.navigate("addItemForm");
   };
 
-  return (
-    <View style={styles.container}>
-      <Text> welcome Admin Home Screen</Text>
+  useEffect(() => {
+    const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+    const userName = async () => {
+      const userRef = doc(collection(database, "user"), currentUserUid);
+      const userDoc = await getDoc(userRef);
+      const userData = userDoc.data();
+      setUserName(userData?.username);
+    };
+    userName();
+  }, []);
 
-      <Button
-        icon="store-cog-outline"
-        mode="contained"
-        onPress={handleAddItems}
-        style={styles.buttons}
-      >
-        Add Items
-      </Button>
-      <Button
-        icon="store-cog-outline"
-        mode="contained"
-        onPress={() => navigation.navigate("checkoutScanner")}
-        style={styles.buttons}
-      >
-        Checkout Scanner
-      </Button>
-      <Button
-        icon="logout"
-        mode="contained"
-        onPress={handleLogout}
-        style={styles.buttons}
-      >
-        Logout
-      </Button>
+  return !userName ? (
+    <View style={styles.loader}>
+      <ActivityIndicator size="large" color="black" />
     </View>
-  );
-};
+  ) : (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.imageConatiner}>
+        <Ionicons name="cart" size={74} color="white" />
+        <Text category="h4" style={{ color: "white" }}>
+          Digicart
+        </Text>
+      </View>
+      <View>
+        <Text style={styles.welcome}>Welcome Admin {userName}</Text>
+      </View>
 
-export default AdminHomeScreen;
+      <AppButton
+        title="Update Inventory"
+        onPress={handleAddItems}
+        micon="inventory"
+      />
+      <AppButton
+        title="Checkout Scanner"
+        onPress={() => navigation.navigate("checkoutScanner")}
+        micon="qr-code-scanner"
+      />
+      <AppButton title="Logout" onPress={handleLogout} icon="logout" />
+    </SafeAreaView>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    height: "100%",
-    display: "flex",
+    flex: 1,
+    paddingTop: StatusBar.currentHeight,
+    backgroundColor: "#202124",
     alignItems: "center",
+  },
+  imageConatiner: {
+    display: "flex",
+    flex: 0.15,
     justifyContent: "center",
+    alignItems: "center",
   },
   buttons: {
     margin: 20,
+  },
+  welcome: {
+    color: "white",
+    fontSize: 32,
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  loader: {
+    height: "100%",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
   },
 });

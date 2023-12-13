@@ -3,6 +3,7 @@ import { Button, Text } from "@ui-kitten/components";
 import { StyleSheet, View, ImageBackground } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { COLORS } from "../components/utils/COLORS";
 
 // ===================================================================
 
@@ -56,7 +57,7 @@ export default function ConfirmUser({ navigation }) {
               <MaterialIcons
                 name="admin-panel-settings"
                 size={22}
-                color="white"
+                color={COLORS.lightColor}
               />
             }
           >
@@ -69,7 +70,11 @@ export default function ConfirmUser({ navigation }) {
             onPress={handleCustomer}
             style={{ borderRadius: 50, width: 170 }}
             accessoryLeft={
-              <MaterialIcons name="person" size={22} color="white" />
+              <MaterialIcons
+                name="person"
+                size={22}
+                color={COLORS.lightColor}
+              />
             }
           >
             Customer
