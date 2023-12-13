@@ -1,45 +1,48 @@
 import React, { useState } from "react";
 import { Entypo } from "@expo/vector-icons";
 import { Button } from "@ui-kitten/components";
-import * as ImagePicker from "expo-image-picker";
 import { Image, View, StyleSheet } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 
 // ===================================================================
 
-export default function UploadImage({ setImgURL }) {
-  const [image, setImage] = useState(null);
-
-  const handlePickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    setImgURL(result?.assets[0]?.uri);
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
-  };
-
+export default function UploadImage({
+  imageUrl,
+  openImagePicker,
+  pictureLoading,
+}) {
   return (
     <View style={styles.container}>
       <Button
         status="primary"
+        disabled={pictureLoading}
         style={{ marginBottom: 10, borderRadius: 15 }}
         accessoryLeft={<Entypo name="image-inverted" size={20} color="white" />}
-        onPress={handlePickImage}
+        onPress={openImagePicker}
       >
         Upload Item photo
       </Button>
 
       <View>
-        {image && (
-          <Image
-            source={{ uri: image }}
-            style={{ width: 150, height: 150, borderRadius: 15 }}
-          />
+        {pictureLoading ? (
+          <View
+            style={{
+              width: 150,
+              height: 150,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <ActivityIndicator size="large" color="white" />
+          </View>
+        ) : (
+          imageUrl && (
+            <Image
+              source={{ uri: imageUrl }}
+              style={{ width: 150, height: 150, borderRadius: 15 }}
+            />
+          )
         )}
       </View>
     </View>

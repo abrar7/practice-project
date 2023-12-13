@@ -1,4 +1,4 @@
-import { ToastAndroid } from "react-native";
+import DevicesToast from "../Toast/DevicesToast";
 
 // ==============================================
 
@@ -35,7 +35,7 @@ const FirebaseErrorHandler = (error) => {
         errorMessage = "Something went wrong. Try again later!";
     }
   }
-  ToastAndroid.show(errorMessage, ToastAndroid.LONG);
+  DevicesToast(errorMessage);
 };
 
 export default FirebaseErrorHandler;

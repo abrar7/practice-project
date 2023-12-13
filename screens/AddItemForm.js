@@ -1,27 +1,28 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  ImageBackground,
-  View,
-  ScrollView,
-  Scrol,
-} from "react-native";
+import { StyleSheet, ImageBackground, View } from "react-native";
 import { useForm } from "react-hook-form";
-import { Button, Icon, Text } from "@ui-kitten/components";
+import * as ImagePicker from "expo-image-picker";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { Button, Text } from "@ui-kitten/components";
 import AppInputField from "../components/form/AppInputField";
 import { doc, setDoc } from "firebase/firestore";
 import { addDoc, collection } from "firebase/firestore";
-import { FIRESTORE_DB } from "../FirebaseConfig";
+import { FIRESTORE_DB, firebaseConfig } from "../FirebaseConfig";
 import { Ionicons } from "@expo/vector-icons";
 import UploadImage from "../screens/UploadImage";
+import { initializeApp } from "firebase/app";
 import AppCircularProgress from "../components/form/AppCircularProgress";
+import DevicesToast from "../components/Toast/DevicesToast";
 
 // ===================================================================
 
 export default function AddItemForm({ navigation }) {
   const [loading, setLoading] = useState(false);
-  const [imgURL, setImgURL] = useState();
+  const [pictureLoading, setPictureLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
   const database = FIRESTORE_DB;
+  const firebaseApp = initializeApp(firebaseConfig);
+  const storage = getStorage(firebaseApp);
 
   const {
     control,
@@ -48,7 +49,8 @@ export default function AddItemForm({ navigation }) {
         inStock: Number(data.itemsInStock),
         price: Number(data.price),
         weight: Number(data.weight),
-        imgLink: imgURL,
+        imgLink: imageUrl,
+        count: 1,
       });
       const uid = response?.id;
       setDoc(
@@ -58,7 +60,7 @@ export default function AddItemForm({ navigation }) {
         },
         { merge: true }
       );
-      alert("Item added in stock");
+      DevicesToast("Item added in stock");
       navigation.navigate("generateQRCode", {
         id: uid,
         product: data.itemName,
@@ -67,9 +69,68 @@ export default function AddItemForm({ navigation }) {
       reset();
       setLoading(false);
     } catch (err) {
-      alert("Error", err);
+      DevicesToast("Error occured, try agin later!");
+      console.err(err);
     }
   };
+
+  const openImagePicker = async () => {
+    setPictureLoading(true);
+    let permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      DevicesToast("Permission to access camera roll is required!");
+      return;
+    }
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      quality: 0.1,
+      base64: true,
+      allowsMultipleSelection: false,
+    });
+    if (!result.canceled && result.assets.length > 0) {
+      const selectedImage = result.assets[0];
+      uriToBlob(selectedImage.uri)
+        .then((blob) => {
+          uploadToFirebase(blob);
+        })
+        .catch((error) => {
+          setPictureLoading(false);
+          console.error(error);
+        });
+    }
+  };
+
+  async function uploadToFirebase(blob) {
+    try {
+      const fileName = `${Date.now()}.jpg`;
+      const storageRef = ref(storage, fileName);
+      uploadBytes(storageRef, blob);
+      const downloadURL = await getDownloadURL(storageRef);
+      setImageUrl(downloadURL);
+      DevicesToast("Image uploaded successfully");
+      setPictureLoading(false);
+    } catch (error) {
+      setPictureLoading(false);
+      console.error(error);
+    }
+  }
+  async function uriToBlob(uri) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function () {
+        reject(new Error("uriToBlob failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+  }
 
   return (
     <ImageBackground
@@ -138,7 +199,11 @@ export default function AddItemForm({ navigation }) {
           />
         </View>
 
-        <UploadImage setImgURL={setImgURL} />
+        <UploadImage
+          imageUrl={imageUrl}
+          openImagePicker={openImagePicker}
+          pictureLoading={pictureLoading}
+        />
 
         <View style={styles.buttonContainer}>
           <Button

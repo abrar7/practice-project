@@ -13,8 +13,8 @@ import {
 } from "firebase/firestore";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../FirebaseConfig";
 import QRCode from "react-native-qrcode-svg";
-import { ToastAndroid } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
+import DevicesToast from "../components/Toast/DevicesToast";
 
 // ===================================================================
 
@@ -56,11 +56,11 @@ export default function CheckoutQRCode({ route, navigation }) {
         checkoutScanned: checkoutScanned,
       };
       setJsonData(JSON.stringify(QRData));
-      ToastAndroid.show("QR Generated Successfully.", ToastAndroid.LONG);
+      DevicesToast("QR Generated Successfully.");
       setIsLoading(false);
     } catch (err) {
       console.error("Error while generating QR code");
-      ToastAndroid.show("Error while generating QR code.", ToastAndroid.LONG);
+      DevicesToast("Error while generating QR code.");
       setIsLoading(false);
     }
   };
