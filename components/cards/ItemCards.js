@@ -16,7 +16,7 @@ import ListItemSeparator from "./ListItemSeparator";
 import EmptyListMessage from "./EmptyListMessage";
 import { Ionicons } from "@expo/vector-icons";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
-import { ToastAndroid } from "react-native";
+import DevicesToast from "../Toast/DevicesToast";
 
 // ============================================================
 
@@ -79,7 +79,7 @@ export default function ItemCards({ route, navigation }) {
   const handleDelete = (item) => {
     const filteredData = newItems?.filter((v) => v.id !== item?.id);
     setNewItems(filteredData);
-    ToastAndroid.show("Item deleted", ToastAndroid.LONG);
+    DevicesToast("Item deleted");
   };
 
   const handleScanToAdd = () => {

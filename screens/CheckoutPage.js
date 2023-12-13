@@ -15,7 +15,7 @@ export default function CheckoutPage({ route, navigation }) {
   };
   const gstAmount = (12 * routeArray.subTotal) / 100;
   const total = routeArray.subTotal + gstAmount;
-  const reward = (2 * total) / 100;
+  const reward = (9 * total) / 100;
   const grandTotal = total - reward;
 
   const data = [

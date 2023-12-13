@@ -4,8 +4,6 @@ import {
   ImageBackground,
   View,
   KeyboardAvoidingView,
-  ToastAndroid,
-  // Image,
 } from "react-native";
 import { useForm } from "react-hook-form";
 import { Button, Icon, Text } from "@ui-kitten/components";
@@ -17,6 +15,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../FirebaseConfig";
 import { ActivityIndicator } from "react-native-paper";
 import FirebaseErrorHandler from "../components/form/FirebaseErrorHandler";
+import DevicesToast from "../components/Toast/DevicesToast";
 
 // =====================================================
 
@@ -57,7 +56,7 @@ export default function SignupView({ navigation }) {
         },
         { merge: true }
       );
-      ToastAndroid.show("Signed in successfully", ToastAndroid.LONG);
+      DevicesToast("Signed in successfully");
       navigation.navigate("login");
     } catch (error) {
       FirebaseErrorHandler(error);
@@ -75,10 +74,6 @@ export default function SignupView({ navigation }) {
       blurRadius={20}
     >
       <View style={styles.imageConatiner}>
-        {/* <Image
-          style={styles.image}
-          source={require("../../assets/cartlogo.png")}
-        /> */}
         <Ionicons name="cart" size={74} color="white" />
         <Text category="h4" style={{ color: "white" }}>
           Digicart

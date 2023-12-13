@@ -3,9 +3,7 @@ import {
   StyleSheet,
   ImageBackground,
   View,
-  // Image,
   TouchableOpacity,
-  ToastAndroid,
 } from "react-native";
 import { useForm } from "react-hook-form";
 import { Button, Text } from "@ui-kitten/components";
@@ -18,6 +16,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { ActivityIndicator } from "react-native-paper";
 import FirebaseErrorHandler from "../components/form/FirebaseErrorHandler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import DevicesToast from "../components/Toast/DevicesToast";
 
 // ==================================================================
 
@@ -28,7 +27,6 @@ export default function LoginView({ route, navigation }) {
   const auth = FIREBASE_AUTH;
   const database = FIRESTORE_DB;
 
-  // console.log("role is:", role);
   const {
     control,
     handleSubmit,
@@ -69,10 +67,10 @@ export default function LoginView({ route, navigation }) {
         } else if (role === "admin") {
           navigation.navigate("adminHomeScreen");
         }
-        ToastAndroid.show(`Login Successfully`, ToastAndroid.LONG);
+        DevicesToast("Login Successfully");
         setLoading(false);
       } else {
-        ToastAndroid.show("Email not authorized to login", ToastAndroid.LONG);
+        DevicesToast("Email not authorized to login!");
         setLoading(false);
       }
       setLoading(false);
@@ -88,7 +86,7 @@ export default function LoginView({ route, navigation }) {
     if (role === "customer") {
       navigation.navigate("forgotPassword");
     } else {
-      ToastAndroid.show("Contact to your manager!", ToastAndroid.LONG);
+      DevicesToast("Contact to your manager!");
     }
   };
 

@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  ImageBackground,
-  View,
-  Alert,
-  // Image,
-  TouchableOpacity,
-  ToastAndroid,
-} from "react-native";
+import { StyleSheet, ImageBackground, View } from "react-native";
 import { useForm } from "react-hook-form";
 import { Button, Text } from "@ui-kitten/components";
 import AppInputField from "../components/form/AppInputField";
@@ -16,6 +8,7 @@ import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { sendPasswordResetEmail } from "firebase/auth";
 import AppCircularProgress from "../components/form/AppCircularProgress";
 import FirebaseErrorHandler from "../components/form/FirebaseErrorHandler";
+import DevicesToast from "../components/Toast/DevicesToast";
 
 // ==================================================================
 
@@ -36,11 +29,8 @@ export default function ForgotPasswordView({ navigation }) {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await sendPasswordResetEmail(auth, data?.email);
-      ToastAndroid.show(
-        `Check your email to reset the password`,
-        ToastAndroid.LONG
-      );
+      await sendPasswordResetEmail(auth, data?.email);
+      DevicesToast("Check your email to reset the password");
       navigation.navigate("confirmUser");
     } catch (error) {
       FirebaseErrorHandler(error);
@@ -127,5 +117,3 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
 });
-
-// Login done
