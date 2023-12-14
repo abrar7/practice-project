@@ -92,7 +92,7 @@ export default function AddItemForm({ navigation }) {
     });
     if (!result.canceled && result.assets.length > 0) {
       const selectedImage = result.assets[0];
-      uriToBlob(selectedImage.uri)
+      await uriToBlob(selectedImage.uri)
         .then((blob) => {
           uploadToFirebase(blob);
         })
@@ -107,7 +107,7 @@ export default function AddItemForm({ navigation }) {
     try {
       const fileName = `${Date.now()}.jpg`;
       const storageRef = ref(storage, fileName);
-      uploadBytes(storageRef, blob);
+      await uploadBytes(storageRef, blob);
       const downloadURL = await getDownloadURL(storageRef);
       setImageUrl(downloadURL);
       DevicesToast("Image uploaded successfully");
