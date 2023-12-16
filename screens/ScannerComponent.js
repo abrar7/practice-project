@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 
 // ===================================================================
 
@@ -67,24 +68,27 @@ export default function ScannerComponent({ navigation }) {
 
   // Return the View
   return (
-    <View style={styles.container}>
-      <View style={styles.barcodebox}>
-        <BarCodeScanner
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          style={{ height: 400, width: 400 }}
-        />
+    <>
+      <DeviceSafeArea />
+      <View style={styles.container}>
+        <View style={styles.barcodebox}>
+          <BarCodeScanner
+            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            style={{ height: 400, width: 400 }}
+          />
+        </View>
+
+        <Text style={styles.maintext}>{text}</Text>
+
+        {scanned && (
+          <Button
+            title={"Scan again?"}
+            onPress={() => setScanned(false)}
+            color="tomato"
+          />
+        )}
       </View>
-
-      <Text style={styles.maintext}>{text}</Text>
-
-      {scanned && (
-        <Button
-          title={"Scan again?"}
-          onPress={() => setScanned(false)}
-          color="tomato"
-        />
-      )}
-    </View>
+    </>
   );
 }
 

@@ -19,7 +19,7 @@ export default function AppButton({ title, onPress, icon, micon }) {
           >
             <AntDesign
               name={icon}
-              size={20}
+              size={25}
               color="white"
               style={{ marginRight: 10 }}
             />

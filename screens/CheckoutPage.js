@@ -4,6 +4,7 @@ import { Text, Divider, Button } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
 import { ActivityIndicator } from "react-native-paper";
 import ListItemSeparator from "../components/cards/ListItemSeparator";
+import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 
 // =======================================================
 
@@ -59,49 +60,48 @@ export default function CheckoutPage({ route, navigation }) {
   };
 
   return (
-    <ImageBackground
-      source={require("../assets/cart9.jpg")}
-      resizeMode="cover"
-      style={styles.container}
-      blurRadius={20}
-    >
-      <View style={styles.imageConatiner}>
-        {/* <Image
-          style={styles.image}
-          source={require("../../assets/cartlogo.png")}
-        /> */}
-        <Ionicons name="cart" size={74} color="white" />
-        <Text category="h4" style={{ color: "white" }}>
-          Digicart
-        </Text>
-      </View>
-      <View>
-        <Text style={styles.heading}>Checkout Details</Text>
-      </View>
-      <Divider />
-      <View style={styles.flatlist}>
-        <FlatList
-          data={data}
-          keyExtractor={(message) => message?.id.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.billContainer}>
-              <View>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.description}>{item.description}</Text>
+    <>
+      <DeviceSafeArea />
+      <ImageBackground
+        source={require("../assets/cart9.jpg")}
+        resizeMode="cover"
+        style={styles.container}
+        blurRadius={20}
+      >
+        <View style={styles.imageConatiner}>
+          <Ionicons name="cart" size={74} color="white" />
+          <Text category="h4" style={{ color: "white" }}>
+            Digicart
+          </Text>
+        </View>
+        <View>
+          <Text style={styles.heading}>Checkout Details</Text>
+        </View>
+        <Divider />
+        <View style={styles.flatlist}>
+          <FlatList
+            data={data}
+            keyExtractor={(message) => message?.id.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.billContainer}>
+                <View>
+                  <Text style={styles.title}>{item.title}</Text>
+                  <Text style={styles.description}>{item.description}</Text>
+                </View>
+                <Text style={styles.title}>{item.price}</Text>
               </View>
-              <Text style={styles.title}>{item.price}</Text>
-            </View>
-          )}
-          ItemSeparatorComponent={<ListItemSeparator />} // Divider
-        />
-      </View>
+            )}
+            ItemSeparatorComponent={<ListItemSeparator />} // Divider
+          />
+        </View>
 
-      <View style={styles.buttonContainer}>
-        <Button size="giant" onPress={handleOnClick}>
-          NEXT
-        </Button>
-      </View>
-    </ImageBackground>
+        <View style={styles.buttonContainer}>
+          <Button size="giant" onPress={handleOnClick}>
+            NEXT
+          </Button>
+        </View>
+      </ImageBackground>
+    </>
   );
 }
 

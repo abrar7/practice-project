@@ -9,6 +9,7 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import AppCircularProgress from "../components/form/AppCircularProgress";
 import FirebaseErrorHandler from "../components/form/FirebaseErrorHandler";
 import DevicesToast from "../components/Toast/DevicesToast";
+import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 
 // ==================================================================
 
@@ -41,49 +42,52 @@ export default function ForgotPasswordView({ navigation }) {
   };
 
   return (
-    <ImageBackground
-      source={require("../assets/cart9.jpg")}
-      resizeMode="cover"
-      style={styles.container}
-      blurRadius={20}
-    >
-      <View style={styles.imageConatiner}>
-        {/* <Image
+    <>
+      <DeviceSafeArea />
+      <ImageBackground
+        source={require("../assets/cart9.jpg")}
+        resizeMode="cover"
+        style={styles.container}
+        blurRadius={20}
+      >
+        <View style={styles.imageConatiner}>
+          {/* <Image
           style={styles.image}
           source={require("../../assets/cartlogo.png")}
         /> */}
-        <Ionicons name="cart" size={74} color="white" />
-        <Text category="h4" style={{ color: "white" }}>
-          Digicart
-        </Text>
-      </View>
-      <View style={styles.textContainer}>
-        <Text category="h2" status="control">
-          Reset Password
-        </Text>
-      </View>
-
-      <View style={styles.formContainer}>
-        <AppInputField
-          name="email"
-          placeholder="Enter valid email"
-          icon="mail"
-          textContentType="emailAddress"
-          control={control}
-          errors={errors}
-        />
-
-        <View style={styles.buttonContainer}>
-          <Button
-            size="giant"
-            disabled={loading}
-            onPress={handleSubmit(onSubmit)}
-          >
-            {!loading ? "Proceed" : <AppCircularProgress color="white" />}
-          </Button>
+          <Ionicons name="cart" size={74} color="white" />
+          <Text category="h4" style={{ color: "white" }}>
+            Digicart
+          </Text>
         </View>
-      </View>
-    </ImageBackground>
+        <View style={styles.textContainer}>
+          <Text category="h2" status="control">
+            Reset Password
+          </Text>
+        </View>
+
+        <View style={styles.formContainer}>
+          <AppInputField
+            name="email"
+            placeholder="Enter valid email"
+            icon="mail"
+            textContentType="emailAddress"
+            control={control}
+            errors={errors}
+          />
+
+          <View style={styles.buttonContainer}>
+            <Button
+              size="giant"
+              disabled={loading}
+              onPress={handleSubmit(onSubmit)}
+            >
+              {!loading ? "Proceed" : <AppCircularProgress color="white" />}
+            </Button>
+          </View>
+        </View>
+      </ImageBackground>
+    </>
   );
 }
 

@@ -1,7 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "@ui-kitten/components";
+import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
+import { AntDesign } from "@expo/vector-icons";
+import { COLORS } from "../components/utils/COLORS";
 
 // ======================================
 
@@ -11,38 +13,36 @@ export default function PaymentSuccessfull({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: "cyan" }}>
+    <>
+      <DeviceSafeArea />
       <View
         style={{
+          height: "100%",
           display: "flex",
           alignItems: "center",
-          height: "100%",
-          marginTop: 50,
+          justifyContent: "center",
+          backgroundColor: COLORS.bgColor,
         }}
       >
-        <Image
-          source={require("../assets/payment.png")}
-          style={{
-            width: 300,
-            height: 300,
-            marginBottom: 50,
-
-            borderColor: "black",
-          }}
+        <AntDesign
+          name="checkcircle"
+          size={100}
+          color="white"
+          style={{ flex: 0.3 }}
         />
-        <Text style={styles.text}>Payment was Successfull!</Text>
+        <Text style={styles.text}>Payment was Successfull</Text>
         <Text style={styles.text}>Thanks for shopping</Text>
-        <Text style={styles.text}>Come back soon</Text>
+        <Text style={styles.text}>Come back soon 😊</Text>
         <Button
-          style={styles.button}
-          onPress={handleClick}
-          status="primary"
           size="large"
+          status="primary"
+          onPress={handleClick}
+          style={styles.button}
         >
           Back to Home Screen
         </Button>
       </View>
-    </SafeAreaView>
+    </>
   );
 }
 
@@ -50,8 +50,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 35,
     fontWeight: "700",
+    color: "white",
   },
   button: {
     margin: 42,
+    borderRadius: 15,
   },
 });

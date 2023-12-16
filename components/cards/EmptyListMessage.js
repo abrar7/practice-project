@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { COLORS } from "../utils/COLORS";
 
 // ===================================================================
 
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    color: "#212226",
+    color: COLORS.textColor,
     fontSize: 22,
     textAlign: "center",
     marginHorizontal: 10,

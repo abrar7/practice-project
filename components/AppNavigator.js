@@ -10,16 +10,16 @@ import LoginView from "../screens/LoginView";
 import ScannerComponent from "../screens/ScannerComponent";
 import SignupView from "../screens/SignupView";
 import ItemCards from "./cards/ItemCards";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { FIREBASE_AUTH } from "../FirebaseConfig";
 import AppLoader from "../screens/AppLoader";
-import { onAuthStateChanged } from "firebase/auth";
 import CheckoutPage from "../screens/CheckoutPage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import StripePayment from "./payment/StripePayment";
 import PaymentSuccessfull from "../screens/PaymentSuccessfull";
 import CheckoutQRCode from "../screens/CheckoutQRCode";
 import CheckoutScanner from "../screens/CheckoutScanner";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { FIREBASE_AUTH } from "../FirebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
 
 // ===================================================================
 
@@ -69,25 +69,89 @@ export default function AppNavigator() {
         )
       }
     >
-      <Stack.Screen name="customerHomeScreen" component={CustomerHomeScreen} />
-      <Stack.Screen name="adminHomeScreen" component={AdminHomeScreen} />
-      <Stack.Screen name="addItemForm" component={AddItemForm} />
-      <Stack.Screen name="scannerComponent" component={ScannerComponent} />
-      <Stack.Screen name="generateQRCode" component={GenerateQRCode} />
-      <Stack.Screen name="checkoutPage" component={CheckoutPage} />
-      <Stack.Screen name="checkoutQRCode" component={CheckoutQRCode} />
-      <Stack.Screen name="checkoutScanner" component={CheckoutScanner} />
-      <Stack.Screen name="itemCards" component={ItemCards} />
-      <Stack.Screen name="stripePayment" component={StripePayment} />
-      <Stack.Screen name="success" component={PaymentSuccessfull} />
+      <Stack.Screen
+        name="customerHomeScreen"
+        component={CustomerHomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="adminHomeScreen"
+        component={AdminHomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="addItemForm"
+        component={AddItemForm}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="scannerComponent"
+        component={ScannerComponent}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="generateQRCode"
+        component={GenerateQRCode}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="checkoutPage"
+        component={CheckoutPage}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="checkoutQRCode"
+        component={CheckoutQRCode}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="checkoutScanner"
+        component={CheckoutScanner}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="itemCards"
+        component={ItemCards}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="stripePayment"
+        component={StripePayment}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="success"
+        component={PaymentSuccessfull}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   ) : (
     <Stack.Navigator initialRouteName="confirmUser">
-      <Stack.Screen name="confirmUser" component={ConfirmUser} />
-      <Stack.Screen name="customerAction" component={CustomerAction} />
-      <Stack.Screen name="signUp" component={SignupView} />
-      <Stack.Screen name="login" component={LoginView} />
-      <Stack.Screen name="forgotPassword" component={ForgotPasswordView} />
+      <Stack.Screen
+        name="confirmUser"
+        component={ConfirmUser}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="customerAction"
+        component={CustomerAction}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="signUp"
+        component={SignupView}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="login"
+        component={LoginView}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="forgotPassword"
+        component={ForgotPasswordView}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
