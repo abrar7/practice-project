@@ -1,22 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  StyleSheet,
-  FlatList,
-  View,
-  Alert,
-  RefreshControl,
-  SafeAreaView,
-  StatusBar,
-} from "react-native";
+import { StyleSheet, FlatList, View, Alert } from "react-native";
 import { Text, Button } from "@ui-kitten/components";
-import ItemCard from "./ItemCard";
+import { Ionicons } from "@expo/vector-icons";
+import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import ItemCard from "./ItemCard";
 import ListItemDeleteAction from "./ListItemDeleteAction";
 import ListItemSeparator from "./ListItemSeparator";
 import EmptyListMessage from "./EmptyListMessage";
-import { Ionicons } from "@expo/vector-icons";
-import { FIRESTORE_DB } from "../../FirebaseConfig";
 import DevicesToast from "../Toast/DevicesToast";
+import DeviceSafeArea from "../safe-area/DeviceSafeArea";
+import { COLORS } from "../utils/COLORS";
 
 // ============================================================
 
@@ -27,7 +21,6 @@ export default function ItemCards({ route, navigation }) {
   const [checkoutWeight, setCheckoutWeight] = useState();
   const isFirstRender = useRef(true);
   const database = FIRESTORE_DB;
-  // const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
     async function getData() {
@@ -65,7 +58,7 @@ export default function ItemCards({ route, navigation }) {
   const handleAlertAction = (item) => {
     Alert.alert(
       "Confirm Deletion",
-      "Do you want to delete this Item from your cart?",
+      "Do you want to delete this item from your cart?",
       [
         {
           text: "Yes",
@@ -126,81 +119,74 @@ export default function ItemCards({ route, navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text
-        category="h2"
-        style={{
-          padding: 10,
-          color: "black",
-          backgroundColor: "#e4e7ed",
-          marginBottom: 3,
-        }}
-      >
-        Scanned Items List
-      </Text>
-      {newItems?.length ? (
-        <FlatList
-          data={newItems}
-          keyExtractor={(item, index) => index.toString()}
-          // keyExtractor={(message) => message?.id.toString()}
-          renderItem={({ item }) => (
-            <ItemCard
-              key={item?.id}
-              item={item}
-              handleIncrement={() => handleIncrement(item?.id)}
-              handleDecrement={() => handleDecrement(item?.id)}
-              renderRightActions={() => (
-                <ListItemDeleteAction onPress={() => handleAlertAction(item)} />
-              )}
-            />
-          )}
-          ItemSeparatorComponent={<ListItemSeparator />} // Divider
-          // refreshControl={
-          //   <RefreshControl
-          //     refreshing={isRefreshing}
-          //     // onRefresh={() => getData()}
-          //     onRefresh={() => newItems}
-          //   />
-          // }
-        />
-      ) : (
-        <EmptyListMessage />
-      )}
-      <View style={styles.button}>
-        <Button
-          status="info"
-          disabled={newItems.length === 0}
-          onPress={handleCheckout}
+    <>
+      <DeviceSafeArea />
+      <View style={styles.container}>
+        <Text
+          category="h2"
+          style={{
+            padding: 10,
+            color: "white",
+            backgroundColor: "#2c2c2d",
+            marginBottom: 3,
+          }}
         >
-          {`Checkout Rs: ${checkoutAmount}`}{" "}
-        </Button>
-
-        <Button
-          status="primary"
-          onPress={handleScanToAdd}
-          accessoryLeft={<Ionicons name="camera" size={20} color="white" />}
-        >
-          Scan To add
-        </Button>
+          Scanned Items List
+        </Text>
+        {newItems?.length ? (
+          <FlatList
+            data={newItems}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <ItemCard
+                key={item?.id}
+                item={item}
+                handleIncrement={() => handleIncrement(item?.id)}
+                handleDecrement={() => handleDecrement(item?.id)}
+                renderRightActions={() => (
+                  <ListItemDeleteAction
+                    onPress={() => handleAlertAction(item)}
+                  />
+                )}
+              />
+            )}
+            ItemSeparatorComponent={<ListItemSeparator />}
+          />
+        ) : (
+          <EmptyListMessage />
+        )}
+        <View style={styles.button}>
+          <Button
+            status="info"
+            disabled={newItems.length === 0}
+            onPress={handleCheckout}
+            style={{ borderRadius: 20 }}
+          >
+            {`Checkout Rs: ${checkoutAmount}`}{" "}
+          </Button>
+          <Button
+            status="primary"
+            onPress={handleScanToAdd}
+            style={{ borderRadius: 20 }}
+            accessoryLeft={<Ionicons name="camera" size={20} color="white" />}
+          >
+            Scan To add
+          </Button>
+        </View>
       </View>
-    </SafeAreaView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  // container: {
-  //   display: "flex",
-  //   height: "100%",
-  //   justifyContent: "space-between",
-  // },
   container: {
     flex: 1,
-    paddingTop: StatusBar.currentHeight,
+    backgroundColor: COLORS.bgColor,
   },
   button: {
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: "#e4e7ed",
+    backgroundColor: "#2c2c2d",
     padding: 15,
   },
   checkoutText: {

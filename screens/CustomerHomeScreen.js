@@ -7,6 +7,7 @@ import { FIREBASE_AUTH, FIRESTORE_DB } from "../FirebaseConfig";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppButton from "../components/form/AppButton";
+import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 
 // ==================================================
 
@@ -50,23 +51,38 @@ export default function CustomerHomeScreen({ navigation }) {
   };
 
   return userName ? (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.imageConatiner}>
-        <Ionicons name="cart" size={74} color="white" />
-        <Text category="h4" style={{ color: "white" }}>
-          Digicart
-        </Text>
+    <>
+      <DeviceSafeArea />
+      <View style={styles.container}>
+        <View style={styles.imageConatiner}>
+          <Ionicons name="cart" size={74} color="white" />
+          <Text category="h4" style={{ color: "white" }}>
+            Digicart
+          </Text>
+        </View>
+        <View>
+          <Text style={styles.welcome}>Welcome {userName.toUpperCase()}</Text>
+        </View>
+        <AppButton
+          title="Ready to shop?"
+          icon="shoppingcart"
+          onPress={handleShop}
+        />
+        <AppButton title="Logout" onPress={handleLogout} icon="logout" />
       </View>
-      <View>
-        <Text style={styles.welcome}>Welcome {userName.toUpperCase()}</Text>
-      </View>
-      <AppButton title="Ready to shop?" onPress={handleShop} />
-      <AppButton title="Logout" onPress={handleLogout} icon="logout" />
-    </SafeAreaView>
+    </>
   ) : (
-    <View style={styles.loader}>
-      <ActivityIndicator size="large" color="black" />
-    </View>
+    <>
+      <DeviceSafeArea />
+      <View style={styles.loader}>
+        <ActivityIndicator
+          size="large"
+          color="black"
+          style={{ marginBottom: 10 }}
+        />
+        <Text>Loading...</Text>
+      </View>
+    </>
   );
 }
 

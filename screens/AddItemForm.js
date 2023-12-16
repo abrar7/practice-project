@@ -13,6 +13,7 @@ import UploadImage from "../screens/UploadImage";
 import { initializeApp } from "firebase/app";
 import AppCircularProgress from "../components/form/AppCircularProgress";
 import DevicesToast from "../components/Toast/DevicesToast";
+import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 
 // ===================================================================
 
@@ -133,93 +134,96 @@ export default function AddItemForm({ navigation }) {
   }
 
   return (
-    <ImageBackground
-      source={require("../assets/cart5.jpg")}
-      resizeMode="stretch"
-      style={styles.container}
-      blurRadius={20}
-    >
-      <View style={styles.imageConatiner}>
-        {/* <Image
+    <>
+      <DeviceSafeArea />
+      <ImageBackground
+        source={require("../assets/cart5.jpg")}
+        resizeMode="stretch"
+        style={styles.container}
+        blurRadius={20}
+      >
+        <View style={styles.imageConatiner}>
+          {/* <Image
           style={styles.image}
           source={require("../../assets/cartlogo.png")}
         /> */}
-        <Ionicons name="cart" size={74} color="white" />
-        <Text category="h4" style={{ color: "white" }}>
-          Digicart
-        </Text>
-      </View>
-      <View style={styles.textContainer}>
-        <Text category="h2" status="control">
-          Add Item Details
-        </Text>
-      </View>
-
-      <View style={styles.formContainer}>
-        <AppInputField
-          name="itemName"
-          placeholder="Item Full Name"
-          control={control}
-          errors={errors}
-        />
-        <AppInputField
-          name="companyName"
-          placeholder="Item Company Name"
-          control={control}
-          errors={errors}
-        />
-
-        <AppInputField
-          name="weight"
-          placeholder="Item Gross Weight"
-          keyboardType="numeric"
-          control={control}
-          errors={errors}
-        />
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <AppInputField
-            name="price"
-            placeholder="Item Price"
-            keyboardType="numeric"
-            control={control}
-            errors={errors}
-          />
-          <AppInputField
-            name="itemsInStock"
-            placeholder="Items in Stock"
-            keyboardType="numeric"
-            control={control}
-            errors={errors}
-          />
+          <Ionicons name="cart" size={74} color="white" />
+          <Text category="h4" style={{ color: "white" }}>
+            Digicart
+          </Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text category="h2" status="control">
+            Add Item Details
+          </Text>
         </View>
 
-        <UploadImage
-          imageUrl={imageUrl}
-          openImagePicker={openImagePicker}
-          pictureLoading={pictureLoading}
-        />
+        <View style={styles.formContainer}>
+          <AppInputField
+            name="itemName"
+            placeholder="Item Full Name"
+            control={control}
+            errors={errors}
+          />
+          <AppInputField
+            name="companyName"
+            placeholder="Item Company Name"
+            control={control}
+            errors={errors}
+          />
 
-        <View style={styles.buttonContainer}>
-          <Button
-            size="giant"
-            onPress={handleSubmit(onSubmit)}
-            disabled={loading}
+          <AppInputField
+            name="weight"
+            placeholder="Item Gross Weight"
+            keyboardType="numeric"
+            control={control}
+            errors={errors}
+          />
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
           >
-            {!loading ? (
-              "Generate QR Code"
-            ) : (
-              <AppCircularProgress color="white" />
-            )}
-          </Button>
+            <AppInputField
+              name="price"
+              placeholder="Item Price"
+              keyboardType="numeric"
+              control={control}
+              errors={errors}
+            />
+            <AppInputField
+              name="itemsInStock"
+              placeholder="Items in Stock"
+              keyboardType="numeric"
+              control={control}
+              errors={errors}
+            />
+          </View>
+
+          <UploadImage
+            imageUrl={imageUrl}
+            openImagePicker={openImagePicker}
+            pictureLoading={pictureLoading}
+          />
+
+          <View style={styles.buttonContainer}>
+            <Button
+              size="giant"
+              onPress={handleSubmit(onSubmit)}
+              disabled={loading}
+            >
+              {!loading ? (
+                "Generate QR Code"
+              ) : (
+                <AppCircularProgress color="white" />
+              )}
+            </Button>
+          </View>
         </View>
-      </View>
-    </ImageBackground>
+      </ImageBackground>
+    </>
   );
 }
 

@@ -4,6 +4,7 @@ import { StyleSheet, View, ImageBackground } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../components/utils/COLORS";
+import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 
 // ===================================================================
 
@@ -19,69 +20,72 @@ export default function ConfirmUser({ navigation }) {
     });
   };
   return (
-    <ImageBackground
-      source={require("../assets/cart3.jpg")}
-      resizeMode="cover"
-      style={styles.container}
-      blurRadius={20}
-    >
-      <View
-        style={{
-          width: "100%",
-          height: "75%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-        }}
+    <>
+      <DeviceSafeArea />
+      <ImageBackground
+        source={require("../assets/cart3.jpg")}
+        resizeMode="cover"
+        style={styles.container}
+        blurRadius={20}
       >
-        <View style={styles.imageConatiner}>
-          <Ionicons name="cart" size={74} color="white" />
-          <Text category="h2" style={{ color: "white" }}>
-            Digicart
-          </Text>
-        </View>
         <View
           style={{
+            width: "100%",
+            height: "75%",
             display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-evenly",
+            flexDirection: "column",
+            justifyContent: "space-between",
           }}
         >
-          <Button
-            size="giant"
-            appearance="filled"
-            status="primary"
-            onPress={handleAdmin}
-            style={{ borderRadius: 50, width: 170 }}
-            accessoryLeft={
-              <MaterialIcons
-                name="admin-panel-settings"
-                size={22}
-                color={COLORS.lightColor}
-              />
-            }
+          <View style={styles.imageConatiner}>
+            <Ionicons name="cart" size={74} color="white" />
+            <Text category="h2" style={{ color: "white" }}>
+              Digicart
+            </Text>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+            }}
           >
-            Admin
-          </Button>
-          <Button
-            size="giant"
-            appearance="filled"
-            status="primary"
-            onPress={handleCustomer}
-            style={{ borderRadius: 50, width: 170 }}
-            accessoryLeft={
-              <MaterialIcons
-                name="person"
-                size={22}
-                color={COLORS.lightColor}
-              />
-            }
-          >
-            Customer
-          </Button>
+            <Button
+              size="giant"
+              appearance="filled"
+              status="primary"
+              onPress={handleAdmin}
+              style={{ borderRadius: 50, width: 170 }}
+              accessoryLeft={
+                <MaterialIcons
+                  name="admin-panel-settings"
+                  size={22}
+                  color={COLORS.lightColor}
+                />
+              }
+            >
+              Admin
+            </Button>
+            <Button
+              size="giant"
+              appearance="filled"
+              status="primary"
+              onPress={handleCustomer}
+              style={{ borderRadius: 50, width: 170 }}
+              accessoryLeft={
+                <MaterialIcons
+                  name="person"
+                  size={22}
+                  color={COLORS.lightColor}
+                />
+              }
+            >
+              Customer
+            </Button>
+          </View>
         </View>
-      </View>
-    </ImageBackground>
+      </ImageBackground>
+    </>
   );
 }
 

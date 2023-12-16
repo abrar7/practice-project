@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { addDoc, doc, collection, setDoc, updateDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../FirebaseConfig";
+import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 
 // ===================================================================
 
@@ -72,25 +73,30 @@ export default function CheckoutScanner({ navigation }) {
 
   // Return the View
   return (
-    <View style={styles.container}>
-      <View style={styles.barcodebox}>
-        <BarCodeScanner
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          style={{ height: 400, width: 400 }}
-        />
+    <>
+      <DeviceSafeArea />
+      <View style={styles.container}>
+        <View style={styles.barcodebox}>
+          <BarCodeScanner
+            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            style={{ height: 400, width: 400 }}
+          />
+        </View>
+        {!scannedData && (
+          <Text style={styles.maintext}>Nothing scanned yet</Text>
+        )}
+
+        <Text style={styles.maintext}>{scannedData}</Text>
+
+        {scanned && (
+          <Button
+            title={"Scan again?"}
+            onPress={() => setScanned(false)}
+            color="tomato"
+          />
+        )}
       </View>
-      {!scannedData && <Text style={styles.maintext}>Nothing scanned yet</Text>}
-
-      <Text style={styles.maintext}>{scannedData}</Text>
-
-      {scanned && (
-        <Button
-          title={"Scan again?"}
-          onPress={() => setScanned(false)}
-          color="tomato"
-        />
-      )}
-    </View>
+    </>
   );
 }
 

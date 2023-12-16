@@ -16,6 +16,7 @@ import { FIRESTORE_DB } from "../FirebaseConfig";
 import { ActivityIndicator } from "react-native-paper";
 import FirebaseErrorHandler from "../components/form/FirebaseErrorHandler";
 import DevicesToast from "../components/Toast/DevicesToast";
+import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 
 // =====================================================
 
@@ -67,64 +68,67 @@ export default function SignupView({ navigation }) {
   };
 
   return (
-    <ImageBackground
-      source={require("../assets/cart10.jpg")}
-      resizeMode="stretch"
-      style={styles.container}
-      blurRadius={20}
-    >
-      <View style={styles.imageConatiner}>
-        <Ionicons name="cart" size={74} color="white" />
-        <Text category="h4" style={{ color: "white" }}>
-          Digicart
-        </Text>
-      </View>
-      <View style={styles.textContainer}>
-        <Text category="h2" status="control">
-          Sign Up to Digicart
-        </Text>
-      </View>
-
-      <View style={styles.formContainer}>
-        <AppInputField
-          name="name"
-          placeholder="Full Name"
-          icon="person"
-          control={control}
-          errors={errors}
-        />
-        <AppInputField
-          name="email"
-          placeholder="Valid Email"
-          icon="mail"
-          control={control}
-          errors={errors}
-        />
-        <AppInputField
-          name="password"
-          placeholder="Password"
-          secureTextEntry={passwordVisible ? false : true}
-          icon="visibility"
-          onPressIcon={() => setPasswordVisible(!passwordVisible)}
-          control={control}
-          errors={errors}
-        />
-
-        <View style={styles.buttonContainer}>
-          <Button
-            size="giant"
-            onPress={handleSubmit(onSubmit)}
-            disabled={loading}
-          >
-            {!loading ? (
-              "SIGN UP"
-            ) : (
-              <ActivityIndicator size="small" color="white" />
-            )}
-          </Button>
+    <>
+      <DeviceSafeArea />
+      <ImageBackground
+        source={require("../assets/cart10.jpg")}
+        resizeMode="stretch"
+        style={styles.container}
+        blurRadius={20}
+      >
+        <View style={styles.imageConatiner}>
+          <Ionicons name="cart" size={74} color="white" />
+          <Text category="h4" style={{ color: "white" }}>
+            Digicart
+          </Text>
         </View>
-      </View>
-    </ImageBackground>
+        <View style={styles.textContainer}>
+          <Text category="h2" status="control">
+            Sign Up to Digicart
+          </Text>
+        </View>
+
+        <View style={styles.formContainer}>
+          <AppInputField
+            name="name"
+            placeholder="Full Name"
+            icon="person"
+            control={control}
+            errors={errors}
+          />
+          <AppInputField
+            name="email"
+            placeholder="Valid Email"
+            icon="mail"
+            control={control}
+            errors={errors}
+          />
+          <AppInputField
+            name="password"
+            placeholder="Password"
+            secureTextEntry={passwordVisible ? false : true}
+            icon="visibility"
+            onPressIcon={() => setPasswordVisible(!passwordVisible)}
+            control={control}
+            errors={errors}
+          />
+
+          <View style={styles.buttonContainer}>
+            <Button
+              size="giant"
+              onPress={handleSubmit(onSubmit)}
+              disabled={loading}
+            >
+              {!loading ? (
+                "SIGN UP"
+              ) : (
+                <ActivityIndicator size="small" color="white" />
+              )}
+            </Button>
+          </View>
+        </View>
+      </ImageBackground>
+    </>
   );
 }
 

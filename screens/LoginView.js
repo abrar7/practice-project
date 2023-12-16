@@ -17,6 +17,7 @@ import { ActivityIndicator } from "react-native-paper";
 import FirebaseErrorHandler from "../components/form/FirebaseErrorHandler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DevicesToast from "../components/Toast/DevicesToast";
+import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 
 // ==================================================================
 
@@ -90,74 +91,77 @@ export default function LoginView({ route, navigation }) {
   };
 
   return (
-    <ImageBackground
-      source={require("../assets/cart2.jpg")}
-      resizeMode="cover"
-      style={styles.container}
-      blurRadius={20}
-    >
-      <View style={styles.imageConatiner}>
-        {/* <Image
+    <>
+      <DeviceSafeArea />
+      <ImageBackground
+        source={require("../assets/cart2.jpg")}
+        resizeMode="cover"
+        style={styles.container}
+        blurRadius={20}
+      >
+        <View style={styles.imageConatiner}>
+          {/* <Image
           style={styles.image}
           source={require("../../assets/cartlogo.png")}
         /> */}
-        <Ionicons name="cart" size={74} color="white" />
-        <Text category="h4" style={{ color: "white" }}>
-          Digicart
-        </Text>
-      </View>
-      <View style={styles.textContainer}>
-        <Text category="h2" status="control">
-          Login to Digicart
-        </Text>
-      </View>
+          <Ionicons name="cart" size={74} color="white" />
+          <Text category="h4" style={{ color: "white" }}>
+            Digicart
+          </Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text category="h2" status="control">
+            Login to Digicart
+          </Text>
+        </View>
 
-      <View style={styles.formContainer}>
-        <AppInputField
-          name="email"
-          placeholder="Email"
-          icon="mail"
-          control={control}
-          errors={errors}
-        />
-        <AppInputField
-          name="password"
-          placeholder="Password"
-          secureTextEntry={passwordVisible ? false : true}
-          icon="visibility"
-          onPressIcon={() => setPasswordVisible(!passwordVisible)}
-          control={control}
-          errors={errors}
-        />
-        <View style={{ display: "flex", alignItems: "flex-end" }}>
-          <TouchableOpacity onPress={handleForgotPassword}>
-            <Text
-              style={{
-                color: "white",
-                fontSize: 20,
-                textDecorationLine: "underline",
-              }}
+        <View style={styles.formContainer}>
+          <AppInputField
+            name="email"
+            placeholder="Email"
+            icon="mail"
+            control={control}
+            errors={errors}
+          />
+          <AppInputField
+            name="password"
+            placeholder="Password"
+            secureTextEntry={passwordVisible ? false : true}
+            icon="visibility"
+            onPressIcon={() => setPasswordVisible(!passwordVisible)}
+            control={control}
+            errors={errors}
+          />
+          <View style={{ display: "flex", alignItems: "flex-end" }}>
+            <TouchableOpacity onPress={handleForgotPassword}>
+              <Text
+                style={{
+                  color: "white",
+                  fontSize: 20,
+                  textDecorationLine: "underline",
+                }}
+              >
+                Forgot password?
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <Button
+              size="giant"
+              disabled={loading}
+              onPress={handleSubmit(onSubmit)}
             >
-              Forgot password?
-            </Text>
-          </TouchableOpacity>
+              {!loading ? (
+                "LOGIN"
+              ) : (
+                <ActivityIndicator size="small" color="white" />
+              )}
+            </Button>
+          </View>
         </View>
-
-        <View style={styles.buttonContainer}>
-          <Button
-            size="giant"
-            disabled={loading}
-            onPress={handleSubmit(onSubmit)}
-          >
-            {!loading ? (
-              "LOGIN"
-            ) : (
-              <ActivityIndicator size="small" color="white" />
-            )}
-          </Button>
-        </View>
-      </View>
-    </ImageBackground>
+      </ImageBackground>
+    </>
   );
 }
 

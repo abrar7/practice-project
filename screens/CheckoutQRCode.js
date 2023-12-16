@@ -15,6 +15,7 @@ import { FIREBASE_AUTH, FIRESTORE_DB } from "../FirebaseConfig";
 import QRCode from "react-native-qrcode-svg";
 import { ActivityIndicator } from "react-native-paper";
 import DevicesToast from "../components/Toast/DevicesToast";
+import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 
 // ===================================================================
 
@@ -100,71 +101,74 @@ export default function CheckoutQRCode({ route, navigation }) {
   }, [responseId]);
 
   return (
-    <ImageBackground
-      source={require("../assets/qrcodebg.jpg")}
-      resizeMode="cover"
-      style={styles.container}
-      blurRadius={20}
-    >
-      <View style={styles.logoConatiner}>
-        <Ionicons name="cart" size={74} color="white" />
-        <Text category="h4" style={{ color: "white" }}>
-          Digicart
-        </Text>
-      </View>
-      <View style={styles.qrcodeContainer}>
-        <Text category="h4" style={styles.text}>
-          Kindly go to the checkout point device located in store and scan this
-          QR code
-        </Text>
-        <View style={styles.qrcode}>
-          {jsonData && <QRCode value={jsonData} size={300} />}
-        </View>
-        <View style={styles.detailsContainer}>
-          <Text category="h5" style={styles.detailsText}>
-            Weightage: {weightAge} kg
-          </Text>
-          <Text category="h5" style={styles.detailsText}>
-            Total bill: Rs.{grandTotal}
+    <>
+      <DeviceSafeArea />
+      <ImageBackground
+        source={require("../assets/qrcodebg.jpg")}
+        resizeMode="cover"
+        style={styles.container}
+        blurRadius={20}
+      >
+        <View style={styles.logoConatiner}>
+          <Ionicons name="cart" size={74} color="white" />
+          <Text category="h4" style={{ color: "white" }}>
+            Digicart
           </Text>
         </View>
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          size="giant"
-          appearance="outline"
-          status="primary"
-          onPress={() => navigation.goBack()}
-          style={{ borderRadius: 50, width: 110 }}
-        >
-          Back
-        </Button>
-        <Button
-          size="giant"
-          appearance="filled"
-          status="info"
-          disabled={jsonData?.length > 0}
-          onPress={handleGenerateQR}
-          style={{ borderRadius: 50, width: 160 }}
-        >
-          {isLoading ? (
-            <ActivityIndicator size="small" color="white" />
-          ) : (
-            "Generate QR"
-          )}
-        </Button>
-        <Button
-          size="giant"
-          appearance="outline"
-          status="success"
-          disabled={!next}
-          onPress={handleNext}
-          style={{ borderRadius: 50, width: 110 }}
-        >
-          Next
-        </Button>
-      </View>
-    </ImageBackground>
+        <View style={styles.qrcodeContainer}>
+          <Text category="h4" style={styles.text}>
+            Kindly go to the checkout point device located in store and scan
+            this QR code
+          </Text>
+          <View style={styles.qrcode}>
+            {jsonData && <QRCode value={jsonData} size={300} />}
+          </View>
+          <View style={styles.detailsContainer}>
+            <Text category="h5" style={styles.detailsText}>
+              Weightage: {weightAge} kg
+            </Text>
+            <Text category="h5" style={styles.detailsText}>
+              Total bill: Rs.{grandTotal}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            size="giant"
+            appearance="outline"
+            status="primary"
+            onPress={() => navigation.goBack()}
+            style={{ borderRadius: 50, width: 110 }}
+          >
+            Back
+          </Button>
+          <Button
+            size="giant"
+            appearance="filled"
+            status="info"
+            disabled={jsonData?.length > 0}
+            onPress={handleGenerateQR}
+            style={{ borderRadius: 50, width: 160 }}
+          >
+            {isLoading ? (
+              <ActivityIndicator size="small" color="white" />
+            ) : (
+              "Generate QR"
+            )}
+          </Button>
+          <Button
+            size="giant"
+            appearance="outline"
+            status="success"
+            disabled={!next}
+            onPress={handleNext}
+            style={{ borderRadius: 50, width: 110 }}
+          >
+            Next
+          </Button>
+        </View>
+      </ImageBackground>
+    </>
   );
 }
 

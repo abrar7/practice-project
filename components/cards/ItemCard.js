@@ -5,6 +5,9 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 import { Button } from "@ui-kitten/components";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AntDesign } from "@expo/vector-icons";
+import { COLORS } from "../utils/COLORS";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 
 // =======================================================
 
@@ -42,24 +45,35 @@ export default function ItemCard({
                 >
                   <Text
                     variant="titleLarge"
-                    style={{ marginLeft: 5, color: "black" }}
+                    style={{ marginLeft: 5, color: "white" }}
                   >
                     {itemName}
                   </Text>
-
-                  <Chip
-                    icon="weight"
+                  <View
                     style={{
-                      width: "28%",
-                      height: "100%",
-                      marginRight: 6,
+                      marginRight: 7,
+                      flexDirection: "row",
+                      alignItems: "center",
+                      backgroundColor: COLORS.bgColor,
+                      paddingLeft: 10,
+                      borderRadius: 6,
                     }}
                   >
-                    {weight * count} kg
-                  </Chip>
+                    <FontAwesome5
+                      name="weight-hanging"
+                      size={12}
+                      color="white"
+                    />
+                    <Text style={{ color: "white", marginHorizontal: 10 }}>
+                      {weight * count} kg
+                    </Text>
+                  </View>
                 </View>
-                <View>
-                  <Text variant="titleMedium" style={{ marginLeft: 5 }}>
+                <View style={{ marginTop: 7 }}>
+                  <Text
+                    variant="titleMedium"
+                    style={{ marginLeft: 5, color: "white" }}
+                  >
                     {companyName}
                   </Text>
                 </View>
@@ -68,17 +82,25 @@ export default function ItemCard({
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "space-between",
+                    alignItems: "center",
                   }}
                 >
-                  <Text
-                    variant="titleMedium"
+                  <View
                     style={{
-                      paddingHorizontal: 4,
-                      marginVertical: 10,
+                      flexDirection: "row",
+                      alignItems: "center",
+                      backgroundColor: COLORS.bgColor,
+                      height: 28,
+                      marginLeft: 5,
+                      paddingLeft: 10,
+                      borderRadius: 6,
                     }}
                   >
-                    <Chip icon="information">Rs: {price * count}</Chip>
-                  </Text>
+                    <Entypo name="price-tag" size={14} color="white" />
+                    <Text style={{ color: "white", marginHorizontal: 10 }}>
+                      Rs: {price * count}
+                    </Text>
+                  </View>
                   <View
                     style={{
                       display: "flex",
@@ -96,17 +118,7 @@ export default function ItemCard({
                       style={{ borderRadius: 50, borderWidth: 1 }}
                       accessoryLeft={<AntDesign name="minuscircle" size={15} />}
                     />
-                    <Text
-                      variant="titleMedium"
-                      style={{
-                        margin: 6,
-                        borderWidth: 1,
-                        paddingVertical: 6,
-                        paddingHorizontal: 10,
-                        textAlign: "center",
-                        borderRadius: 5,
-                      }}
-                    >
+                    <Text variant="titleMedium" style={styles.countStyle}>
                       {count}
                     </Text>
 
@@ -134,8 +146,8 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: "100%",
     paddingVertical: 5,
-    backgroundColor: "#f5f6fa",
-    borderRadius: 15,
+    backgroundColor: "#2c2c2d",
+    borderRadius: 7,
   },
   mainContainer: {
     display: "flex",
@@ -148,8 +160,16 @@ const styles = StyleSheet.create({
   image: {
     margin: 4,
     width: 92,
-    // height: 92,
     height: 92,
     borderRadius: 10,
+  },
+  countStyle: {
+    margin: 6,
+    borderWidth: 1,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    textAlign: "center",
+    borderRadius: 5,
+    color: "white",
   },
 });

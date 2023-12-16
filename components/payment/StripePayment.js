@@ -8,6 +8,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
+import DeviceSafeArea from "../safe-area/DeviceSafeArea";
 
 // ========================================================
 
@@ -88,54 +89,53 @@ export default function StripePayment({ route, navigation }) {
   };
 
   return (
-    <ImageBackground
-      source={require("../../assets/card4.jpg")}
-      resizeMode="cover"
-      style={styles.container}
-      blurRadius={10}
-    >
-      <View style={styles.imageConatiner}>
-        {/* <Image
-          style={styles.image}
-          source={require("../../assets/cartlogo.png")}
-        /> */}
-        <Ionicons name="cart" size={74} color="white" />
-        <Text category="h4" style={{ color: "white" }}>
-          Digicart
-        </Text>
-        <View style={styles.textContainer}>
-          <Text category="h2" status="control">
-            Pay here
+    <>
+      <DeviceSafeArea />
+      <ImageBackground
+        source={require("../../assets/card4.jpg")}
+        resizeMode="cover"
+        style={styles.container}
+        blurRadius={10}
+      >
+        <View style={styles.imageConatiner}>
+          <Ionicons name="cart" size={74} color="white" />
+          <Text category="h4" style={{ color: "white" }}>
+            Digicart
           </Text>
+          <View style={styles.textContainer}>
+            <Text category="h2" status="control">
+              Pay here
+            </Text>
+          </View>
         </View>
-      </View>
-      <View style={styles.container}>
-        <Button
-          size="giant"
-          disabled={loading || paymentSuccessful}
-          onPress={handleCheckout}
-          accessoryLeft={
-            <FontAwesome
-              name="dollar"
-              size={24}
-              color={data?.clientSecret ? "white" : "red"}
-            />
-          }
-        >
-          {loading ? (
-            <ActivityIndicator size="small" color="white" />
-          ) : (
-            "Proceed Payment"
-          )}
-        </Button>
-
-        {paymentSuccessful && (
-          <Button onPress={handleFinished} style={styles.button} size="giant">
-            Finished
+        <View style={styles.container}>
+          <Button
+            size="giant"
+            disabled={loading || paymentSuccessful}
+            onPress={handleCheckout}
+            style={{ borderRadius: 15 }}
+            accessoryLeft={
+              <FontAwesome
+                name="dollar"
+                size={24}
+                color={data?.clientSecret ? "white" : "red"}
+              />
+            }
+          >
+            {loading ? (
+              <ActivityIndicator size="small" color="white" />
+            ) : (
+              "Proceed Payment"
+            )}
           </Button>
-        )}
-      </View>
-    </ImageBackground>
+          {paymentSuccessful && (
+            <Button onPress={handleFinished} style={styles.button} size="giant">
+              Finished
+            </Button>
+          )}
+        </View>
+      </ImageBackground>
+    </>
   );
 }
 
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     margin: 30,
-    borderRadius: 5,
+    borderRadius: 15,
   },
   textContainer: {
     marginTop: 35,

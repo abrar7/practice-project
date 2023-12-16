@@ -7,6 +7,7 @@ import { collection, getDoc, doc } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppButton from "../components/form/AppButton";
 import { ActivityIndicator } from "react-native-paper";
+import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 
 // =====================================================
 
@@ -40,32 +41,40 @@ export default function AdminHomeScreen({ navigation }) {
 
   return !userName ? (
     <View style={styles.loader}>
-      <ActivityIndicator size="large" color="black" />
+      <ActivityIndicator
+        size="large"
+        color="black"
+        style={{ marginBottom: 10 }}
+      />
+      <Text>Loading...</Text>
     </View>
   ) : (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.imageConatiner}>
-        <Ionicons name="cart" size={74} color="white" />
-        <Text category="h4" style={{ color: "white" }}>
-          Digicart
-        </Text>
-      </View>
-      <View>
-        <Text style={styles.welcome}>Welcome Admin {userName}</Text>
-      </View>
+    <>
+      <DeviceSafeArea />
+      <SafeAreaView style={styles.container}>
+        <View style={styles.imageConatiner}>
+          <Ionicons name="cart" size={74} color="white" />
+          <Text category="h4" style={{ color: "white" }}>
+            Digicart
+          </Text>
+        </View>
+        <View>
+          <Text style={styles.welcome}>Welcome Admin {userName}</Text>
+        </View>
 
-      <AppButton
-        title="Update Inventory"
-        onPress={handleAddItems}
-        micon="inventory"
-      />
-      <AppButton
-        title="Checkout Scanner"
-        onPress={() => navigation.navigate("checkoutScanner")}
-        micon="qr-code-scanner"
-      />
-      <AppButton title="Logout" onPress={handleLogout} icon="logout" />
-    </SafeAreaView>
+        <AppButton
+          title="Update Inventory"
+          onPress={handleAddItems}
+          micon="inventory"
+        />
+        <AppButton
+          title="Checkout Scanner"
+          onPress={() => navigation.navigate("checkoutScanner")}
+          micon="qr-code-scanner"
+        />
+        <AppButton title="Logout" onPress={handleLogout} icon="logout" />
+      </SafeAreaView>
+    </>
   );
 }
 
