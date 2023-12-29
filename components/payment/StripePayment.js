@@ -8,7 +8,11 @@ import { ActivityIndicator } from "react-native-paper";
 import { FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
+import { useMutation } from "react-query";
+import { useSavePurchase } from "../query-hooks/useSavePurchase";
 import DeviceSafeArea from "../safe-area/DeviceSafeArea";
+import DevicesToast from "../Toast/DevicesToast";
+import { FIREBASE_AUTH } from "../../FirebaseConfig";
 
 // ========================================================
 
@@ -20,7 +24,39 @@ export default function StripePayment({ route, navigation }) {
   const [loading, setLoading] = useState(false);
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
   const DB = FIRESTORE_DB;
+  const { mutate: savePurchaseMutation } = useMutation(useSavePurchase);
+  const currentTime = new Date().toLocaleString();
 
+  const postData = {
+    data: {
+      userUid: FIREBASE_AUTH?.currentUser?.uid,
+      grandTotal: grandTotal,
+      date: currentTime,
+      items: purchasedItems?.map((v) => ({
+        companyName: v?.companyName,
+        count: v?.count,
+        id: v?.id,
+        imgLink: v?.imgLink,
+        inStock: v?.inStock,
+        itemName: v?.itemName,
+        price: v?.price,
+        weight: v?.weight,
+      })),
+    },
+  };
+
+  const handleSavePurchaseInDb = () => {
+    savePurchaseMutation(postData, {
+      onSuccess: (data) => {
+        DevicesToast("Purchase successfull.");
+        // here generate receipt button true
+      },
+      onError: (error) => {
+        DevicesToast("Post request failed");
+        console.error("Error while post request!", error);
+      },
+    });
+  };
   useEffect(() => {
     if (data && !error) {
       handlePaymentFlow();
@@ -39,6 +75,7 @@ export default function StripePayment({ route, navigation }) {
 
     if (paymentSuccessful) {
       manageInventory();
+      handleSavePurchaseInDb();
     }
   }, [data, error, paymentSuccessful]);
 
