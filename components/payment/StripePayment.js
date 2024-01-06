@@ -17,7 +17,8 @@ import { FIREBASE_AUTH } from "../../FirebaseConfig";
 // ========================================================
 
 export default function StripePayment({ route, navigation }) {
-  const { grandTotal, purchasedItems } = route.params;
+  const { grandTotal, purchasedItems, gstAmount, reward, subTotal } =
+    route.params;
   const [amount, setAmount] = useState(grandTotal);
   const { mutate, data, error } = useCreatePaymentIntent();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -30,6 +31,9 @@ export default function StripePayment({ route, navigation }) {
   const postData = {
     data: {
       userUid: FIREBASE_AUTH?.currentUser?.uid,
+      subTotal: subTotal,
+      gstAmount: gstAmount,
+      reward: reward,
       grandTotal: grandTotal,
       date: currentTime,
       items: purchasedItems?.map((v) => ({

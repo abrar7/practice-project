@@ -30,8 +30,8 @@ export default function App() {
 
     // <ApplicationProvider {...eva} theme={eva.light}>
     //   {/* <AppLoader /> */}
-    //   {/* <TestFile /> */}
-    //   <PaymentSuccessfull />
+    //   <TestFile />
+    //   {/* <PaymentSuccessfull /> */}
     // </ApplicationProvider>
   );
 }

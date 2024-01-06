@@ -3,29 +3,18 @@ import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { DataTable, Card } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
-import ListItemSeparator from "../components/cards/ListItemSeparator";
+import DeviceSafeArea from "../../components/safe-area/DeviceSafeArea";
+import ListItemSeparator from "../../components/cards/ListItemSeparator";
 
 // ===================================================
 
-const items = [
-  {
-    _id: 1,
-    itemName: "Cupcake",
-    price: 356,
-    weight: 16,
-    count: 2,
-  },
-  {
-    _id: 2,
-    itemName: "Eclair",
-    price: 262,
-    weight: 16,
-    count: 5,
-  },
-];
+export default function Receipt({ navigation, route }) {
+  const { data, customerName } = route?.params;
+  const { _id, date, grandTotal, gstAmount, reward, subTotal, items } = data;
+  const totalBill = grandTotal - reward;
+  const capitalizedName =
+    customerName.charAt(0).toUpperCase() + customerName.slice(1);
 
-export default function TestFile() {
   return (
     <>
       <DeviceSafeArea />
@@ -36,6 +25,7 @@ export default function TestFile() {
             size={30}
             color="white"
             style={{ marginRight: 15 }}
+            onPress={() => navigation.goBack()}
           />
           <Text style={styles.receiptText}>Receipt</Text>
         </View>
@@ -46,9 +36,10 @@ export default function TestFile() {
           </View>
           <ListItemSeparator />
           <View style={styles.idView}>
-            <Text style={styles.idText}>
-              Purchase id: 6595e2fadf178857d1d8b919
-            </Text>
+            <Text style={styles.idText}>Customer Name: {capitalizedName}</Text>
+            <Text style={styles.idText}>Date: {date}</Text>
+            <Text style={styles.idText}>MOP: Bank Card</Text>
+            <Text style={styles.idText}>Purchase id: {_id}</Text>
           </View>
           <ListItemSeparator />
           <Card style={styles.card}>
@@ -66,12 +57,15 @@ export default function TestFile() {
                 <DataTable.Title numeric textStyle={styles.customCell}>
                   Rupees
                 </DataTable.Title>
+                <DataTable.Title numeric textStyle={styles.customCell}>
+                  Total
+                </DataTable.Title>
               </DataTable.Header>
 
-              {items?.map((item) => (
+              {items?.map((item, index) => (
                 <DataTable.Row key={item?._id}>
                   <DataTable.Cell textStyle={styles.customCell}>
-                    {item?._id}
+                    {index + 1}
                   </DataTable.Cell>
                   <DataTable.Cell textStyle={styles.customCell}>
                     {item?.itemName}
@@ -81,6 +75,9 @@ export default function TestFile() {
                   </DataTable.Cell>
                   <DataTable.Cell numeric textStyle={styles.customCell}>
                     {item?.price}
+                  </DataTable.Cell>
+                  <DataTable.Cell numeric textStyle={styles.customCell}>
+                    {item?.count * item?.price}
                   </DataTable.Cell>
                 </DataTable.Row>
               ))}
@@ -94,68 +91,66 @@ export default function TestFile() {
               <Text style={styles.total}>Tax Amount</Text>
             </View>
             <View style={styles.cardView}>
-              <Text style={styles.total}>570</Text>
-              <Text style={styles.total}>15</Text>
-              <Text style={styles.total}>20</Text>
+              <Text style={styles.total}>{subTotal.toFixed(0)}</Text>
+              <Text style={styles.total}>{reward.toFixed(2)}</Text>
+              <Text style={styles.total}>{gstAmount.toFixed(2)}</Text>
             </View>
           </Card>
 
           <Card style={styles.card}>
             <View style={styles.cardView}>
               <Text style={styles.total}>Total Bill: </Text>
-              <Text style={styles.total}>Rs: 804</Text>
-            </View>
-            <View style={styles.cardView}>
-              <Text style={styles.total}>Date: </Text>
-              <Text style={styles.total}>8 april, 2017</Text>
+              <Text style={styles.total}>Rs: {totalBill}</Text>
             </View>
           </Card>
 
-          <Card style={styles.card}>
-            <Text
-              style={{
-                textAlign: "center",
-                width: "100%",
-                fontSize: 22,
-                color: "white",
-                marginBottom: 8,
-              }}
-            >
-              Contact Us:
-            </Text>
-            <ListItemSeparator />
+          <View style={styles.extraSpace}>
+            <Card style={styles.card}>
+              <Text
+                style={{
+                  textAlign: "center",
+                  width: "100%",
+                  fontSize: 22,
+                  color: "white",
+                  marginBottom: 8,
+                }}
+              >
+                Contact Us:
+              </Text>
+              <ListItemSeparator />
 
-            <View
-              style={{
-                flexDirection: "row",
-                marginHorizontal: 10,
-                marginVertical: 5,
-              }}
-            >
-              <Entypo
-                name="mail"
-                size={30}
-                color="white"
-                style={{ marginRight: 10 }}
-              />
-              <Text style={styles.total}>digicart@gmail.com</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                marginHorizontal: 10,
-                marginVertical: 5,
-              }}
-            >
-              <Entypo
-                name="phone"
-                size={30}
-                color="white"
-                style={{ marginRight: 10 }}
-              />
-              <Text style={styles.total}>+92 306 123456</Text>
-            </View>
-          </Card>
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginHorizontal: 10,
+                  marginVertical: 5,
+                }}
+              >
+                <Entypo
+                  name="mail"
+                  size={30}
+                  color="white"
+                  style={{ marginRight: 10 }}
+                />
+                <Text style={styles.total}>digicart@gmail.com</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginHorizontal: 10,
+                  marginVertical: 5,
+                }}
+              >
+                <Entypo
+                  name="phone"
+                  size={30}
+                  color="white"
+                  style={{ marginRight: 10 }}
+                />
+                <Text style={styles.total}>+92 306 123456</Text>
+              </View>
+            </Card>
+          </View>
         </ScrollView>
       </View>
     </>
@@ -163,7 +158,10 @@ export default function TestFile() {
 }
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: "#202124", flex: 1 },
+  container: {
+    flex: 1,
+    backgroundColor: "#202124",
+  },
   imageConatiner: {
     display: "flex",
     justifyContent: "center",
@@ -191,15 +189,14 @@ const styles = StyleSheet.create({
     color: "white",
   },
   idView: {
-    flexDirection: "row",
+    flexDirection: "column",
     marginHorizontal: 10,
     marginTop: 7,
-    alignItems: "center",
   },
   idText: {
     fontSize: 18,
     color: "white",
-    marginVertical: 10,
+    marginVertical: 5,
   },
   logoText: { color: "white", fontSize: 25 },
   receiptText: {
@@ -211,5 +208,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginTop: 7,
     alignItems: "center",
+  },
+  extraSpace: {
+    height: 230,
   },
 });
