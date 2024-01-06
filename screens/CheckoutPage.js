@@ -14,7 +14,7 @@ export default function CheckoutPage({ route, navigation }) {
     subTotal: subTotal,
     weightAge: weightAge,
   };
-  const gstAmount = (12 * routeArray.subTotal) / 100;
+  const gstAmount = (16 * routeArray.subTotal) / 100;
   const total = routeArray.subTotal + gstAmount;
   const reward = (9 * total) / 100;
   const grandTotal = total - reward;
@@ -35,7 +35,7 @@ export default function CheckoutPage({ route, navigation }) {
     {
       id: 3,
       title: "Tax Amount",
-      description: "12% GST ",
+      description: "16% GST ",
       price: `${gstAmount.toFixed(1)} PKR`,
     },
     {
@@ -56,6 +56,9 @@ export default function CheckoutPage({ route, navigation }) {
     navigation.navigate("checkoutQRCode", {
       grandTotal: grandTotal.toFixed(0),
       data: route.params,
+      gstAmount: gstAmount,
+      reward: reward,
+      subTotal: subTotal,
     });
   };
 

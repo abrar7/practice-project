@@ -20,6 +20,8 @@ import CheckoutScanner from "../screens/CheckoutScanner";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
+import PurchasesList from "../screens/purchase-details/PurchasesList";
+import Receipt from "../screens/purchase-details/Receipt";
 
 // ===================================================================
 
@@ -72,6 +74,16 @@ export default function AppNavigator() {
       <Stack.Screen
         name="customerHomeScreen"
         component={CustomerHomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="purchasesList"
+        component={PurchasesList}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="receipt"
+        component={Receipt}
         options={{ headerShown: false }}
       />
       <Stack.Screen

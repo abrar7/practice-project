@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Alert, SafeAreaView, StatusBar } from "react-native";
+import { StyleSheet, View, Alert, StatusBar } from "react-native";
 import { Text } from "@ui-kitten/components";
 import { ActivityIndicator } from "react-native-paper";
 import { collection, getDoc, doc } from "firebase/firestore";
@@ -8,11 +8,13 @@ import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppButton from "../components/form/AppButton";
 import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
+import { AntDesign } from "@expo/vector-icons";
 
 // ==================================================
 
 export default function CustomerHomeScreen({ navigation }) {
   const [userName, setUserName] = useState();
+  const currentUserUid = FIREBASE_AUTH?.currentUser?.uid;
   const database = FIRESTORE_DB;
 
   const handleLogout = async () => {
@@ -25,12 +27,14 @@ export default function CustomerHomeScreen({ navigation }) {
   };
 
   useEffect(() => {
-    const currentUserUid = FIREBASE_AUTH.currentUser.uid;
     const getUserName = async () => {
       const userRef = doc(collection(database, "user"), currentUserUid);
       const userDoc = await getDoc(userRef);
       const userData = userDoc.data();
-      setUserName(userData?.username);
+      const userName = userData?.username;
+      const capitalizedName =
+        userName.charAt(0).toUpperCase() + userName.slice(1);
+      setUserName(capitalizedName);
     };
     getUserName();
   }, []);
@@ -60,15 +64,26 @@ export default function CustomerHomeScreen({ navigation }) {
             Digicart
           </Text>
         </View>
-        <View>
-          <Text style={styles.welcome}>Welcome {userName.toUpperCase()}</Text>
+        <View style={styles.profileView}>
+          <Text style={styles.welcome}>Welcome {userName}</Text>
+          <AntDesign
+            name="poweroff"
+            size={24}
+            color="white"
+            onPress={handleLogout}
+          />
         </View>
+
         <AppButton
           title="Ready to shop?"
           icon="shoppingcart"
           onPress={handleShop}
         />
-        <AppButton title="Logout" onPress={handleLogout} icon="logout" />
+        <AppButton
+          title="Purchase History"
+          micon="history"
+          onPress={() => navigation.navigate("purchasesList")}
+        />
       </View>
     </>
   ) : (
@@ -91,7 +106,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: StatusBar.currentHeight,
     backgroundColor: "#202124",
-    alignItems: "center",
   },
   imageConatiner: {
     display: "flex",
@@ -99,13 +113,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  profileView: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+    marginHorizontal: 20,
+  },
   welcome: {
     color: "white",
     fontSize: 32,
-    marginBottom: 20,
-  },
-  button: {
-    margin: 15,
   },
   loader: {
     height: "100%",

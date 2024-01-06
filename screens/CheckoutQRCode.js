@@ -20,7 +20,7 @@ import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 // ===================================================================
 
 export default function CheckoutQRCode({ route, navigation }) {
-  const { grandTotal, data } = route.params;
+  const { grandTotal, data, gstAmount, reward, subTotal } = route.params;
   const { weightAge, purchasedItems, checkoutScanned } = data;
   const [jsonData, setJsonData] = useState();
   const [responseId, setResponseId] = useState(undefined || "");
@@ -71,6 +71,9 @@ export default function CheckoutQRCode({ route, navigation }) {
     navigation.navigate("stripePayment", {
       grandTotal: bill,
       purchasedItems: purchasedItems,
+      gstAmount: gstAmount,
+      reward: reward,
+      subTotal: subTotal,
     });
   };
 

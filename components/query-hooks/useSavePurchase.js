@@ -13,5 +13,3 @@ export const useSavePurchase = async (data) => {
     throw error;
   }
 };
-
-// "https://fyp-backend-git-main-abrar-ul-haqs-projects.vercel.app/insertPurchases";
