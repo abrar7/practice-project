@@ -10,9 +10,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { useMutation } from "react-query";
 import { useSavePurchase } from "../query-hooks/useSavePurchase";
+import { FIREBASE_AUTH } from "../../FirebaseConfig";
+import { useGetPurchaseHistory } from "../query-hooks/useGetPurchaseHistory";
 import DeviceSafeArea from "../safe-area/DeviceSafeArea";
 import DevicesToast from "../Toast/DevicesToast";
-import { FIREBASE_AUTH } from "../../FirebaseConfig";
 
 // ========================================================
 
@@ -24,8 +25,11 @@ export default function StripePayment({ route, navigation }) {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
+  const [showReceipt, setShowReceipt] = useState(false);
+  const [getReceiptData, setGetReceiptData] = useState(null || undefined);
   const DB = FIRESTORE_DB;
   const { mutate: savePurchaseMutation } = useMutation(useSavePurchase);
+  const currentUserUid = FIREBASE_AUTH?.currentUser?.uid;
 
   const currentDate = new Date();
   const options = {
@@ -41,7 +45,7 @@ export default function StripePayment({ route, navigation }) {
 
   const postData = {
     data: {
-      userUid: FIREBASE_AUTH?.currentUser?.uid,
+      userUid: currentUserUid,
       subTotal: subTotal,
       gstAmount: gstAmount,
       reward: reward,
@@ -62,12 +66,17 @@ export default function StripePayment({ route, navigation }) {
 
   const handleSavePurchaseInDb = () => {
     savePurchaseMutation(postData, {
-      onSuccess: (data) => {
-        DevicesToast("Purchase successfull.");
-        // here generate receipt button true
+      onSuccess: async (data) => {
+        const historyData = await useGetPurchaseHistory(currentUserUid);
+        const fileredData = historyData?.data?.find(
+          (v) => v?._id === data?.reponseId
+        );
+        setGetReceiptData(fileredData);
+        setShowReceipt(true);
+        DevicesToast(data?.message);
       },
       onError: (error) => {
-        DevicesToast("Post request failed");
+        DevicesToast("Post request failed!");
         console.error("Error while post request!", error);
       },
     });
@@ -142,6 +151,19 @@ export default function StripePayment({ route, navigation }) {
     navigation.navigate("success");
   };
 
+  const handleShowReceipt = async () => {
+    const userRef = doc(collection(DB, "user"), currentUserUid);
+    const userDoc = await getDoc(userRef);
+    const userData = userDoc.data();
+    const customerName = userData?.username;
+    if (customerName && getReceiptData) {
+      navigation.navigate("receipt", {
+        data: getReceiptData,
+        customerName: customerName,
+      });
+    }
+  };
+
   return (
     <>
       <DeviceSafeArea />
@@ -182,10 +204,27 @@ export default function StripePayment({ route, navigation }) {
               "Proceed Payment"
             )}
           </Button>
-          {paymentSuccessful && (
-            <Button onPress={handleFinished} style={styles.button} size="giant">
-              Finished
-            </Button>
+          {paymentSuccessful && getReceiptData && (
+            <View style={styles.receiptButtonView}>
+              {showReceipt && (
+                <Button
+                  onPress={handleShowReceipt}
+                  style={styles.button}
+                  size="giant"
+                >
+                  Receipt
+                </Button>
+              )}
+              {paymentSuccessful && (
+                <Button
+                  onPress={handleFinished}
+                  style={styles.button}
+                  size="giant"
+                >
+                  Finished
+                </Button>
+              )}
+            </View>
           )}
         </View>
       </ImageBackground>
@@ -211,9 +250,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     margin: 30,
-    borderRadius: 15,
+    borderRadius: 20,
   },
   textContainer: {
     marginTop: 35,
+  },
+  loadingView: {
+    width: "100%",
+    marginTop: 25,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loadingText: { fontSize: 22, color: "black", marginTop: 15 },
+  receiptButtonView: {
+    width: "100%",
+    marginTop: 25,
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
 });
