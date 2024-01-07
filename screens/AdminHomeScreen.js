@@ -40,14 +40,17 @@ export default function AdminHomeScreen({ navigation }) {
   }, []);
 
   return !userName ? (
-    <View style={styles.loader}>
-      <ActivityIndicator
-        size="large"
-        color="black"
-        style={{ marginBottom: 10 }}
-      />
-      <Text>Loading...</Text>
-    </View>
+    <>
+      <DeviceSafeArea />
+      <View style={styles.loader}>
+        <ActivityIndicator
+          size="large"
+          color="white"
+          style={{ marginBottom: 10 }}
+        />
+        <Text style={{ color: "white" }}>Loading...</Text>
+      </View>
+    </>
   ) : (
     <>
       <DeviceSafeArea />
@@ -105,6 +108,6 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: "#202124",
   },
 });

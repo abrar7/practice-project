@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
   text: {
     padding: 15,
-    fontSize: 30,
+    fontSize: 26,
     color: "white",
   },
 });

@@ -10,8 +10,13 @@ import ListItemSeparator from "../../components/cards/ListItemSeparator";
 
 export default function Receipt({ navigation, route }) {
   const { data, customerName } = route?.params;
-  const { _id, date, grandTotal, gstAmount, reward, subTotal, items } = data;
-  const totalBill = grandTotal - reward;
+  const { _id, date, subTotal, items } = data;
+
+  const newGstAmount = (5 * subTotal) / 100;
+  const totalAmount = subTotal + newGstAmount;
+  const newReward = (2 * totalAmount) / 100;
+  const newGrandTotal = totalAmount - newReward;
+
   const capitalizedName =
     customerName.charAt(0).toUpperCase() + customerName.slice(1);
 
@@ -38,7 +43,7 @@ export default function Receipt({ navigation, route }) {
           <View style={styles.idView}>
             <Text style={styles.idText}>Customer Name: {capitalizedName}</Text>
             <Text style={styles.idText}>Date: {date}</Text>
-            <Text style={styles.idText}>MOP: Bank Card</Text>
+            <Text style={styles.idText}>MOP: Credit Card</Text>
             <Text style={styles.idText}>Purchase id: {_id}</Text>
           </View>
           <ListItemSeparator />
@@ -49,16 +54,16 @@ export default function Receipt({ navigation, route }) {
                   Item No.
                 </DataTable.Title>
                 <DataTable.Title textStyle={styles.customCell}>
-                  Product
+                  Item
                 </DataTable.Title>
                 <DataTable.Title numeric textStyle={styles.customCell}>
-                  Count
+                  Qty
                 </DataTable.Title>
                 <DataTable.Title numeric textStyle={styles.customCell}>
-                  Rupees
+                  Rate
                 </DataTable.Title>
                 <DataTable.Title numeric textStyle={styles.customCell}>
-                  Total
+                  Amount
                 </DataTable.Title>
               </DataTable.Header>
 
@@ -86,21 +91,21 @@ export default function Receipt({ navigation, route }) {
 
           <Card style={styles.card}>
             <View style={styles.cardView}>
-              <Text style={styles.total}>Sub Total</Text>
+              <Text style={styles.total}>Total</Text>
+              <Text style={styles.total}>Tax @5.00%</Text>
               <Text style={styles.total}>Discount</Text>
-              <Text style={styles.total}>Tax Amount</Text>
             </View>
             <View style={styles.cardView}>
               <Text style={styles.total}>{subTotal.toFixed(0)}</Text>
-              <Text style={styles.total}>{reward.toFixed(2)}</Text>
-              <Text style={styles.total}>{gstAmount.toFixed(2)}</Text>
+              <Text style={styles.total}>{newGstAmount.toFixed(1)}</Text>
+              <Text style={styles.total}>{newReward.toFixed(0)}</Text>
             </View>
           </Card>
 
           <Card style={styles.card}>
             <View style={styles.cardView}>
-              <Text style={styles.total}>Total Bill: </Text>
-              <Text style={styles.total}>Rs: {totalBill}</Text>
+              <Text style={styles.total}>Grand Total: </Text>
+              <Text style={styles.total}>{newGrandTotal.toFixed(0)} PKR</Text>
             </View>
           </Card>
 

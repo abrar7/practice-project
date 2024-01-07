@@ -26,7 +26,18 @@ export default function StripePayment({ route, navigation }) {
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
   const DB = FIRESTORE_DB;
   const { mutate: savePurchaseMutation } = useMutation(useSavePurchase);
-  const currentTime = new Date().toLocaleString();
+
+  const currentDate = new Date();
+  const options = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  };
+  const currentDateAndTime = currentDate?.toLocaleDateString("en-US", options);
 
   const postData = {
     data: {
@@ -35,7 +46,7 @@ export default function StripePayment({ route, navigation }) {
       gstAmount: gstAmount,
       reward: reward,
       grandTotal: grandTotal,
-      date: currentTime,
+      date: currentDateAndTime,
       items: purchasedItems?.map((v) => ({
         companyName: v?.companyName,
         count: v?.count,

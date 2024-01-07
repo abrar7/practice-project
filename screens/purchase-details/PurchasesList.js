@@ -51,18 +51,24 @@ export default function PurchasesList({ navigation }) {
         ) : (
           <>
             <Text style={styles.heading}>Purchases History</Text>
-            <FlatList
-              data={historyData}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => (
-                <AppReceiptButton
-                  key={item?._id}
-                  buttonText={item?.date}
-                  onPress={() => handlePress(item?._id)}
-                />
-              )}
-              ItemSeparatorComponent={<ListItemSeparator />}
-            />
+            {historyData?.length === 0 ? (
+              <View style={styles.noRecordView}>
+                <Text style={styles.noRecordText}>No Record Found!</Text>
+              </View>
+            ) : (
+              <FlatList
+                data={historyData}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                  <AppReceiptButton
+                    key={item?._id}
+                    buttonText={item?.date}
+                    onPress={() => handlePress(item?._id)}
+                  />
+                )}
+                ItemSeparatorComponent={<ListItemSeparator />}
+              />
+            )}
           </>
         )}
       </View>
@@ -100,9 +106,19 @@ const styles = StyleSheet.create({
   heading: {
     color: "white",
     fontSize: 35,
-    marginTop: 15,
-    marginVertical: 10,
+    marginBottom: 10,
     fontWeight: "bold",
     paddingLeft: 10,
+    paddingVertical: 10,
+    backgroundColor: "#2c2c2d",
+  },
+  noRecordView: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: "80%",
+  },
+  noRecordText: {
+    color: "white",
+    fontSize: 32,
   },
 });
