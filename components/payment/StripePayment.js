@@ -72,11 +72,8 @@ export default function StripePayment({ route, navigation }) {
       },
     });
   };
-  useEffect(() => {
-    if (data && !error) {
-      handlePaymentFlow();
-    }
 
+  useEffect(() => {
     const manageInventory = async () => {
       for (let i = 0; i <= purchasedItems.length; i++) {
         const docRef = doc(collection(DB, "stockItems"), purchasedItems[i].id);
@@ -87,12 +84,17 @@ export default function StripePayment({ route, navigation }) {
         });
       }
     };
-
     if (paymentSuccessful) {
       manageInventory();
       handleSavePurchaseInDb();
     }
-  }, [data, error, paymentSuccessful]);
+  }, [paymentSuccessful]);
+
+  useEffect(() => {
+    if (data && !error) {
+      handlePaymentFlow();
+    }
+  }, [data, error]);
 
   const handlePaymentFlow = async () => {
     try {
