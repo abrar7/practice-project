@@ -14,9 +14,9 @@ export default function CheckoutPage({ route, navigation }) {
     subTotal: subTotal,
     weightAge: weightAge,
   };
-  const gstAmount = (16 * routeArray.subTotal) / 100;
+  const gstAmount = (5 * routeArray.subTotal) / 100;
   const total = routeArray.subTotal + gstAmount;
-  const reward = (9 * total) / 100;
+  const reward = (2 * total) / 100;
   const grandTotal = total - reward;
 
   const data = [
@@ -35,7 +35,7 @@ export default function CheckoutPage({ route, navigation }) {
     {
       id: 3,
       title: "Tax Amount",
-      description: "16% GST ",
+      description: "5% GST ",
       price: `${gstAmount.toFixed(1)} PKR`,
     },
     {

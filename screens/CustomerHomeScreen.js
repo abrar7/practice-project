@@ -92,10 +92,10 @@ export default function CustomerHomeScreen({ navigation }) {
       <View style={styles.loader}>
         <ActivityIndicator
           size="large"
-          color="black"
+          color="white"
           style={{ marginBottom: 10 }}
         />
-        <Text>Loading...</Text>
+        <Text style={{ color: "white" }}>Loading...</Text>
       </View>
     </>
   );
@@ -125,10 +125,10 @@ const styles = StyleSheet.create({
     fontSize: 32,
   },
   loader: {
+    backgroundColor: "#202124",
     height: "100%",
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "white",
   },
 });
