@@ -68,7 +68,7 @@ export default function Receipt({ navigation, route }) {
               </DataTable.Header>
 
               {items?.map((item, index) => (
-                <DataTable.Row key={item?._id}>
+                <DataTable.Row key={index}>
                   <DataTable.Cell textStyle={styles.customCell}>
                     {index + 1}
                   </DataTable.Cell>
@@ -96,16 +96,16 @@ export default function Receipt({ navigation, route }) {
               <Text style={styles.total}>Discount</Text>
             </View>
             <View style={styles.cardView}>
-              <Text style={styles.total}>{subTotal.toFixed(0)}</Text>
-              <Text style={styles.total}>{newGstAmount.toFixed(1)}</Text>
-              <Text style={styles.total}>{newReward.toFixed(0)}</Text>
+              <Text style={styles.total}>{subTotal?.toFixed(0)}</Text>
+              <Text style={styles.total}>{newGstAmount?.toFixed(1)}</Text>
+              <Text style={styles.total}>{newReward?.toFixed(0)}</Text>
             </View>
           </Card>
 
           <Card style={styles.card}>
             <View style={styles.cardView}>
               <Text style={styles.total}>Grand Total: </Text>
-              <Text style={styles.total}>{newGrandTotal.toFixed(0)} PKR</Text>
+              <Text style={styles.total}>{newGrandTotal?.toFixed(0)} PKR</Text>
             </View>
           </Card>
 

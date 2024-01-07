@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button, Alert } from "react-native";
-import { BarCodeScanner } from "expo-barcode-scanner";
-import { addDoc, doc, collection, setDoc, updateDoc } from "firebase/firestore";
+import { Text, View, StyleSheet, Alert } from "react-native";
+import { Button } from "@ui-kitten/components";
+import { doc, collection, updateDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../FirebaseConfig";
+import { BarCodeScanner } from "expo-barcode-scanner";
 import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 
 // ===================================================================
@@ -76,6 +77,16 @@ export default function CheckoutScanner({ navigation }) {
     <>
       <DeviceSafeArea />
       <View style={styles.container}>
+        <Text
+          style={{
+            color: "white",
+            marginBottom: 20,
+            fontSize: 27,
+            fontWeight: "bold",
+          }}
+        >
+          Checkout Scanner
+        </Text>
         <View style={styles.barcodebox}>
           <BarCodeScanner
             onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
@@ -83,17 +94,21 @@ export default function CheckoutScanner({ navigation }) {
           />
         </View>
         {!scannedData && (
-          <Text style={styles.maintext}>Nothing scanned yet</Text>
+          <Text style={styles.maintext}>Nothing scanned yet!</Text>
         )}
 
         <Text style={styles.maintext}>{scannedData}</Text>
 
         {scanned && (
           <Button
-            title={"Scan again?"}
+            size="medium"
+            appearance="outline"
+            style={styles.button}
             onPress={() => setScanned(false)}
-            color="tomato"
-          />
+            status="success"
+          >
+            Scan Again?
+          </Button>
         )}
       </View>
     </>
@@ -104,13 +119,18 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
-    backgroundColor: "cyan",
+    backgroundColor: "#202124",
     alignItems: "center",
     justifyContent: "center",
   },
   maintext: {
-    fontSize: 16,
+    fontSize: 22,
     margin: 20,
+    color: "white",
+  },
+  button: {
+    margin: 2,
+    borderRadius: 20,
   },
   barcodebox: {
     alignItems: "center",
