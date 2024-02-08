@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { StyleSheet, ImageBackground, View } from "react-native";
 import { useForm } from "react-hook-form";
-import * as ImagePicker from "expo-image-picker";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Button, Text } from "@ui-kitten/components";
-import AppInputField from "../components/form/AppInputField";
 import { doc, setDoc } from "firebase/firestore";
 import { addDoc, collection } from "firebase/firestore";
 import { FIRESTORE_DB, firebaseConfig } from "../FirebaseConfig";
 import { Ionicons } from "@expo/vector-icons";
-import UploadImage from "../screens/UploadImage";
 import { initializeApp } from "firebase/app";
+import * as ImagePicker from "expo-image-picker";
 import AppCircularProgress from "../components/form/AppCircularProgress";
+import AppInputField from "../components/form/AppInputField";
+import UploadImage from "../screens/UploadImage";
 import DevicesToast from "../components/Toast/DevicesToast";
 import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 

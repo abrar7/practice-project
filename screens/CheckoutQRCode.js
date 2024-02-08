@@ -12,8 +12,8 @@ import {
   where,
 } from "firebase/firestore";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../FirebaseConfig";
-import QRCode from "react-native-qrcode-svg";
 import { ActivityIndicator } from "react-native-paper";
+import QRCode from "react-native-qrcode-svg";
 import DevicesToast from "../components/Toast/DevicesToast";
 import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 
@@ -107,14 +107,14 @@ export default function CheckoutQRCode({ route, navigation }) {
     <>
       <DeviceSafeArea />
       <ImageBackground
-        source={require("../assets/qrcodebg.jpg")}
+        source={require("../assets/qrcodebg.png")}
         resizeMode="cover"
         style={styles.container}
         blurRadius={20}
       >
         <View style={styles.logoConatiner}>
-          <Ionicons name="cart" size={74} color="white" />
-          <Text category="h4" style={{ color: "white" }}>
+          <Ionicons name="cart" size={74} color="black" />
+          <Text category="h4" style={{ color: "black" }}>
             Digicart
           </Text>
         </View>
@@ -138,7 +138,7 @@ export default function CheckoutQRCode({ route, navigation }) {
         <View style={styles.buttonContainer}>
           <Button
             size="giant"
-            appearance="outline"
+            appearance="filled"
             status="primary"
             onPress={() => navigation.goBack()}
             style={{ borderRadius: 50, width: 110 }}
@@ -161,8 +161,8 @@ export default function CheckoutQRCode({ route, navigation }) {
           </Button>
           <Button
             size="giant"
-            appearance="outline"
-            status="success"
+            appearance="filled"
+            status="primary"
             disabled={!next}
             onPress={handleNext}
             style={{ borderRadius: 50, width: 110 }}
@@ -192,9 +192,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   qrcode: { margin: 5 },
-  text: { color: "white", marginBottom: 25 },
+  text: { color: "black", marginBottom: 25 },
   detailsContainer: { marginTop: 15 },
-  detailsText: { color: "white" },
+  detailsText: { color: "black" },
   buttonContainer: {
     flexDirection: "row",
     marginTop: 25,

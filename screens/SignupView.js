@@ -1,19 +1,14 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  ImageBackground,
-  View,
-  KeyboardAvoidingView,
-} from "react-native";
+import { StyleSheet, ImageBackground, View } from "react-native";
 import { useForm } from "react-hook-form";
 import { Button, Icon, Text } from "@ui-kitten/components";
-import AppInputField from "../components/form/AppInputField";
 import { Ionicons } from "@expo/vector-icons";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../FirebaseConfig";
 import { ActivityIndicator } from "react-native-paper";
+import AppInputField from "../components/form/AppInputField";
 import FirebaseErrorHandler from "../components/form/FirebaseErrorHandler";
 import DevicesToast from "../components/Toast/DevicesToast";
 import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";

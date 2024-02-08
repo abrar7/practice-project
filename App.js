@@ -6,8 +6,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { STRIPE_KEY } from "./components/utils/encapsulate";
-import TestFile from "./screens/TestFile";
-import PaymentSuccessfull from "./screens/PaymentSuccessfull";
 
 // ======================================
 
@@ -27,11 +25,5 @@ export default function App() {
         </ApplicationProvider>
       </StripeProvider>
     </QueryClientProvider>
-
-    // <ApplicationProvider {...eva} theme={eva.light}>
-    //   {/* <AppLoader /> */}
-    //   <TestFile />
-    //   {/* <PaymentSuccessfull /> */}
-    // </ApplicationProvider>
   );
 }

@@ -5,10 +5,10 @@ import { ActivityIndicator } from "react-native-paper";
 import { collection, getDoc, doc } from "firebase/firestore";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../FirebaseConfig";
 import { Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppButton from "../components/form/AppButton";
 import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
-import { AntDesign } from "@expo/vector-icons";
 
 // ==================================================
 

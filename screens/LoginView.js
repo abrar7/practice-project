@@ -7,13 +7,13 @@ import {
 } from "react-native";
 import { useForm } from "react-hook-form";
 import { Button, Text } from "@ui-kitten/components";
-import AppInputField from "../components/form/AppInputField";
 import { Ionicons } from "@expo/vector-icons";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { FIRESTORE_DB } from "../FirebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { ActivityIndicator } from "react-native-paper";
+import AppInputField from "../components/form/AppInputField";
 import FirebaseErrorHandler from "../components/form/FirebaseErrorHandler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DevicesToast from "../components/Toast/DevicesToast";
