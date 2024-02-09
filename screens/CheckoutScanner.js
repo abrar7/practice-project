@@ -13,7 +13,6 @@ export default function CheckoutScanner({ navigation }) {
   const [scanned, setScanned] = useState(false);
   const [scannedData, setScannedData] = useState();
   const database = FIRESTORE_DB;
-
   const askForCameraPermission = () => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -46,8 +45,19 @@ export default function CheckoutScanner({ navigation }) {
   // What happens when we scan the bar code
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    setScannedData(data);
-    Alert.alert("Message", "QR code has been scanned");
+    const jsonToObj = JSON.parse(data);
+    const date = new Date(jsonToObj.timeStamp);
+    const formattedTime = new Intl.DateTimeFormat("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    }).format(date);
+    console.log("formattedTime", formattedTime);
+    setScannedData(formattedTime);
+    Alert.alert("Message", "QR scanned successfully.");
   };
 
   // Check permissions and return the screens
@@ -97,7 +107,7 @@ export default function CheckoutScanner({ navigation }) {
           <Text style={styles.maintext}>Nothing scanned yet!</Text>
         )}
 
-        <Text style={styles.maintext}>{scannedData}</Text>
+        <Text style={styles.maintext}>Time: {scannedData}</Text>
 
         {scanned && (
           <Button

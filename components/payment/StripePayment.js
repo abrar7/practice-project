@@ -5,8 +5,8 @@ import { useCreatePaymentIntent } from "../query-hooks/useCreatePaymentIntent";
 import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useStripe } from "@stripe/stripe-react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { useMutation } from "react-query";
 import { useSavePurchase } from "../query-hooks/useSavePurchase";
@@ -191,10 +191,10 @@ export default function StripePayment({ route, navigation }) {
             onPress={handleCheckout}
             style={{ borderRadius: 15 }}
             accessoryLeft={
-              <FontAwesome
-                name="dollar"
+              <AntDesign
+                name="checkcircle"
                 size={24}
-                color={data?.clientSecret ? "white" : "red"}
+                color={data?.clientSecret ? "white" : "black"}
               />
             }
           >

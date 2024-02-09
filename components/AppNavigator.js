@@ -17,11 +17,11 @@ import StripePayment from "./payment/StripePayment";
 import PaymentSuccessfull from "../screens/PaymentSuccessfull";
 import CheckoutQRCode from "../screens/CheckoutQRCode";
 import CheckoutScanner from "../screens/CheckoutScanner";
+import Receipt from "../screens/purchase-details/Receipt";
+import PurchasesList from "../screens/purchase-details/PurchasesList";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
-import PurchasesList from "../screens/purchase-details/PurchasesList";
-import Receipt from "../screens/purchase-details/Receipt";
 
 // ===================================================================
 

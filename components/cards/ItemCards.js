@@ -4,13 +4,13 @@ import { Text, Button } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { COLORS } from "../utils/COLORS";
 import ItemCard from "./ItemCard";
 import ListItemDeleteAction from "./ListItemDeleteAction";
 import ListItemSeparator from "./ListItemSeparator";
 import EmptyListMessage from "./EmptyListMessage";
 import DevicesToast from "../Toast/DevicesToast";
 import DeviceSafeArea from "../safe-area/DeviceSafeArea";
-import { COLORS } from "../utils/COLORS";
 
 // ============================================================
 
@@ -170,7 +170,7 @@ export default function ItemCards({ route, navigation }) {
             style={{ borderRadius: 20 }}
             accessoryLeft={<Ionicons name="camera" size={20} color="white" />}
           >
-            Scan To add
+            Scan To Add
           </Button>
         </View>
       </View>

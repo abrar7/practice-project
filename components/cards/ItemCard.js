@@ -1,13 +1,13 @@
 import React from "react";
 import { View, StyleSheet, Image } from "react-native";
-import { Card, Text, Chip } from "react-native-paper";
-import Swipeable from "react-native-gesture-handler/Swipeable";
+import { Card, Text } from "react-native-paper";
 import { Button } from "@ui-kitten/components";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AntDesign } from "@expo/vector-icons";
 import { COLORS } from "../utils/COLORS";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
+import Swipeable from "react-native-gesture-handler/Swipeable";
 
 // =======================================================
 

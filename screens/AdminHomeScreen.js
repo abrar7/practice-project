@@ -4,9 +4,9 @@ import { StyleSheet, View, SafeAreaView, StatusBar } from "react-native";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../FirebaseConfig";
 import { Ionicons } from "@expo/vector-icons";
 import { collection, getDoc, doc } from "firebase/firestore";
+import { ActivityIndicator } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppButton from "../components/form/AppButton";
-import { ActivityIndicator } from "react-native-paper";
 import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 
 // =====================================================

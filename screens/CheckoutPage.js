@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, StyleSheet, ImageBackground, FlatList } from "react-native";
 import { Text, Divider, Button } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
-import { ActivityIndicator } from "react-native-paper";
 import ListItemSeparator from "../components/cards/ListItemSeparator";
 import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 
 // =======================================================
 
 export default function CheckoutPage({ route, navigation }) {
-  const { subTotal, weightAge, purchasedItems } = route.params;
+  const { subTotal, weightAge } = route.params;
   const routeArray = {
     subTotal: subTotal,
     weightAge: weightAge,

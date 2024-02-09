@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Entypo } from "@expo/vector-icons";
 import { Button } from "@ui-kitten/components";
 import { Image, View, StyleSheet } from "react-native";
