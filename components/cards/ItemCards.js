@@ -168,7 +168,9 @@ export default function ItemCards({ route, navigation }) {
             status="primary"
             onPress={handleScanToAdd}
             style={{ borderRadius: 20 }}
-            accessoryLeft={<Ionicons name="camera" size={20} color="white" />}
+            accessoryLeft={() => (
+              <Ionicons name="camera" size={20} color="white" />
+            )}
           >
             Scan To Add
           </Button>

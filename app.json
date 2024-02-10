@@ -1,34 +1,32 @@
 {
   "expo": {
-    "name": "DigitCart Project",
-    "slug": "digicart-project",
+    "name": "Digitcart Project",
+    "slug": "practice-project",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/adaptive-icon.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#000000"
+      "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.abrar7.digicartproject"
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#000000"
-      },
-      "package": "com.abrar7.digicartproject"
+        "backgroundColor": "#ffffff"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "65b415f1-6860-4535-b517-8952bea78101"
+        "projectId": "5e9976c7-c964-4e10-846e-6c0c2481c030"
       }
     },
     "owner": "abrar7"

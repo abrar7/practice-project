@@ -116,7 +116,9 @@ export default function ItemCard({
                       disabled={count === 1}
                       onPress={handleDecrement}
                       style={{ borderRadius: 50, borderWidth: 1 }}
-                      accessoryLeft={<AntDesign name="minuscircle" size={15} />}
+                      accessoryLeft={() => (
+                        <AntDesign name="minuscircle" size={16} />
+                      )}
                     />
                     <Text variant="titleMedium" style={styles.countStyle}>
                       {count}
@@ -129,7 +131,9 @@ export default function ItemCard({
                       disabled={count >= 5}
                       onPress={handleIncrement}
                       style={{ borderRadius: 50, borderWidth: 1 }}
-                      accessoryLeft={<AntDesign name="pluscircle" size={15} />}
+                      accessoryLeft={() => (
+                        <AntDesign name="pluscircle" size={16} />
+                      )}
                     />
                   </View>
                 </View>
