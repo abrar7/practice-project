@@ -39,14 +39,14 @@ export default function AppInputField({
             keyboardType={keyboardType}
             autoCapitalize="none"
             textStyle={{ fontSize: 22, paddingVertical: 3 }}
-            accessoryRight={
+            accessoryRight={() => (
               <MaterialIcons
                 name={icon}
                 size={24}
                 color="black"
                 onPress={onPressIcon}
               />
-            }
+            )}
             {...other}
           />
         )}

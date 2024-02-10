@@ -190,13 +190,13 @@ export default function StripePayment({ route, navigation }) {
             disabled={loading || paymentSuccessful}
             onPress={handleCheckout}
             style={{ borderRadius: 15 }}
-            accessoryLeft={
+            accessoryLeft={() => (
               <AntDesign
                 name="checkcircle"
                 size={24}
                 color={data?.clientSecret ? "white" : "black"}
               />
-            }
+            )}
           >
             {loading ? (
               <ActivityIndicator size="small" color="white" />

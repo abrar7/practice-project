@@ -52,11 +52,7 @@ export default function LoginView({ route, navigation }) {
       const getDocsRole = documentData[0].role;
 
       if (getDocsRole === role) {
-        const response = await signInWithEmailAndPassword(
-          auth,
-          data?.email,
-          data?.password
-        );
+        await signInWithEmailAndPassword(auth, data?.email, data?.password);
         try {
           await AsyncStorage.setItem("userRole", role);
         } catch (e) {

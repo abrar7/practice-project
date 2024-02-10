@@ -56,13 +56,13 @@ export default function ConfirmUser({ navigation }) {
               status="primary"
               onPress={handleAdmin}
               style={{ borderRadius: 50, width: 170 }}
-              accessoryLeft={
+              accessoryLeft={() => (
                 <MaterialIcons
                   name="admin-panel-settings"
                   size={22}
                   color={COLORS.lightColor}
                 />
-              }
+              )}
             >
               Admin
             </Button>
@@ -72,13 +72,13 @@ export default function ConfirmUser({ navigation }) {
               status="primary"
               onPress={handleCustomer}
               style={{ borderRadius: 50, width: 170 }}
-              accessoryLeft={
+              accessoryLeft={() => (
                 <MaterialIcons
                   name="person"
                   size={22}
                   color={COLORS.lightColor}
                 />
-              }
+              )}
             >
               Customer
             </Button>
@@ -103,3 +103,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+// {
+//   "cli": {
+//     "version": ">= 5.4.0"
+//   },
+//   "build": {
+//     "development": {
+//       "developmentClient": true,
+//       "distribution": "internal"
+//     },
+//     "preview": {
+//       "distribution": "internal"
+//     },
+//     "production": {}
+//   },
+//   "submit": {
+//     "production": {}
+//   }
+// }
+
+// "package": "com.abrar7.digicartproject"

@@ -55,13 +55,13 @@ export default function CustomerAction({ route, navigation }) {
               status="primary"
               onPress={handleSignUp}
               style={{ borderRadius: 50, width: 170 }}
-              accessoryLeft={
+              accessoryLeft={() => (
                 <MaterialIcons
                   name="app-registration"
                   size={22}
                   color="white"
                 />
-              }
+              )}
             >
               SIGN UP
             </Button>
@@ -71,9 +71,9 @@ export default function CustomerAction({ route, navigation }) {
               status="primary"
               onPress={handleLogin}
               style={{ borderRadius: 50, width: 170 }}
-              accessoryLeft={
+              accessoryLeft={() => (
                 <MaterialIcons name="login" size={22} color="white" />
-              }
+              )}
             >
               LOGIN
             </Button>
