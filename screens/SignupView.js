@@ -11,11 +11,13 @@ import { ActivityIndicator } from "react-native-paper";
 import AppInputField from "../components/form/AppInputField";
 import FirebaseErrorHandler from "../components/form/FirebaseErrorHandler";
 import DevicesToast from "../components/Toast/DevicesToast";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import DeviceSafeArea from "../components/safe-area/DeviceSafeArea";
 
 // =====================================================
 
-export default function SignupView({ navigation }) {
+export default function SignupView({ route, navigation }) {
+  const role = route.params.role;
   const auth = FIREBASE_AUTH;
   const database = FIRESTORE_DB;
   const [loading, setLoading] = useState(false);
@@ -52,8 +54,13 @@ export default function SignupView({ navigation }) {
         },
         { merge: true }
       );
-      DevicesToast("Signed in successfully");
-      navigation.navigate("login");
+      try {
+        await AsyncStorage.setItem("userRole", role);
+      } catch (e) {
+        console.log("errorsss", e.message);
+      }
+      DevicesToast("Sign n successfully.");
+      navigation.navigate("customerHomeScreen");
     } catch (error) {
       FirebaseErrorHandler(error);
       console.log("error", error.message);

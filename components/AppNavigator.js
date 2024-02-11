@@ -19,6 +19,7 @@ import CheckoutQRCode from "../screens/CheckoutQRCode";
 import CheckoutScanner from "../screens/CheckoutScanner";
 import Receipt from "../screens/purchase-details/Receipt";
 import PurchasesList from "../screens/purchase-details/PurchasesList";
+import NoUserRoleFound from "../screens/NoUserRoleFound";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
@@ -62,13 +63,11 @@ export default function AppNavigator() {
   return user ? (
     <Stack.Navigator
       initialRouteName={
-        userRole === "customer" ? (
-          "customerHomeScreen"
-        ) : userRole === "admin" ? (
-          "adminHomeScreen"
-        ) : (
-          <AppLoader />
-        )
+        userRole === "customer"
+          ? "customerHomeScreen"
+          : userRole === "admin"
+          ? "adminHomeScreen"
+          : "noUserRoleFound"
       }
     >
       <Stack.Screen
@@ -134,6 +133,11 @@ export default function AppNavigator() {
       <Stack.Screen
         name="success"
         component={PaymentSuccessfull}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="noUserRoleFound"
+        component={NoUserRoleFound}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

@@ -11,7 +11,9 @@ export default function CustomerAction({ route, navigation }) {
   const role = route.params.role;
 
   const handleSignUp = () => {
-    navigation.navigate("signUp");
+    navigation.navigate("signUp", {
+      role,
+    });
   };
   const handleLogin = () => {
     navigation.navigate("login", {
