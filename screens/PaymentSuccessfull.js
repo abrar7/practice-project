@@ -21,6 +21,8 @@ export default function PaymentSuccessfull({ navigation, route }) {
   const DB = FIRESTORE_DB;
   const currentUserUid = FIREBASE_AUTH?.currentUser?.uid;
 
+  const macelinous = 11111;
+
   const handleClick = () => {
     navigation.navigate("customerHomeScreen");
   };
@@ -70,8 +72,9 @@ export default function PaymentSuccessfull({ navigation, route }) {
       })),
     },
   };
+  console.log("post", postData);
 
-  const handleSavePurchaseInDb = async () => {
+  function handleSavePurchaseInDb() {
     savePurchaseMutation(postData, {
       onSuccess: async (data) => {
         const historyData = await useGetPurchaseHistory(currentUserUid);
@@ -86,7 +89,7 @@ export default function PaymentSuccessfull({ navigation, route }) {
         console.error("Error while post request!", error);
       },
     });
-  };
+  }
 
   useEffect(() => {
     handleSavePurchaseInDb();
@@ -113,14 +116,15 @@ export default function PaymentSuccessfull({ navigation, route }) {
         <Text style={styles.text}>Payment was Successfull</Text>
         <Text style={styles.text}>Thanks for shopping</Text>
         <Text style={styles.text}>Come back soon 😊</Text>
-        {getReceiptData && (
-          <View
-            style={{
-              justifyContent: "space-around",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-          >
+
+        <View
+          style={{
+            justifyContent: "space-around",
+            alignItems: "center",
+            flexDirection: "row",
+          }}
+        >
+          {getReceiptData && (
             <Button
               onPress={handleShowReceipt}
               style={styles.receiptButton}
@@ -128,16 +132,16 @@ export default function PaymentSuccessfull({ navigation, route }) {
             >
               Receipt
             </Button>
-            <Button
-              size="large"
-              status="primary"
-              onPress={handleClick}
-              style={styles.button}
-            >
-              Back to Home Screen
-            </Button>
-          </View>
-        )}
+          )}
+          <Button
+            size="large"
+            status="primary"
+            onPress={handleClick}
+            style={styles.button}
+          >
+            Back to Home Screen
+          </Button>
+        </View>
       </View>
     </>
   );
