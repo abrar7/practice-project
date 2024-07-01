@@ -12,6 +12,7 @@ export default function CheckoutScanner({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [scannedData, setScannedData] = useState();
+  const [showDateTime, setShowDateTime] = useState();
   const database = FIRESTORE_DB;
   const askForCameraPermission = () => {
     (async () => {
@@ -23,30 +24,13 @@ export default function CheckoutScanner({ navigation }) {
   // Request Camera Permission
   useEffect(() => {
     askForCameraPermission();
-
-    const handleRequest = async () => {
-      const dataObject = JSON.parse(scannedData);
-      const updateRef = doc(
-        collection(database, "checkout"),
-        dataObject.userUid,
-        "enableQR",
-        dataObject.docId
-      );
-      updateDoc(updateRef, {
-        checkoutScanned: true,
-      });
-    };
-
-    if (scannedData) {
-      handleRequest();
-    }
-  }, [scannedData]);
+  }, []);
 
   // What happens when we scan the bar code
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
-    const jsonToObj = JSON.parse(data);
-    const date = new Date(jsonToObj.timeStamp);
+    const dataObj = JSON.parse(data);
+    const date = new Date(dataObj.timeStamp);
     const formattedTime = new Intl.DateTimeFormat("en-US", {
       day: "numeric",
       month: "short",
@@ -55,8 +39,17 @@ export default function CheckoutScanner({ navigation }) {
       minute: "numeric",
       hour12: true,
     }).format(date);
-    console.log("formattedTime", formattedTime);
-    setScannedData(formattedTime);
+    setScannedData(dataObj);
+    setShowDateTime(formattedTime);
+    const updateRef = doc(
+      collection(database, "checkout"),
+      dataObj.userUid,
+      "enableQR",
+      dataObj.docId
+    );
+    await updateDoc(updateRef, {
+      checkoutScanned: true,
+    });
     Alert.alert("Message", "QR scanned successfully.");
   };
 
@@ -107,7 +100,7 @@ export default function CheckoutScanner({ navigation }) {
           <Text style={styles.maintext}>Nothing scanned yet!</Text>
         )}
 
-        <Text style={styles.maintext}>Time: {scannedData}</Text>
+        <Text style={styles.maintext}>Time: {showDateTime}</Text>
 
         {scanned && (
           <Button

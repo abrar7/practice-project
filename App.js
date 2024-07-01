@@ -11,7 +11,6 @@ import { STRIPE_KEY } from "./components/utils/encapsulate";
 
 const queryClient = new QueryClient();
 const STRIPE_PUBLISH_KEY = STRIPE_KEY;
-// const STRIPE_PUBLISH_KEY = STRIPE_KEY;
 
 // =====================================
 

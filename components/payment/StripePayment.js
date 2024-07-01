@@ -8,10 +8,6 @@ import { ActivityIndicator } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
-import { useMutation } from "react-query";
-import { useSavePurchase } from "../query-hooks/useSavePurchase";
-import { FIREBASE_AUTH } from "../../FirebaseConfig";
-import { useGetPurchaseHistory } from "../query-hooks/useGetPurchaseHistory";
 import DeviceSafeArea from "../safe-area/DeviceSafeArea";
 import DevicesToast from "../Toast/DevicesToast";
 
@@ -25,77 +21,25 @@ export default function StripePayment({ route, navigation }) {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
-  const [showReceipt, setShowReceipt] = useState(false);
-  const [getReceiptData, setGetReceiptData] = useState(null || undefined);
+  const [showNextButton, setShowNextButton] = useState(false);
   const DB = FIRESTORE_DB;
-  const { mutate: savePurchaseMutation } = useMutation(useSavePurchase);
-  const currentUserUid = FIREBASE_AUTH?.currentUser?.uid;
 
-  const currentDate = new Date();
-  const options = {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true,
-  };
-  const currentDateAndTime = currentDate?.toLocaleDateString("en-US", options);
-
-  const postData = {
-    data: {
-      userUid: currentUserUid,
-      subTotal: subTotal,
-      gstAmount: gstAmount,
-      reward: reward,
-      grandTotal: grandTotal,
-      date: currentDateAndTime,
-      items: purchasedItems?.map((v) => ({
-        companyName: v?.companyName,
-        count: v?.count,
-        id: v?.id,
-        imgLink: v?.imgLink,
-        inStock: v?.inStock,
-        itemName: v?.itemName,
-        price: v?.price,
-        weight: v?.weight,
-      })),
-    },
-  };
-
-  const handleSavePurchaseInDb = () => {
-    savePurchaseMutation(postData, {
-      onSuccess: async (data) => {
-        const historyData = await useGetPurchaseHistory(currentUserUid);
-        const fileredData = historyData?.data?.find(
-          (v) => v?._id === data?.reponseId
-        );
-        setGetReceiptData(fileredData);
-        setShowReceipt(true);
-        DevicesToast(data?.message);
-      },
-      onError: (error) => {
-        DevicesToast("Post request failed!");
-        console.error("Error while post request!", error);
-      },
-    });
+  const manageInventory = async () => {
+    for (let i = 0; i < purchasedItems.length; i++) {
+      const docRef = doc(collection(DB, "stockItems"), purchasedItems[i].id);
+      const itemDoc = await getDoc(docRef);
+      const docCountValue = itemDoc.data().inStock;
+      updateDoc(docRef, {
+        inStock: docCountValue - purchasedItems[i].count,
+      });
+    }
+    setShowNextButton(true);
+    DevicesToast("Inventory Updated.");
   };
 
   useEffect(() => {
-    const manageInventory = async () => {
-      for (let i = 0; i <= purchasedItems.length; i++) {
-        const docRef = doc(collection(DB, "stockItems"), purchasedItems[i].id);
-        const itemDoc = await getDoc(docRef);
-        const docCountValue = itemDoc.data().inStock;
-        updateDoc(docRef, {
-          inStock: docCountValue - purchasedItems[i].count,
-        });
-      }
-    };
     if (paymentSuccessful) {
       manageInventory();
-      handleSavePurchaseInDb();
     }
   }, [paymentSuccessful]);
 
@@ -147,21 +91,14 @@ export default function StripePayment({ route, navigation }) {
     mutate({ amount });
   };
 
-  const handleFinished = () => {
-    navigation.navigate("success");
-  };
-
-  const handleShowReceipt = async () => {
-    const userRef = doc(collection(DB, "user"), currentUserUid);
-    const userDoc = await getDoc(userRef);
-    const userData = userDoc.data();
-    const customerName = userData?.username;
-    if (customerName && getReceiptData) {
-      navigation.navigate("receipt", {
-        data: getReceiptData,
-        customerName: customerName,
-      });
-    }
+  const handleNext = () => {
+    navigation.navigate("success", {
+      grandTotal,
+      purchasedItems,
+      gstAmount,
+      reward,
+      subTotal,
+    });
   };
 
   return (
@@ -204,28 +141,14 @@ export default function StripePayment({ route, navigation }) {
               "Proceed Payment"
             )}
           </Button>
-          {paymentSuccessful && getReceiptData && (
-            <View style={styles.receiptButtonView}>
-              {showReceipt && (
-                <Button
-                  onPress={handleShowReceipt}
-                  style={styles.button}
-                  size="giant"
-                >
-                  Receipt
-                </Button>
-              )}
-              {paymentSuccessful && (
-                <Button
-                  onPress={handleFinished}
-                  style={styles.button}
-                  size="giant"
-                >
-                  Finished
-                </Button>
-              )}
-            </View>
-          )}
+
+          <View style={styles.receiptButtonView}>
+            {showNextButton && (
+              <Button onPress={handleNext} style={styles.button} size="giant">
+                Next
+              </Button>
+            )}
+          </View>
         </View>
       </ImageBackground>
     </>
